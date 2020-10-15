@@ -69,45 +69,40 @@ vi a(N);
 vi x(N);
 vi y(N);
 int r,n;
-int dp[N];
 
-// int solve(int t,int x1,int y1,int i)
-// {
-//     // debug(x1,y1,t,i,dp[i]);
-//     if(i>=n)
-//         return 0;
-//     // if(dp[i]!=-1)
-//     // {
-//     //     return dp[i];
-//     // }
-//     if(a[i]-t <abs(x[i]-x1)+abs(y[i]-y1))
-//     {
-//         if(dp[i]!=-1)
-//         {
-//             return dp[i];
-//         }
-//         return dp[i] = solve(t,x1,y1,i+1);
-//     }
-//     else 
-//     {
-//         // cout<<"* ";
-//         return dp[i] = max(solve(t,x1,y1,i+1),solve(a[i],x[i],y[i],i+1)+1);
-//     }
-// }
-int dp[N];
+vi dp(N,0);
+vi pref(N,0);
 
 int solve(int i,int j) {
-    if(j>n)
-        return 0;
     
-    if(a[j]-a[i] < abs(x[i]-x[j])+abs(y[i]-y[j]))
+    for(int i=1;i<=n;i++)
     {
-        return solve(i,j+1);
+        // debug(i);
+        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
+        {
+            dp[i]=1;
+            
+            for(int j=i-1;j>0;j--)
+            {
+                if(a[i]-a[j]>=2*r)
+                {
+                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
+                    break;
+                }
+                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
+                {
+                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
+                }
+                // debug(i,j,dp[i]);
+            }
+        }
+        else
+        {
+            dp[i]=INT_MIN;
+        }
+        pref[i]=max(pref[i-1],dp[i]);
     }
-    else
-    {
-        return max(solve(i,j+1),1+solve(j,j+1));
-    }
+    return *max_element(dp.begin(),dp.begin()+n+1);
 }
 
 int32_t main()
@@ -116,7 +111,7 @@ int32_t main()
     cin>>r>>n;
     for(int i=1;i<=n;i++)
     {
-        cin>>a[i];
+        cin>>a[i];  // time
         cin>>x[i];
         cin>>y[i];
     }
