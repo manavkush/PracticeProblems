@@ -63,70 +63,51 @@ void _print(T t, V... v)
 #else
 #define debug(x...)
 #endif
-clock_t time_p=clock();
-void time()
-{
-    time_p=clock()-time_p;
-    cerr<<"Time Taken : "<<(float)(time_p)/CLOCKS_PER_SEC<<"\n";
-}
 //====================================DEBUG TEMPLATE==============================================
 
-int n;
-bool vis[1005][1005];
-int dp[1005][1005];      // initial final 
-
-char ch;
-string str;
-int solve(int i,int f,int p)
-{
-    if(i>f)
-    {
-        if(p==0)
-            return -1000000;
-        return 0;
-    }
-    if(vis[i][f])
-        return dp[i][f];
-    else
-    {
-        vis[i][f]=1;
-        int tmp=-1000000;
-        if(str[i]==str[f])
-        {
-            tmp = 2 + solve(i+1,f-1,p or str[i]==ch);
-            if(i==f)
-            tmp--;
-        }
-        // else
-        {
-            tmp = max( max(solve(i+1,f,p) , solve(i,f-1,p) ), tmp );
-        }
-        dp[i][f] = tmp;
-        return dp[i][f];
-    }
-    
-    
-}
 
 int32_t main()
 {
     FIO;
     int t;
-	cin>>t;
-	while(t--)
-	{
-        
-		cin>>ch;
-		cin>>str;
-		n=str.length();
-		
-        memset(vis,0,sizeof(vis));
-        memset(dp,0,sizeof(dp));
-        
-		int ans = solve(0,n-1,0);
-        cout<<((ans<0)?0:ans)<<endl;
-        
-	}
-    // time();
+    cin>>t;
+    string kick="KICK";
+    string start="START";
+    re(z,t)
+    {
+        string str;
+        cin>>str;
+        int ans=0;
+        vi k,e;
+        for (int i = 0; i < str.length(); i++) 
+        {
+            if (str.substr(i, kick.length()) == kick)
+            {
+                k.pb(i);
+            }
+            if(str.substr(i,start.length())== start)
+            {
+                e.pb(i);
+            }
+        }
+        // debug(k);
+        // debug(e);
+        sort(all(k));
+        sort(all(e));
+        for(int i=0;i<k.size();i++)
+        {
+            for(int j=0;j<e.size();j++)
+            {
+                if(k[i]<e[j])
+                {
+                    ans++;
+                    // cout<<k[i]<<" "<<e[j]<<endl;
+                }
+            }
+        }
 
+   
+
+        cout<<"Case #"<<(z+1)<<": "<<ans<<endl;
+    }
 }

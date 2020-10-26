@@ -63,70 +63,48 @@ void _print(T t, V... v)
 #else
 #define debug(x...)
 #endif
-clock_t time_p=clock();
-void time()
-{
-    time_p=clock()-time_p;
-    cerr<<"Time Taken : "<<(float)(time_p)/CLOCKS_PER_SEC<<"\n";
-}
 //====================================DEBUG TEMPLATE==============================================
 
-int n;
-bool vis[1005][1005];
-int dp[1005][1005];      // initial final 
-
-char ch;
-string str;
-int solve(int i,int f,int p)
-{
-    if(i>f)
-    {
-        if(p==0)
-            return -1000000;
-        return 0;
-    }
-    if(vis[i][f])
-        return dp[i][f];
-    else
-    {
-        vis[i][f]=1;
-        int tmp=-1000000;
-        if(str[i]==str[f])
-        {
-            tmp = 2 + solve(i+1,f-1,p or str[i]==ch);
-            if(i==f)
-            tmp--;
-        }
-        // else
-        {
-            tmp = max( max(solve(i+1,f,p) , solve(i,f-1,p) ), tmp );
-        }
-        dp[i][f] = tmp;
-        return dp[i][f];
-    }
-    
-    
-}
+string pattern="abcdefghijklmnopqrstuvwxyz";
 
 int32_t main()
 {
     FIO;
-    int t;
-	cin>>t;
-	while(t--)
-	{
-        
-		cin>>ch;
-		cin>>str;
-		n=str.length();
-		
-        memset(vis,0,sizeof(vis));
-        memset(dp,0,sizeof(dp));
-        
-		int ans = solve(0,n-1,0);
-        cout<<((ans<0)?0:ans)<<endl;
-        
-	}
-    // time();
+    string s;
+    cin>>s;
+    int n=s.length();
+    vi a(n+1,0);
+    re(i,n) {
+        a[i+1]=s[i]-'a';
+    }
+    if(n<26) {
+        cout<<"-1";
+        return 0;
+    }
+
+
+    vi diff(n+1,0);
+    a[0]=-1;
+    for(int i=1;i<=n;i++)
+    {
+        diff[i]=a[i]-a[i-1];
+    }
+    vi indices;
+    for(int i=0;i<n;i++)
+    {
+        if(diff[i]>1)
+            indices.push_back(i);
+    }
+    if(indices.empty()||indices[0]>=26)
+    {
+        cout<<pattern;
+        for(int j=26;j<n;j++)
+        {
+            cout<<s[i];
+        }
+    }
+    // for(int i=0;i<indices.size()-1;i++)
+
+    
 
 }

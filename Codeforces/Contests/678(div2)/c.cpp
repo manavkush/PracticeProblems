@@ -18,7 +18,7 @@ typedef vector<int> vi;
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
-const int mod = 1000000007;
+const int mod = 1e9+7;
 //===================================DEBUG TEMPLATE=================================================
 void __print(int x) { cerr << x; }
 void __print(float x) { cerr << x; }
@@ -63,70 +63,85 @@ void _print(T t, V... v)
 #else
 #define debug(x...)
 #endif
-clock_t time_p=clock();
-void time()
-{
-    time_p=clock()-time_p;
-    cerr<<"Time Taken : "<<(float)(time_p)/CLOCKS_PER_SEC<<"\n";
-}
 //====================================DEBUG TEMPLATE==============================================
+vi fact(5002);
+vi vis(5002);
 
-int n;
-bool vis[1005][1005];
-int dp[1005][1005];      // initial final 
-
-char ch;
-string str;
-int solve(int i,int f,int p)
+int factorial(int n) 
 {
-    if(i>f)
-    {
-        if(p==0)
-            return -1000000;
+    if(n<0)
         return 0;
-    }
-    if(vis[i][f])
-        return dp[i][f];
-    else
+    if(n==1||n==0)
+        return 1ll;
+    if(vis[n])
     {
-        vis[i][f]=1;
-        int tmp=-1000000;
-        if(str[i]==str[f])
-        {
-            tmp = 2 + solve(i+1,f-1,p or str[i]==ch);
-            if(i==f)
-            tmp--;
-        }
-        // else
-        {
-            tmp = max( max(solve(i+1,f,p) , solve(i,f-1,p) ), tmp );
-        }
-        dp[i][f] = tmp;
-        return dp[i][f];
+        return fact[n];
     }
-    
-    
+    vis[n]=1;
+    (fact[n]=(n*factorial(n-1))%mod); 
+    return fact[n];
+}
+
+int NCR(int n, int r)
+{
+    if (r == 0) return 1;
+    if (r<0|| n<0||r>n)
+        return 0;
+    if (r > n / 2) 
+        return NCR(n, n - r);
+
+    int res = 1ll; 
+
+    for (int k = 1; k <= r; ++k)
+    {
+        res = (res *( n - k + 1))%mod;
+        res = (res/k)%mod;
+    }
+
+    return res%mod;
+}
+int NPR(int n, int r)
+{
+    if (r == 0) return 1;
+    if (r<0|| n<0||r>n)
+        return 0;
+    int res=1;
+    for(int i=n;i>n-r;i--)
+    {
+        res*=i;
+        res=(res%mod);
+    }
+    return res;
 }
 
 int32_t main()
 {
     FIO;
-    int t;
-	cin>>t;
-	while(t--)
-	{
-        
-		cin>>ch;
-		cin>>str;
-		n=str.length();
-		
-        memset(vis,0,sizeof(vis));
-        memset(dp,0,sizeof(dp));
-        
-		int ans = solve(0,n-1,0);
-        cout<<((ans<0)?0:ans)<<endl;
-        
-	}
-    // time();
-
+    int n,x,pos;
+    cin>>n>>x>>pos;
+    factorial(1001);
+    
+    int l=0;
+    int r=n;
+    int cntless=0;      // storing the counts of less numbers needed
+    int cntmore=0;      // storing the counts of more numbers needed
+    fact[0]=fact[1]=1;
+    
+    while(l<r)
+    {
+        int mid=(l+r)/2;
+        if(mid<pos)    cntless++;
+        if(mid>pos)    cntmore++;
+        if(mid<=pos)   l=mid+1;
+        else {
+            r= mid;
+        }
+    }
+    
+    int haveless=x-1;
+    int havemore=n-x;
+    {
+        cout<<  NPR(n-x,cntmore) * NPR(x-1,cntless)%mod * fact[n-cntmore-cntless-1]%mod ;
+    }
+    
 }
