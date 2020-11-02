@@ -63,82 +63,38 @@ void _print(T t, V... v)
 #else
 #define debug(x...)
 #endif
-const int N=1e5+4;
 //====================================DEBUG TEMPLATE==============================================
 
-vi a(N);         // Storing the input
-vi dp(N,0);
-map<int,int> m[N];      // Map to store the prime factors of each no from 1 to 1e5
-
-
-//============================================Pre-calculation====================================
-int spf[N];     // Smallest prime factor of every number
-
-void seive()    // One time smallest prime factor calculation ( Pre-pre computation)
-{
-    for(int i=1;i<N;i++) {
-        spf[i] = i;
-    }
-    for(int i=2;i<N;i=i+2) {
-        spf[i] = 2;
-    }
-    for(int i=3;i*i<N;i++)
-    {
-        if(spf[i]==i)
-        {
-            for(int j=i;j<N;j+=i)       // Iterating over the multiples of i
-            {
-                if(spf[j]==j)     // If the element j reached from i hasn't been reached before then the spf of j is i
-                    spf[j]=i;
-            }
-        }
-    }
-}
-//=============================================Pre-calculation done ===============================
+vi dp;
 
 int32_t main()
 {
     FIO;
-    int n;
-    cin>>n;
-    re(i,n)
+    int t;
+    cin>>t;
+    while (t--)
     {
-        cin>>a[i];
-    }
-    if(n==1&&a[0]==1)
-    {
-        cout<<1;
-        return 0;
-    }
-    seive();
-    // This is precomputation of prime-factors of all integers from 1 to 1e5
-    for(int i=2;i<N;i++)
-    {
-        int num=i;
-        while(num!=1)
+        int n;
+        cin>>n;
+        vi a(n);
+        dp.resize(n+1,1);
+        re(i,n)
         {
-            m[i][spf[num]]++;
-            num/=spf[num];   
+            cin>>a[i];
         }
-    }
-    // Now we have the Prime factorization of all the numbers from 2 to N
-    
-    
-    for(int i=0;i<n;i++)
-    {
-        int number = a[i];
-        tr(itr,m[number])       // updating the number
+        for(int i=1;i<n;i++)
         {
-            int factor = itr->first;
-            dp[number] = max(dp[number],dp[factor]+1);
+            if(a[i]>=a[i-1])
+            {
+                dp[i]= dp[i-1]+1; 
+            }
         }
-        
-        tr(itr,m[number])       // updating the factors 
+        int sum=0;
+        re(i,n)
         {
-            dp[itr->first] = dp[number];
+            sum+=dp[i];
         }
+        cout<<sum<<endl;
     }
     
-    cout<<*max_element(all(dp));
-
 }
