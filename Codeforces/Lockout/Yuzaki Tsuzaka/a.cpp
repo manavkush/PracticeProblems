@@ -64,61 +64,51 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=1e5+2;
-vi a(N);
-vi x(N);
-vi y(N);
-int r,n;
 
-vi dp(N,0);         // Stores the maximum photos taken when last photo is of ith celebrity
-vi pref(N,0);       // Storing the maximum element from previous dp indices
-
-int solve(int i,int j) {
-    
-    for(int i=1;i<=n;i++)
-    {
-        // debug(i);
-        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
-        {
-            dp[i]=1;
-            
-            for(int j=i-1;j>0;j--)
-            {
-                if(a[i]-a[j]>=2*r)
-                {
-                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
-                    break;
-                }
-                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
-                {
-                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
-                }
-                // debug(i,j,dp[i]);
-            }
-        }
-        else
-        {
-            dp[i]=INT_MIN;
-        }
-        pref[i]=max(pref[i-1],dp[i]);
-    }
-    return *max_element(dp.begin(),dp.begin()+n+1);
-}
 
 int32_t main()
 {
     FIO;
-    cin>>r>>n;
-    for(int i=1;i<=n;i++)
+    int t;
+    cin>>t;
+    while (t--)
     {
-        cin>>a[i];  // time
-        cin>>x[i];
-        cin>>y[i];
+        int n,l;
+        cin>>n>>l;
+        vector<int> a(n+3);
+        vector<int> b(n+3);
+        re(i,n)
+        {
+            cin>>a[i+1];
+            b[n-i]=l-a[i];
+        }
+        vector<double> time(n+1);
+        vector<double> first(n+3);      // Time to reach flags by first car
+        vector<double> second(n+3);     // Time to reach flags by second car
+        double speed = 1;
+        for(int i=1;i<=n;i++)
+        {
+            first[i]=first[i-1]+(a[i]-a[i-1])/speed;
+            speed++;
+        }
+        speed = 1;
+        for(int i=n;i>0;i--)
+        {
+            if(i==n)
+            {
+                second[i] = ((double)l-a[i])/speed;
+            }
+            else
+            second[i]=second[i+1]+abs(a[i]-a[i+1])/speed;
+        }
+        for(int i=1;i<=n;i++)
+        {
+            if(first[i]>=second[i])
+            {
+                cout<<i<<" "<<first[i]<<":"<<second[i]<<"   "<<first[i-1]<<":"<<second[i+1]<<endl;
+                break;
+            }
+        }
     }
-    a[0]=0;
-    x[0]=1;
-    y[0]=1;
     
-    int ans= solve(0,1);
-    cout<<ans;
 }

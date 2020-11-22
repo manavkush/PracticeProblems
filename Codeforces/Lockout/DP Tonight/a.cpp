@@ -64,61 +64,72 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=1e5+2;
-vi a(N);
-vi x(N);
-vi y(N);
-int r,n;
+int n,m;
+int grid[26][26];
+int pref[26][26];
 
-vi dp(N,0);         // Stores the maximum photos taken when last photo is of ith celebrity
-vi pref(N,0);       // Storing the maximum element from previous dp indices
-
-int solve(int i,int j) {
-    
+void makeprefix()
+{
     for(int i=1;i<=n;i++)
     {
-        // debug(i);
-        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
-        {
-            dp[i]=1;
-            
-            for(int j=i-1;j>0;j--)
-            {
-                if(a[i]-a[j]>=2*r)
-                {
-                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
-                    break;
-                }
-                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
-                {
-                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
-                }
-                // debug(i,j,dp[i]);
-            }
-        }
-        else
-        {
-            dp[i]=INT_MIN;
-        }
-        pref[i]=max(pref[i-1],dp[i]);
+        pref[i][1]=pref[i-1][1]+grid[i][1];
     }
-    return *max_element(dp.begin(),dp.begin()+n+1);
+    for(int i=1;i<=m;i++)
+    {
+        pref[1][i] = pref[1][i-1]+grid[1][i];
+    }
+
+    for(int i=2;i<=n;i++)
+    {
+        for(int j=2;j<=m;j++)
+        {
+            pref[i][j] = pref[i-1][j]+pref[i][j-1]-pref[i-1][j-1]+grid[i][j];
+        }
+    }
 }
 
 int32_t main()
 {
     FIO;
-    cin>>r>>n;
-    for(int i=1;i<=n;i++)
+    cin>>n>>m;
+    memset(grid,0,sizeof(grid));
+    memset(pref,0,sizeof(pref));
+    re(i,n)
     {
-        cin>>a[i];  // time
-        cin>>x[i];
-        cin>>y[i];
+        re(j,m)
+        {
+            char ch;
+            cin>>ch;
+            grid[i+1][j+1] = ch -'0';
+        }
     }
-    a[0]=0;
-    x[0]=1;
-    y[0]=1;
-    
-    int ans= solve(0,1);
+    makeprefix();
+    // re1(i,1,n)
+    // {
+    //     re1(j,1,m)
+    //     {
+    //         cout<<pref[i][j]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
+    int ans=0;
+    for(int x1=1;x1<=n;x1++)
+    {
+        for(int y1=1;y1<=m;y1++)
+        {
+
+            for(int x2=x1;x2<=n;x2++)
+            {
+                for(int y2=y1;y2<=m;y2++)
+                {
+                    int prf = pref[x2][y2] - pref[x1-1][y2] - pref[x2][y1-1] + pref[x1-1][y1-1];
+                    if(prf==0)
+                    {
+                        ans = max(ans,2*(y2-y1+x2-x1+2));
+                    }
+                }
+            }
+        }
+    }
     cout<<ans;
 }

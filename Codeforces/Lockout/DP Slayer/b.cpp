@@ -64,61 +64,64 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=1e5+2;
-vi a(N);
-vi x(N);
-vi y(N);
-int r,n;
-
-vi dp(N,0);         // Stores the maximum photos taken when last photo is of ith celebrity
-vi pref(N,0);       // Storing the maximum element from previous dp indices
-
-int solve(int i,int j) {
-    
-    for(int i=1;i<=n;i++)
+const int N= 1e7+2;
+int n;
+map<pair<int,int>,int> m;
+// A-0 B-1 C-2 D-3
+int count = 0;
+int solve(int num,int corner)
+{
+    if(num<0)
     {
-        // debug(i);
-        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
+        return 0;
+    }
+    if(m.find(mp(num,corner))!=m.end())
+    {
+        return m[mp(num,corner)];
+    }
+    else
+    {
+        if(num==1)
         {
-            dp[i]=1;
-            
-            for(int j=i-1;j>0;j--)
+            if(corner==3)
             {
-                if(a[i]-a[j]>=2*r)
-                {
-                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
-                    break;
-                }
-                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
-                {
-                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
-                }
-                // debug(i,j,dp[i]);
+                return INT_MIN;
+            }
+            else
+            {
+                return 0;
             }
         }
-        else
+        int sum=0;
+        for(int i=0;i<4;i++)
         {
-            dp[i]=INT_MIN;
+            if(i==corner)
+                continue;
+            if(solve(num-1,i)>=0)
+                sum = (sum +solve(num-1,i)+1)%mod;
         }
-        pref[i]=max(pref[i-1],dp[i]);
+        m[mp(num,corner)] = (sum%mod);
+        return m[mp(num,corner)];
     }
-    return *max_element(dp.begin(),dp.begin()+n+1);
+    
 }
 
 int32_t main()
 {
     FIO;
-    cin>>r>>n;
+    int n;
+    cin>>n;
+    int zero=1;
+    int non=0;
+    // cout<<non<<" "<<zero<<endl;
+    // debug(non,zero);
     for(int i=1;i<=n;i++)
     {
-        cin>>a[i];  // time
-        cin>>x[i];
-        cin>>y[i];
+        int nonorig=non;
+        non = ((zero*3) + non*2)%mod;
+        zero = nonorig%mod;
+        // debug(non,zero);
     }
-    a[0]=0;
-    x[0]=1;
-    y[0]=1;
+    cout<<zero;
     
-    int ans= solve(0,1);
-    cout<<ans;
 }

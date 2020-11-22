@@ -64,61 +64,76 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=1e5+2;
-vi a(N);
-vi x(N);
-vi y(N);
-int r,n;
 
-vi dp(N,0);         // Stores the maximum photos taken when last photo is of ith celebrity
-vi pref(N,0);       // Storing the maximum element from previous dp indices
-
-int solve(int i,int j) {
-    
-    for(int i=1;i<=n;i++)
-    {
-        // debug(i);
-        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
-        {
-            dp[i]=1;
-            
-            for(int j=i-1;j>0;j--)
-            {
-                if(a[i]-a[j]>=2*r)
-                {
-                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
-                    break;
-                }
-                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
-                {
-                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
-                }
-                // debug(i,j,dp[i]);
-            }
-        }
-        else
-        {
-            dp[i]=INT_MIN;
-        }
-        pref[i]=max(pref[i-1],dp[i]);
-    }
-    return *max_element(dp.begin(),dp.begin()+n+1);
-}
+// int countpallindrome(int i,int f)
+// {
+//     if(i<f)
+// }
+int dp[2002][2002];
+int pal[2002][2002];
 
 int32_t main()
 {
     FIO;
-    cin>>r>>n;
-    for(int i=1;i<=n;i++)
-    {
-        cin>>a[i];  // time
-        cin>>x[i];
-        cin>>y[i];
-    }
-    a[0]=0;
-    x[0]=1;
-    y[0]=1;
+    memset(dp,0,sizeof(dp));
+    memset(pal,0,sizeof(pal));
     
-    int ans= solve(0,1);
+    string s;
+    cin>>s;
+    int n=s.length();
+    
+    for(int i=0;i<n;i++)
+    {
+        dp[i][i]=1;
+        pal[i][i]=1;
+    }
+    for(int i=0;i<n-1;i++)
+    {
+        if(s[i]==s[i+1])
+        {
+            dp[i][i+1]=3;
+            pal[i][i+1]=1;
+        }
+        else dp[i][i+1]=2;
+    }
+    for(int gap=1;gap<=n-2;gap++)
+    {
+        for(int i=0;i<n-gap-1;i++)
+        {
+            int fin=i+gap+1;
+            if(s[i]==s[fin]&&pal[i+1][fin-1]==1)
+            {
+                pal[i][fin]=1;
+                dp[i][fin]=dp[i][fin-1]+dp[i+1][fin]-dp[i+1][fin-1]+1;
+            }
+            else
+            {
+                dp[i][fin]=dp[i][fin-1]+dp[i+1][fin]-dp[i+1][fin-1];
+            }
+        }
+    }
+    // for(int i=0;i<n;i++)
+    // {
+    //     for(int j=0;j<n;j++)
+    //     {
+    //         cout<<dp[i][j]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
+    int ans=0;
+    for(int j=0;j<n-1;j++)
+    {
+        for(int i=j;i<n-1;i++)
+        {
+            if(pal[j][i])
+            {
+                // cout<<dp[i+1][n-1];
+                // debug(j,i);
+                ans+=dp[i+1][n-1];
+            }
+        }
+    }
     cout<<ans;
+    
+    
 }

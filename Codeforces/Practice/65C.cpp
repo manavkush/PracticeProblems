@@ -64,61 +64,27 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=1e5+2;
-vi a(N);
-vi x(N);
-vi y(N);
-int r,n;
-
-vi dp(N,0);         // Stores the maximum photos taken when last photo is of ith celebrity
-vi pref(N,0);       // Storing the maximum element from previous dp indices
-
-int solve(int i,int j) {
-    
-    for(int i=1;i<=n;i++)
-    {
-        // debug(i);
-        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
-        {
-            dp[i]=1;
-            
-            for(int j=i-1;j>0;j--)
-            {
-                if(a[i]-a[j]>=2*r)
-                {
-                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
-                    break;
-                }
-                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
-                {
-                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
-                }
-                // debug(i,j,dp[i]);
-            }
-        }
-        else
-        {
-            dp[i]=INT_MIN;
-        }
-        pref[i]=max(pref[i-1],dp[i]);
-    }
-    return *max_element(dp.begin(),dp.begin()+n+1);
-}
+vi a;
 
 int32_t main()
 {
     FIO;
-    cin>>r>>n;
-    for(int i=1;i<=n;i++)
+    int n;
+    cin>>n;
+    a.resize(n+1);
+    re(i,n)
     {
-        cin>>a[i];  // time
-        cin>>x[i];
-        cin>>y[i];
+        cin>>a[i];
     }
-    a[0]=0;
-    x[0]=1;
-    y[0]=1;
-    
-    int ans= solve(0,1);
-    cout<<ans;
+
+    for(int i=n;i>=3;i--) {     // i is the number of sides
+        if(n%i!=0)
+            continue;
+        else
+        {
+            re(k,)
+        }
+        
+    }
+
 }

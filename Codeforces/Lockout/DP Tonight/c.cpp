@@ -64,61 +64,47 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=1e5+2;
-vi a(N);
-vi x(N);
-vi y(N);
-int r,n;
-
-vi dp(N,0);         // Stores the maximum photos taken when last photo is of ith celebrity
-vi pref(N,0);       // Storing the maximum element from previous dp indices
-
-int solve(int i,int j) {
-    
-    for(int i=1;i<=n;i++)
-    {
-        // debug(i);
-        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
-        {
-            dp[i]=1;
-            
-            for(int j=i-1;j>0;j--)
-            {
-                if(a[i]-a[j]>=2*r)
-                {
-                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
-                    break;
-                }
-                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
-                {
-                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
-                }
-                // debug(i,j,dp[i]);
-            }
-        }
-        else
-        {
-            dp[i]=INT_MIN;
-        }
-        pref[i]=max(pref[i-1],dp[i]);
-    }
-    return *max_element(dp.begin(),dp.begin()+n+1);
-}
 
 int32_t main()
 {
     FIO;
-    cin>>r>>n;
-    for(int i=1;i<=n;i++)
+    int n,cont,stow;
+    cin>>n>>stow>>cont;
+    int dir=0;
+    string s;
+    cin>>s>>s;
+    if(s[0]=='h')
     {
-        cin>>a[i];  // time
-        cin>>x[i];
-        cin>>y[i];
+        dir=-1;
     }
-    a[0]=0;
-    x[0]=1;
-    y[0]=1;
+    else
+    {
+        dir=1;
+    }
+    cin>>s;
+
+    re(i,s.length())
+    {
+        if(s[i]=='1')
+        {
+            if(cont==n)       dir=-1;
+            if(cont==1)       dir=1;
+            cont= cont+dir;
+
+            if(dir>1)         stow=0;
+            else            stow=n+1;
+        }
+        else
+        {
+            if(cont==n)    dir = -1;
+            else           dir = 1;
+
+            cont = cont + dir;
+            
+        }
+    }
     
-    int ans= solve(0,1);
-    cout<<ans;
+    
+    
+
 }

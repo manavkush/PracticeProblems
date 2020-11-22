@@ -64,61 +64,124 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=1e5+2;
-vi a(N);
-vi x(N);
-vi y(N);
-int r,n;
+const int N = 2003;
+int dp[N][N];
+int vis[N][N];
+bool pal[N][N];
+string s;
 
-vi dp(N,0);         // Stores the maximum photos taken when last photo is of ith celebrity
-vi pref(N,0);       // Storing the maximum element from previous dp indices
+// This is recursive program to check if string(i:j) is a pallindrome or not
 
-int solve(int i,int j) {
+// bool ispallindrome(int i,int j)
+// {
+//     if(j==i)    return 1;
+
+//     if(j==i+1)
+//     {
+//         return pal[i][j]=(s[i]==s[j]);
+//     }
+//     if(j<i)     return 0;
+
+
+//     if(vis[i][j])
+//     {
+//         return pal[i][j];
+//     }
+//     vis[i][j]=1;
+//     if(s[i]==s[j])
+//     {
+//         pal[i][j] = ispallindrome(i+1,j-1);
+//         ispallindrome(i,j-1);
+//         ispallindrome(i+1,j);
+//         return pal[i][j];
+//     }
+//     else
+//     {
+//         pal[i][j] = 0;
+//         ispallindrome(i+1,j);
+//         ispallindrome(i,j-1);
+//         return pal[i][j];
+//     }
     
-    for(int i=1;i<=n;i++)
-    {
-        // debug(i);
-        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
-        {
-            dp[i]=1;
-            
-            for(int j=i-1;j>0;j--)
-            {
-                if(a[i]-a[j]>=2*r)
-                {
-                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
-                    break;
-                }
-                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
-                {
-                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
-                }
-                // debug(i,j,dp[i]);
-            }
-        }
-        else
-        {
-            dp[i]=INT_MIN;
-        }
-        pref[i]=max(pref[i-1],dp[i]);
-    }
-    return *max_element(dp.begin(),dp.begin()+n+1);
-}
+// }
+//========================================================
+
+// int countpallin(int i,int j)
+// {
+//     for(int i=0;i<n;i++)
+//     {
+//         for(int j=i;j<n;j++)
+//         {
+//             if()
+//         }
+//     }
+// }
 
 int32_t main()
 {
     FIO;
-    cin>>r>>n;
+    cin>>s;
+    memset(dp,0,sizeof(dp));
+    memset(vis,0,sizeof(vis));
+    memset(pal,0,sizeof(pal));
+
+    int n = s.size();
+    s='*'+s;
+    
+    // For length = 1
     for(int i=1;i<=n;i++)
     {
-        cin>>a[i];  // time
-        cin>>x[i];
-        cin>>y[i];
+        pal[i][i]=1;
+        dp[i][i]=1;
     }
-    a[0]=0;
-    x[0]=1;
-    y[0]=1;
-    
-    int ans= solve(0,1);
-    cout<<ans;
+    // ispallindrome(0,n-1);
+
+    // For length = 2
+    for(int i=1;i<=n-1;i++)
+    {
+        if(s[i]==s[i+1])
+        {
+            pal[i][i+1]=1;
+            dp[i][i+1]=3;
+        }
+    }
+
+    // For length greater than 2
+    for(int gap=2;gap<n-1;gap++)
+    {
+        for(int i=1;i<n-gap;i++)
+        {
+            int fin=i+gap+1;
+            if(s[i]==s[fin]&&pal[i+1][fin-1])
+            {
+                pal[i][fin]=1;
+            }
+
+            if(pal[i][fin]) {
+                dp[i][fin] = dp[i][fin-1] + dp[i+1][fin] - dp[i+1][fin-1] + 1;
+            }
+            else {
+                dp[i][fin] = dp[i][fin-1] + dp[i+1][fin] - dp[i+1][fin-1] ;
+            }
+        }
+    }
+    re1(i,1,n)
+    {
+        re1(j,1,n)
+        {
+            cout<<dp[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+    re1(i,1,n)
+    {
+        re1(j,1,n)
+        {
+            cout<<(pal[i][j]?1:0)<<" ";
+        }
+        cout<<endl;
+    }
+
+
 }

@@ -64,61 +64,80 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=1e5+2;
-vi a(N);
-vi x(N);
-vi y(N);
-int r,n;
+int n,k;
+vi *adj;
+vi vis;
+vi child;     // node - children
+vector<pii> numchild;   // children - node (in sorted order)
+vi tourist;     // If tourist or not
+int res=0;      // Final answer
+vi dist;        // Distances from 1
 
-vi dp(N,0);         // Stores the maximum photos taken when last photo is of ith celebrity
-vi pref(N,0);       // Storing the maximum element from previous dp indices
-
-int solve(int i,int j) {
-    
-    for(int i=1;i<=n;i++)
+int dfs(int s,int diss)
+{
+    int sum=0;
+    vis[s] = 1;
+    dist[s] = diss;
+    for(auto x:adj[s])
     {
-        // debug(i);
-        if(a[i]>=x[i]+y[i]-2)        // If the man can reach ith celebrity
+        if(!vis[x])
         {
-            dp[i]=1;
-            
-            for(int j=i-1;j>0;j--)
-            {
-                if(a[i]-a[j]>=2*r)
-                {
-                    dp[i]=max(pref[j]+1,dp[i]);     // Used prefix to get the max element from the previous dp indices
-                    break;
-                }
-                if(a[i]-a[j]>=abs(x[i]-x[j])+abs(y[i]-y[j]))  // If from the jth we can go to ith
-                {
-                    dp[i]=max(dp[i],dp[j]+1);       // Then photos of ith would be max of (i-th) and (photos of j-th)+1
-                }
-                // debug(i,j,dp[i]);
-            }
+            sum+=dfs(x,diss+1);
         }
-        else
-        {
-            dp[i]=INT_MIN;
-        }
-        pref[i]=max(pref[i-1],dp[i]);
     }
-    return *max_element(dp.begin(),dp.begin()+n+1);
+    child[s] = sum;
+    return 1+sum;
+}
+
+bool compare(pii i,pii j)
+{
+    if(i.ff!=j.ff)
+    {
+        return i.ff>j.ff;
+    }
+    return dist[i.ss]<dist[j.ss];
 }
 
 int32_t main()
 {
     FIO;
-    cin>>r>>n;
+    cin>>n>>k;
+    adj = new vi [n+1];
+    vis.resize(n+1,0);
+    tourist.resize(n+1,0);
+    dist.resize(n+1,0);
+    child.resize(n+1,0);
+    
+    re(i,n-1)
+    {
+        int a,b;
+        cin>>a>>b;
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+    //=====================================INPUT COMPLETE====================
+    dfs(1,0);
+    re1(itr,1,n)
+    {
+        numchild.push_back(mp(child[itr],itr));
+    }
+    sort(all(numchild),compare);
+    
+    for(int i=0;i<n-k;i++)
+    {
+        tourist[numchild[i].second]=1;
+    }
+    
+    vi ans;
     for(int i=1;i<=n;i++)
     {
-        cin>>a[i];  // time
-        cin>>x[i];
-        cin>>y[i];
+        ans.pb(child[i]-dist[i]);
     }
-    a[0]=0;
-    x[0]=1;
-    y[0]=1;
-    
-    int ans= solve(0,1);
-    cout<<ans;
+    res=0;
+    sort(all(ans),greater<int>());
+    re(i,n-k)
+    {
+        res+=ans[i];
+    }
+    cout<<res;
 }
