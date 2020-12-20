@@ -1,23 +1,23 @@
+// Author: manavkush
+// Date: 20/12/2020
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
 #define ss second
-// #define int long long
+#define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,9 +31,10 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
-void __print(const pair<T, V> &x) {
+void __print(const pair<T, V> &x)
+{
     cerr << '{';
     __print(x.first);
     cerr << ',';
@@ -41,7 +42,8 @@ void __print(const pair<T, V> &x) {
     cerr << '}';
 }
 template <typename T>
-void __print(const T &x) {
+void __print(const T &x)
+{
     int f = 0;
     cerr << '{';
     for (auto &i : x)
@@ -50,7 +52,8 @@ void __print(const T &x) {
 }
 void _print() { cerr << "]\n"; }
 template <typename T, typename... V>
-void _print(T t, V... v) {
+void _print(T t, V... v)
+{
     __print(t);
     if (sizeof...(v))
         cerr << ", ";
@@ -64,38 +67,20 @@ void _print(T t, V... v) {
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N = 1e6;
-int n, x;
-vi cost;
-vi pg;
 
-int dp[N + 1][101];     // States--> Money, Books   // Stores the max pages you can buy
 
-// dp[money][j] = max( (pg[j] + dp[money-cost[j]][j-1] ), dp[money][j-1] )
-
-int32_t main() {
+int32_t main()
+{
     FIO;
-    cin >> n >> x;
-    cost.resize(n);
-    pg.resize(n);
-
-    re(i, n) {
-        cin >> cost[i];
-    }
-    re(i, n) {
-        cin >> pg[i];
-    }
-    memset(dp,0,sizeof(dp));
-
-    for (int j = 0; j < n; j++) {  //   i-th book choosen or not
-        for(int money=0;money<=x;money++) {
-            
-            if (money<cost[j]) {
-                continue;
-            }
-            else {
-                dp
-            }
+    int t;cin>>t;
+    while(t--)
+    {
+        int n,m;
+        cin>>n>>m;
+        int pos[m+1][2];
+        re(i,m) {
+            cin>>pos[i][0]>>pos[i][1];
         }
+        
     }
 }
