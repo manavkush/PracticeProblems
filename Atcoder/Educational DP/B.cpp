@@ -67,20 +67,28 @@ void _print(T t, V... v) {
 
 int32_t main() {
     FIO;
-    int n;
-    cin >> n;
+    int n, k;
+    cin >> n >> k;
     vi a(n + 1);
     re(i, n) {
         cin >> a[i + 1];
     }
     vi dp(n + 2, INT_MAX);
     dp[1] = 0;
-    dp[2] = abs(a[2] - a[1]);
+
     for (int i = 1; i <= n; i++) {
-        if (i < 3) {
-            continue;
+        for (int j = 1; j <= k; j++) {
+            if (j >= i) {
+                break;
+            } else {
+                dp[i] = min(dp[i], dp[i - j] + abs(a[i] - a[i - j]));
+            }
         }
-        dp[i] = min(dp[i - 1] + abs(a[i] - a[i - 1]), dp[i - 2] + abs(a[i] - a[i - 2]));
+        // debug(dp);
+        // if (i < 3) {
+        //     continue;
+        // }
+        // dp[i] = min(dp[i - 1] + abs(a[i] - a[i - 1]), dp[i - 2] + abs(a[i] - a[i - 2]));
     }
     cout << dp[n] << endl;
 }

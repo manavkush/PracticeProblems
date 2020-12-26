@@ -64,23 +64,21 @@ void _print(T t, V... v) {
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+const int N = 1e5;
 
 int32_t main() {
     FIO;
     int n;
     cin >> n;
-    vi a(n + 1);
+    vector<vi> dp(N + 3, vi(4, 0));
+    vi a(n + 2), b(n + 2), c(n + 2);
     re(i, n) {
-        cin >> a[i + 1];
+        cin >> a[i + 1] >> b[i + 1] >> c[i + 1];
     }
-    vi dp(n + 2, INT_MAX);
-    dp[1] = 0;
-    dp[2] = abs(a[2] - a[1]);
     for (int i = 1; i <= n; i++) {
-        if (i < 3) {
-            continue;
-        }
-        dp[i] = min(dp[i - 1] + abs(a[i] - a[i - 1]), dp[i - 2] + abs(a[i] - a[i - 2]));
+        dp[i][1] = max(dp[i - 1][2] + a[i], dp[i - 1][3] + a[i]);
+        dp[i][2] = max(dp[i - 1][1] + b[i], dp[i - 1][3] + b[i]);
+        dp[i][3] = max(dp[i - 1][1] + c[i], dp[i - 1][2] + c[i]);
     }
-    cout << dp[n] << endl;
+    cout << max(max(dp[n][1], dp[n][2]), dp[n][3]);
 }
