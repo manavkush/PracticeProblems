@@ -1,3 +1,5 @@
+// This was a good twist question to the classical knapsack problem. I had gotten the approach 
+// but wasn't sure of it. So I looked up the demoralizer's video.
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -92,15 +94,29 @@ int32_t main() {
     re1(i, 1, n) {
         cin >> w[i] >> a[i];
     }
-    vector<vi> dp(n + 2, vi(N + 2, 0));  // States --> Indices taken for choosing, Total value got
-    for (int i = 1; i <= n; i++) {
-        for (int sum = 1; sum <= N; sum++) {
-            if (sum < w[i]) {
-                dp[i][sum] = dp[i - 1][sum];
-            } else {
-                dp[i][sum] = max(dp[i - 1][sum], dp[i - 1][sum - w[i]] + a[i]);
+    vector<vi> dp(n + 1, vi(N + 1, INT_MAX));  
+    // States --> Indices taken for choosing, Total value got
+    // Stores the total weight formed
+    // We stores the minimum weight that we can get when choosing from i indices that sum to value 'val'
+    re1(i,0,n) {
+        dp[i][0] = 0;
+    }
+    re1(i,1,n) {
+        re1(val,1,N) {
+            if(val<a[i]) {
+                dp[i][val] = dp[i-1][val];
+            }
+            else {
+                dp[i][val] = min(dp[i-1][val],dp[i-1][val-a[i]]+w[i]);
             }
         }
     }
-    cout << dp[n][W];
+    int answer = 0;
+    re1(i,N,0) {
+        if(dp[n][i]<=W) {
+            answer=i;
+            break;
+        }
+    }
+    cout<<answer<<endl;
 }
