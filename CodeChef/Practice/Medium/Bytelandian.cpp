@@ -64,20 +64,29 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-int n;
-vi dp;
+int* dp;
 
-int solve(int n)
-{
-    if(vis[n])
+int solve( int n) {
+    if(n==0) {
+        return 0;
+    } else if(dp[n]!=0) {
+        return dp[n];
+    }
+    else {
+        dp[n] = max(n,solve(n/2)+solve(n/3)+solve(n/4));
+        return dp[n];
+    }
 }
 
 int32_t main()
 {
     FIO;
-    while(cin>>n)
+    int n;
+    while(cin>>n) 
     {
-        dp.resize(n+1,0);   
-        solve(n);
+        dp = new int [n+1];
+        // cout<<dp[0]<<endl;
+        cout<<solve(n)<<endl;
     }
+    return 0;
 }
