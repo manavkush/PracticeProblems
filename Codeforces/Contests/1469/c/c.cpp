@@ -75,6 +75,44 @@ int32_t main()
     int t;cin>>t;
     while(t--)
     {
+        int n,k;
+        cin>>n>>k;
+        vi h(n);
+        re(i,n) {
+            cin>>h[i];
+        }
+        int low =h[0];
+        int high = h[0];
+        bool flag = 1;
+
+        for(int i=1;i<n;i++) {
+            int minfence = h[i];
+            int maxfence = h[i]+k-1;
+            if(i==n-1) {
+                maxfence = h[i];
+            }
+            // Expanding the range for the current fence
+            low = low-(k-1);
+            high = high+(k-1);
+            if((low > maxfence) or (high < minfence)){
+                flag = 0;
+                break;
+            } else {
+                // Triming down to the possible range for the current fence
+                low = max(h[i],low);
+                high = min(high,h[i]+k-1);
+            }
+        }
+        // low = low-(k-1);
+        // high=high+(k+1);
+        // if((low >h[n-1]+k-1)  or (high < h[n-1])){
+        //     flag = 0;
+        // }
         
+        if(flag) {
+            cout<<"YES\n";
+        } else {
+            cout<<"NO\n";
+        }
     }
 }

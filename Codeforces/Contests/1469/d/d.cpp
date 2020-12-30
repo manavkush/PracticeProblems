@@ -75,6 +75,43 @@ int32_t main()
     int t;cin>>t;
     while(t--)
     {
-        
+        int n;
+        cin>>n;
+        vector<int> a,b;
+        if(n<=8) {
+            for(int i=3;i<n;i++) {
+                a.pb(i);
+                b.pb(n);
+            }
+            int n2=n;
+            while(n2!=1) {
+                a.pb(n);
+                b.pb(2);
+                n2=ceil(1.0*n2/2);
+            }
+        } else {
+            for(int i=9;i<n;i++) {
+                a.pb(i);
+                b.pb(n);
+            }
+            int n2=n;
+            while(n2!=1) {
+                n2= ceil(1.0 * n2/8);
+                a.pb(n);
+                b.pb(8);
+            }
+            for(int i=3;i<=7;i++) {
+                a.pb(i);
+                b.pb(8);
+            }
+            for(int i=1;i<=3;i++) {
+                a.pb(8);
+                b.pb(2);
+            }
+        }
+        cout<<a.size()<<endl;
+        for(int i=0;i<a.size();i++) {
+            cout<<a[i]<<" "<<b[i]<<endl;
+        }
     }
 }
