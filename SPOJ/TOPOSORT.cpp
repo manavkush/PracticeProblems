@@ -64,73 +64,76 @@ void _print(T t, V... v) {
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-int n, k;
-const int inf = 1e8;
-vi pref;
+int n, m;
+vector<int> *adj;
+vector<int> vis;
+vector<int> ans;
 
-int dp[4002][8000];
-bool vis[4002][8000];
-// vector<vi> dp(4002, vi(8000, 0));
-// vector<vi> vis(4002, vi(8000, 0));
-
-vector<int> a;
-int solve(int sum1, int ind) {
-    int sum2 = pref[ind] - sum1;
-    if (sum1 >= k and sum2 >= k) {
-        return ind;
-    } else if (ind >= n) {
-        return inf;
-    } else if (vis[ind][sum1]) {
-        return dp[ind][sum1];
-    } else {
-        vis[ind][sum1] = 1;
-
-        if (sum1 >= k) {
-            dp[ind][sum1] = solve(sum1, ind + 1);
-        } else if (sum2 >= k) {
-            dp[ind][sum1] = solve(sum1 + a[ind], ind + 1);
-        } else {
-            dp[ind][sum1] = min(solve(sum1 + a[ind], ind + 1), solve(sum1, ind + 1));
-        }
-        return dp[ind][sum1];
+int dfs(int x) {
+    // cout << "*";
+    vis[x] = 1;
+    for (auto y : adj[x]) {
+        if (!vis[y])
+            dfs(y);
     }
+    ans.push_back(x);
+}
+
+// Cycle detection
+bool check_cycle(int v) {
+    vis[v] = 2;  // Currently visiting
+    for (auto x : adj[v]) {
+        if (vis[x] == 0) {
+            if (check_cycle(x)) {  // if there is cycle return true
+                return true;
+            }
+        } else if (vis[x] == 2) {
+            return true;
+        }
+    }
+    vis[v] = 1;  // visiting complete
+    return false;
 }
 
 int32_t main() {
     FIO;
-    int t;
-    cin >> t;
-    while (t--) {
-        memset(dp, 0, sizeof(dp));
-        memset(vis, 0, sizeof(vis));
-        cin >> n >> k;
-        pref.resize(n + 1, 0);
-        a.resize(n, 0);
-        re(i, n) {
-            cin >> a[i];
+    cin >> n >> m;
+    vis.resize(n + 1, 0);
+    adj = new vector<int>[n + 1];
+    re(i, m) {
+        int x, y;
+        cin >> x >> y;
+        adj[x].pb(y);
+    }
+    for (int i = 1; i <= n; i++) {
+        sort(all(adj[i]), greater<int>());
+    }
+    // Finding the cycle
+    bool flag = 0;
+
+    for (int i = 1; i <= n; i++) {
+        if (vis[i] == 0) {
+            flag = check_cycle(i);
         }
-        sort(all(a), greater<int>());
-        re(i, n) {
-            pref[i + 1] = pref[i] + a[i];
+        if (flag) {
+            break;
         }
-        if (a[0] >= k) {
-            int count = 1;
-            int sum = 0;
-            int flag = 0;
-            for (int i = 1; i < n; i++) {
-                sum += a[i];
-                count++;
-                if (sum >= k) {
-                    flag = 1;
-                    break;
-                }
-            }
+    }
+    if (flag) {
+        cout << "Sandro fails.";
+        return 0;
+    }
+
+    re(i, n) {
+        vis[i + 1] = 0;
+    }
+    for (int i = n; i >= 1; i--) {
+        if (!vis[i]) {
+            dfs(i);
         }
-        int ans = solve(0, 0);
-        if (ans > n) {
-            cout << -1 << endl;
-        } else {
-            cout << ans << endl;
-        }
+    }
+    while (ans.size() > 0) {
+        cout << ans.back() << " ";
+        ans.pop_back();
     }
 }
