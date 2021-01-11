@@ -1,3 +1,4 @@
+// codeforces 377A
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,56 +65,67 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N = 2e5+5;
-vector<int> adj[N];     // Adjacency list
-vector<int> a(N,0);     // Stores the citizens in all cities
-vector<int> sum(N,0);   // Stores the sum of all citizens of the subtrees and itself
-vector<int> nleaves(N,0);   // No of leaves contained in the subtree of a node
-vector<int> dp(N,0);        // The answer to the subtree of ith node
+char maze[505][505];
+int vis[505][505];
+int n,m,k;
+int cnt=0;
 
-// We do a dfs
-// There are two ways. 1)To distribute evenly (ceil(sum)/leaves)
-// Distributing such that 2) Maximum child doesn't change.
+bool explore(int r, int c) {
+    if(r<0||c<0) {
+        return false;
+    } else if(r>=n || c>=m) {
+        return false;
+    } else if(maze[r][c]=='#') {
+        return false;
+    } else if (vis[r][c]==1) {
+        return false;
+    } else  {
+        return true;
+    }
+}
 
-void dfs(int node) {
-    sum[node]=a[node];  // We'll store no of citizens in the subtree of this node.
-    dp[node] = 0;       // Stores the maximum citizens that the burglar can catch starting from node: "node"
-    for(auto x: adj[node]) {
-        {
-            dfs(x);
-            sum[node]+=sum[x];
-            nleaves[node] += nleaves[x];
-            dp[node] = max(dp[x],dp[node]);
+int dr[] = {1,-1,0,0};
+int dc[] = {0,0,1,-1};
+
+void dfs(int sx,int sy) {
+    vis[sx][sy]=1;
+    re(i,4) {
+        int rr = sx+dr[i];
+        int cc = sy+dc[i];
+        if(explore(rr,cc)) {
+            dfs(rr,cc);
         }
     }
-    if(adj[node].size()==0) {   // If it is a leaf node
-        nleaves[node]=1;
-        sum[node] = a[node];
-        dp[node] = a[node];
-        return ;
+    if(cnt>=k) {
+        return;
+    } else {
+        maze[sx][sy]='X';
+        cnt++;
     }
-    dp[node] = max((sum[node]+nleaves[node]-1)/nleaves[node],dp[node]);
-    return ;
 }
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
-    while(t--)
-    {
-        int n;
-        cin>>n;
-        re1(i,2,n) {
-            int p;
-            cin>>p;
-            adj[p].pb(i);
+    // int n,m,k;
+    cin>>n>>m>>k;
+    memset(vis,0,sizeof(vis));
+    pair <int,int> source;
+    re(i,n) {
+        re(j,m) {
+            cin>>maze[i][j];
+            if(maze[i][j]=='.') {
+                source.ff=i;
+                source.ss=j;
+            }
         }
-        re1(i,1,n) {
-            cin>>a[i];
+    }
+    dfs(source.ff,source.ss);
+    
+    re(i,n) {
+        re(j,m) {
+            cout<<maze[i][j];
         }
-        dfs(1);
-        cout<<dp[1]<<endl;
+        cout<<endl;
     }
 }

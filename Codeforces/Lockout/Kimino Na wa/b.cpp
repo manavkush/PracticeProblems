@@ -74,8 +74,9 @@ int32_t main()
     dp[2]=0;
     dp[3]=4;
     re(i,N-2) {
-        if(i>3)
-        dp[i]=(dp[i-1]+(2*dp[i-2])%mod)%mod;
+        if(i>3) {
+                dp[i]=(dp[i-1]+(2*dp[i-2])%mod+((i%3==0)?4:0))%mod;
+        }
     }
     int t;
     cin>>t;

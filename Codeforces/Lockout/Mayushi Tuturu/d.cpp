@@ -64,56 +64,55 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N = 2e5+5;
-vector<int> adj[N];     // Adjacency list
-vector<int> a(N,0);     // Stores the citizens in all cities
-vector<int> sum(N,0);   // Stores the sum of all citizens of the subtrees and itself
-vector<int> nleaves(N,0);   // No of leaves contained in the subtree of a node
-vector<int> dp(N,0);        // The answer to the subtree of ith node
+const int N = 5e4+5;
+int n,k;
+vector<int> adj[N];
+int dp[N][505];     // States--> Node,Distance : Gives the no of node at a distance k from the node in subtree;
+int ans=0;
 
-// We do a dfs
-// There are two ways. 1)To distribute evenly (ceil(sum)/leaves)
-// Distributing such that 2) Maximum child doesn't change.
-
-void dfs(int node) {
-    sum[node]=a[node];  // We'll store no of citizens in the subtree of this node.
-    dp[node] = 0;       // Stores the maximum citizens that the burglar can catch starting from node: "node"
+int dfs(int node,int par) {
+    int temp=0;
+    dp[node][0]=1;
     for(auto x: adj[node]) {
-        {
-            dfs(x);
-            sum[node]+=sum[x];
-            nleaves[node] += nleaves[x];
-            dp[node] = max(dp[x],dp[node]);
+        if(x==par)
+            continue;
+        dfs(x,node);
+        
+        for(int i=1;i<=k;i++) {
+            // Storing the no of nodes with 'i' distance from the current node in the subtree.
+            dp[node][i] += dp[x][i-1]; 
         }
     }
-    if(adj[node].size()==0) {   // If it is a leaf node
-        nleaves[node]=1;
-        sum[node] = a[node];
-        dp[node] = a[node];
-        return ;
-    }
-    dp[node] = max((sum[node]+nleaves[node]-1)/nleaves[node],dp[node]);
-    return ;
 }
 
+void count(int node,int par) {  // this function counts the number of pairs with k distance.
+    ans+=dp[node][k];   // Type 1: if the path starts at the given node.
+
+    // type 2: When the current node lies in the middle of the path.
+    int temp=0;
+    for(auto x: adj[node]) {
+        if(x==par) continue;
+        count(x,node);
+        for(int i=1;i<k;i++) {
+            // We are partitioning the path like (1,k-1), (2,k-2), (3,k-3) ..;
+            // The first half is in x and the rest are in the other child nodes.
+            temp+=(dp[x][i-1]*(dp[node][k-i]-dp[x][k-i-1]));
+        }
+    }
+    ans+=temp/2;    // We add half the temp as each partition is counted twice.(from both the sides: (x, neighbours),(neighbour,x))
+}
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
-    while(t--)
-    {
-        int n;
-        cin>>n;
-        re1(i,2,n) {
-            int p;
-            cin>>p;
-            adj[p].pb(i);
-        }
-        re1(i,1,n) {
-            cin>>a[i];
-        }
-        dfs(1);
-        cout<<dp[1]<<endl;
+    // int n,k;
+    cin>>n>>k;
+    re(i,n-1) {
+        int a,b;
+        cin>>a>>b;
+        adj[a].pb(b);
+        adj[b].pb(a);
     }
+    dfs(1,0);
+    count(1,0);
+    cout<<ans<<endl;
 }
