@@ -64,54 +64,100 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-// We'll store the maximum leaf in a subtree of a node
-// We'll store the number of leaves in a subtree of a node
-const int N=2e5+5;
-vector<int> adj[N];
-vector<int> a(N,0);
-vector<int> vis(N,0);
-vector<int> nleaves(N,0);
-vector<int> dp(N,0);
 
-int dfs(int node) {
-    vector<int> ret;
-    vis[node] = 1;
-    int sum=a[node];
-    int mxchild=0;
-    for(auto x: adj[node]) {
-        if(!vis[x]) {
-            nleaves[node] += nleaves[x];
-            vis[x]=1;
-            int child=dfs(x);
-            sum+=child;
-            mxchild=max(mxchild,dp[x]);
+struct segtree {
+    int size;
+    vector<long long> mins;
+    void init(int n) {
+        size=1;
+        while(size<n) {
+            size*=2;
         }
-        if(adj[node].size()==0) {
-            dp[node] = a[node];
+        mins.assign(2*size,INT_MAX);
+    }
+
+    void build(vector<int> &a, int x, int lx, int rx) {
+        if(rx-lx==1) {
+            // debug(lx, mins);
+            if(lx<a.size()) {
+                mins[x]=a[lx];
+            }
+            return;
+        }
+        int m = (lx+rx)/2;
+        build(a, 2*x+1, lx, m);
+        build(a, 2*x+2, m, rx);
+        mins[x] = min(mins[2*x+1],mins[2*x+2]);
+    }
+    void build(vector<int> &a) {
+        build(a, 0, 0, size);
+    }
+
+    void set(int i, int v, int x, int lx, int rx) {
+        if(rx-lx==1) {
+            mins[x] = v;
+            return;
+        }
+        int m = (lx+rx)/2;
+        if(i<m) {
+            set(i, v, 2*x+1, lx, m);
         } else {
-            dp[node] = max(dp[mxchild],(sum+nleaves[x]-1)/nleaves[x]);
+            set(i, v, 2*x+2, m, rx);
         }
-        return dp[node];
+        mins[x] = min(mins[2*x+1], mins[2*x+2]);
     }
-}
+    void set(int i, int v) {
+        set(i, v, 0, 0, size);
+    }
 
-
-int32_t main()
-{
-    FIO;
-    int t=1;
-    // cin>>t;
-    while(t--)
-    {
-        int n;
-        cin>>n;
-        vector<int> p(n);
-        re1(i,2,n) {
-            cin>>p[i];
-            adj[p[i]].pb(i);
+    int getmin(int l, int r, int x, int lx, int rx) {
+        // debug(l,r,x,lx,rx);
+        if(l>=rx) {
+            return INT_MAX;
         }
-        re1(i,1,n) {
-            cin>>a[i];
+        if(r<=lx) {
+            return INT_MAX;
+        }
+        if(r>=rx && l<=lx) {
+            return mins[x];
+        }
+        int m = (lx+rx)/2;
+        int leftcall = getmin(l, r, 2*x+1, lx, m);
+        int rightcall = getmin(l, r, 2*x+2, m, rx);
+        return min(leftcall, rightcall);
+    }
+    int getmin(int l, int r) {
+        return getmin(l, r, 0, 0, size);
+    }
+};
+
+int32_t main() {
+    int n,m;
+    cin>>n>>m;
+
+    segtree st;
+    st.init(n);
+    
+    vector<int> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+
+    st.build(a);
+    // debug(st.mins);
+    while(m--) {
+        int op;
+        cin>>op;
+        if(op==1) {
+            int i,v;
+            cin>>i>>v;
+            st.set(i,v);
+        }
+        else {
+            int l,r;
+            cin>>l>>r;
+            cout<<st.getmin(l,r)<<endl;
         }
     }
+    debug(st.mins);
 }

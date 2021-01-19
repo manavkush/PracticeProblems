@@ -1,3 +1,6 @@
+// Author: manavkush
+// Date: 08/01/2021
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,54 +67,29 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-// We'll store the maximum leaf in a subtree of a node
-// We'll store the number of leaves in a subtree of a node
-const int N=2e5+5;
-vector<int> adj[N];
-vector<int> a(N,0);
-vector<int> vis(N,0);
-vector<int> nleaves(N,0);
-vector<int> dp(N,0);
-
-int dfs(int node) {
-    vector<int> ret;
-    vis[node] = 1;
-    int sum=a[node];
-    int mxchild=0;
-    for(auto x: adj[node]) {
-        if(!vis[x]) {
-            nleaves[node] += nleaves[x];
-            vis[x]=1;
-            int child=dfs(x);
-            sum+=child;
-            mxchild=max(mxchild,dp[x]);
-        }
-        if(adj[node].size()==0) {
-            dp[node] = a[node];
-        } else {
-            dp[node] = max(dp[mxchild],(sum+nleaves[x]-1)/nleaves[x]);
-        }
-        return dp[node];
-    }
-}
 
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
+    int t;cin>>t;
     while(t--)
     {
         int n;
         cin>>n;
-        vector<int> p(n);
-        re1(i,2,n) {
-            cin>>p[i];
-            adj[p[i]].pb(i);
+        // if(n==1) {
+            
+        // }
+        for(int i=0;i<n;i++) {
+            if(i==0) {
+                cout<<9;
+            } else if(i==1) {
+                cout<<8;
+            } else if(i==2) {
+                cout<<9;
+            }
+            else cout<<(i-3)%10;
         }
-        re1(i,1,n) {
-            cin>>a[i];
-        }
+        cout<<endl;
     }
 }

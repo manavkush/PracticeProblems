@@ -1,3 +1,6 @@
+// Author: manavkush
+// Date: 08/01/2021
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,54 +67,64 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-// We'll store the maximum leaf in a subtree of a node
-// We'll store the number of leaves in a subtree of a node
-const int N=2e5+5;
-vector<int> adj[N];
-vector<int> a(N,0);
-vector<int> vis(N,0);
-vector<int> nleaves(N,0);
-vector<int> dp(N,0);
-
-int dfs(int node) {
-    vector<int> ret;
-    vis[node] = 1;
-    int sum=a[node];
-    int mxchild=0;
-    for(auto x: adj[node]) {
-        if(!vis[x]) {
-            nleaves[node] += nleaves[x];
-            vis[x]=1;
-            int child=dfs(x);
-            sum+=child;
-            mxchild=max(mxchild,dp[x]);
-        }
-        if(adj[node].size()==0) {
-            dp[node] = a[node];
-        } else {
-            dp[node] = max(dp[mxchild],(sum+nleaves[x]-1)/nleaves[x]);
-        }
-        return dp[node];
-    }
-}
 
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
+    int t;cin>>t;
     while(t--)
     {
         int n;
         cin>>n;
-        vector<int> p(n);
-        re1(i,2,n) {
-            cin>>p[i];
-            adj[p[i]].pb(i);
-        }
-        re1(i,1,n) {
+        vi a(n);
+        re(i,n) {
             cin>>a[i];
+        }
+        if(n<3) {
+            cout<<0<<endl;
+            continue;
+        } else {
+            // Base conditions
+            if(is_sorted(all(a))) {
+                cout<<0<<endl;
+                continue;
+            } 
+            vi b=a;
+            sort(all(b),greater<int>());
+            if(b==a) {
+                cout<<0<<endl;
+                continue;
+            }
+            string str(n,'*');
+            b.clear();
+            b.resize(n,0);
+            int flag=0;
+
+            int count=0;
+            re1(i,1,n-2) {
+                if(a[i]>a[i-1]&& a[i]>a[i+1]) {
+                    b[i]=1;
+                    str[i]='a';
+                    count++;
+                } else if( a[i]<a[i-1] && a[i]<a[i+1]) {
+                    b[i]=-1;
+                    str[i]='b';
+                    count++;
+                }
+            }
+            debug(str);
+            int ans=0;
+            if((str.find("aba")!=string::npos)||(str.find("bab")!=string::npos))
+            ans=3;
+            else if((str.find("ab")!=string::npos)||(str.find("ba")!=string::npos))
+            ans = 2;
+            else {
+                ans=1;
+            }
+
+            cout<<count-ans<<endl;
+            // if(b.find())
         }
     }
 }
