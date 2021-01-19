@@ -64,26 +64,55 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=2e6+4;
+const int N = 5e4+5;
+int n,k;
+vector<int> adj[N];
+int dp[N][505];     // States--> Node,Distance : Gives the no of node at a distance k from the node in subtree;
+int ans=0;
 
+int dfs(int node,int par) {
+    int temp=0;
+    dp[node][0]=1;
+    for(auto x: adj[node]) {
+        if(x==par)
+            continue;
+        dfs(x,node);
+        
+        for(int i=1;i<=k;i++) {
+            // Storing the no of nodes with 'i' distance from the current node in the subtree.
+            dp[node][i] += dp[x][i-1]; 
+        }
+    }
+}
+
+void count(int node,int par) {  // this function counts the number of pairs with k distance.
+    ans+=dp[node][k];   // Type 1: if the path starts at the given node.
+
+    // type 2: When the current node lies in the middle of the path.
+    int temp=0;
+    for(auto x: adj[node]) {
+        if(x==par) continue;
+        count(x,node);
+        for(int i=1;i<k;i++) {
+            // We are partitioning the path like (1,k-1), (2,k-2), (3,k-3) ..;
+            // The first half is in x and the rest are in the other child nodes.
+            temp+=(dp[x][i-1]*(dp[node][k-i]-dp[x][k-i-1]));
+        }
+    }
+    ans+=temp/2;    // We add half the temp as each partition is counted twice.(from both the sides: (x, neighbours),(neighbour,x))
+}
 int32_t main()
 {
     FIO;
-    vector<int> dp(N,0);
-    dp[1]=0;
-    dp[2]=0;
-    dp[3]=4;
-    re(i,N-2) {
-        if(i>3) {
-                dp[i]=(dp[i-1]+(2*dp[i-2])%mod+((i%3==0)?4:0))%mod;
-        }
+    // int n,k;
+    cin>>n>>k;
+    re(i,n-1) {
+        int a,b;
+        cin>>a>>b;
+        adj[a].pb(b);
+        adj[b].pb(a);
     }
-    int t;
-    cin>>t;
-    while(t--) {
-        int n;
-        cin>>n;
-        cout<<dp[n]<<endl;
-    }
-
+    dfs(1,0);
+    count(1,0);
+    cout<<ans<<endl;
 }

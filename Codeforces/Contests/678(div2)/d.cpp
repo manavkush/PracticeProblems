@@ -64,37 +64,37 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-// We'll store the maximum leaf in a subtree of a node
-// We'll store the number of leaves in a subtree of a node
-const int N=2e5+5;
-vector<int> adj[N];
-vector<int> a(N,0);
-vector<int> vis(N,0);
-vector<int> nleaves(N,0);
-vector<int> dp(N,0);
+const int N = 2e5+5;
+vector<int> adj[N];     // Adjacency list
+vector<int> a(N,0);     // Stores the citizens in all cities
+vector<int> sum(N,0);   // Stores the sum of all citizens of the subtrees and itself
+vector<int> nleaves(N,0);   // No of leaves contained in the subtree of a node
+vector<int> dp(N,0);        // The answer to the subtree of ith node
 
-int dfs(int node) {
-    vector<int> ret;
-    vis[node] = 1;
-    int sum=a[node];
-    int mxchild=0;
+// We do a dfs
+// There are two ways. 1)To distribute evenly (ceil(sum)/leaves)
+// Distributing such that 2) Maximum child doesn't change.
+
+void dfs(int node) {
+    sum[node]=a[node];  // We'll store no of citizens in the subtree of this node.
+    dp[node] = 0;       // Stores the maximum citizens that the burglar can catch starting from node: "node"
     for(auto x: adj[node]) {
-        if(!vis[x]) {
+        {
+            dfs(x);
+            sum[node]+=sum[x];
             nleaves[node] += nleaves[x];
-            vis[x]=1;
-            int child=dfs(x);
-            sum+=child;
-            mxchild=max(mxchild,dp[x]);
+            dp[node] = max(dp[x],dp[node]);
         }
-        if(adj[node].size()==0) {
-            dp[node] = a[node];
-        } else {
-            dp[node] = max(dp[mxchild],(sum+nleaves[x]-1)/nleaves[x]);
-        }
-        return dp[node];
     }
+    if(adj[node].size()==0) {   // If it is a leaf node
+        nleaves[node]=1;
+        sum[node] = a[node];
+        dp[node] = a[node];
+        return ;
+    }
+    dp[node] = max((sum[node]+nleaves[node]-1)/nleaves[node],dp[node]);
+    return ;
 }
-
 
 int32_t main()
 {
@@ -105,13 +105,25 @@ int32_t main()
     {
         int n;
         cin>>n;
+<<<<<<< HEAD
         vector<int> p(n);
         re1(i,2,n) {
             cin>>p[i];
             adj[p[i]].pb(i);
+=======
+        re1(i,2,n) {
+            int p;
+            cin>>p;
+            adj[p].pb(i);
+>>>>>>> 006b84d6056b6bb90a1359dfd1542a8b77ed57af
         }
         re1(i,1,n) {
             cin>>a[i];
         }
+<<<<<<< HEAD
+=======
+        dfs(1);
+        cout<<dp[1]<<endl;
+>>>>>>> 006b84d6056b6bb90a1359dfd1542a8b77ed57af
     }
 }

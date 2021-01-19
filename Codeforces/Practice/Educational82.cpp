@@ -64,26 +64,91 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=2e6+4;
+int n;
+vector<int> adj[27];
+// void dfs(int i,vector<int> &vis) {
+//         vis[i]=1;
+//         for(auto x:adj[i]) {
+//             if(!vis[x])
+//             {
+//                 vis[x]=1;
+//                 dfs(x,vis);
+//             }
+//         }
+//         cout<<char(i+'a');
+// }
 
 int32_t main()
 {
     FIO;
-    vector<int> dp(N,0);
-    dp[1]=0;
-    dp[2]=0;
-    dp[3]=4;
-    re(i,N-2) {
-        if(i>3) {
-                dp[i]=(dp[i-1]+(2*dp[i-2])%mod+((i%3==0)?4:0))%mod;
-        }
-    }
     int t;
     cin>>t;
     while(t--) {
-        int n;
-        cin>>n;
-        cout<<dp[n]<<endl;
-    }
+        string s;
+        cin>>s;
+        int n=s.length();
+        string ans;
+        int curr=0;
+        map<int,int> hash;
+        vector<int> vis(27,0);
+        int prev=-1;
+        bool flag=1;
+        for(int i=0;i<n;i++) {
+            int letter=s[i]-'a';
+            if(hash.count(letter)==0) {
+                if(curr==ans.length()-1) {
+                    ans+=s[i];
+                    curr++;
+                } else if(curr==0) {
+                    ans = s[i]+ans;
+                } else {
+                    flag=0;
+                    break;
+                }
+                hash[letter]=1;
+            } else {
+                if(curr==ans.length()-1) {
+                    if(ans[curr-1]==s[i]) {
+                        curr--;
+                    } else {
+                        flag=0;
+                        break;
+                    }
+                } else if(curr==0) {
+                    if(ans[1]==s[i]) {
+                        curr++;
+                    } else {
+                        flag=0;
+                        break;
+                    }
+                } else {
+                    if(ans[curr+1]==s[i]) {
+                        curr++;
+                    } else if(ans[curr-1]==s[i]) {
+                        curr--;
+                    } else {
+                        flag=0;
+                        break;
+                    }
+                }
+            }
+        }
+        if(flag) {
+            cout<<"YES\n";
+            for(int i=0;i<26;i++) {
+                if(hash.count(i)) {
+                    continue;
+                } else {
+                    ans+=char('a'+i);
+                }
+            }
+            cout<<ans<<endl;
+        } else {
+            cout<<"NO\n";
+        }
 
+        re(i,27) {
+            adj[i].clear();
+        }
+    }
 }

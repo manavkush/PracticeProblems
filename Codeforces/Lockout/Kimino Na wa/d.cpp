@@ -64,26 +64,56 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N=2e6+4;
+const int N=2e5+3;
+int n,m;
+vector<int> adj[N];
+vector<int> vis;
+
+bool check(int s) {
+    vis[s]=2;
+    for(auto x:adj[s]) {
+        if(vis[x]==2) {
+            return 2;
+        } else if(vis[x]==0) {
+            if(check(x)) {
+                return true;
+            }
+        }
+    }
+    vis[s]=1;
+    return false;
+}
 
 int32_t main()
 {
     FIO;
-    vector<int> dp(N,0);
-    dp[1]=0;
-    dp[2]=0;
-    dp[3]=4;
-    re(i,N-2) {
-        if(i>3) {
-                dp[i]=(dp[i-1]+(2*dp[i-2])%mod+((i%3==0)?4:0))%mod;
-        }
-    }
     int t;
     cin>>t;
     while(t--) {
-        int n;
-        cin>>n;
-        cout<<dp[n]<<endl;
+        cin>>n>>m;
+        vis.resize(n+1,0);
+        re(i,m) {
+            int t,x,y;
+            cin>>t>>x>>y;
+            if(t) {
+                adj[x].pb(y);
+            }
+        }
+        int flag=0;
+        for(int i=1;i<=n;i++) {
+            if(vis[i]==0 && (check(i))) {
+                flag=1;
+                break;
+            }
+        }
+        if(flag) {
+            cout<<"NO\n";
+        } else {
+            cout<<"YES\n";
+        }
+        for(int i=0;i<=n;i++) {
+            adj[i].clear();
+        }
+        vis.clear();
     }
-
 }
