@@ -64,91 +64,101 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-int n;
-vector<int> adj[27];
-// void dfs(int i,vector<int> &vis) {
-//         vis[i]=1;
-//         for(auto x:adj[i]) {
-//             if(!vis[x])
-//             {
-//                 vis[x]=1;
-//                 dfs(x,vis);
-//             }
-//         }
-//         cout<<char(i+'a');
-// }
+char grid[1005][1005];
+bool vis[1005][1005];
+
+int n,m;
+bool flag=0;
+pii start, ending;
+
+int dr [] = {1,-1, 0,  0};
+int dc [] = {0, 0, 1, -1};
+
+map<pii,pii> parent;    // parent of (i,j) -> k,l
+
+bool explore(int r, int c) {
+    if(r<0 || c<0) return false;
+    if(r>=n || c>=m) return false;
+    if(vis[r][c]) return false;
+    if(grid[r][c] == '#') return false;
+    return true;
+}
+
+void bfs(int i, int j) {
+    queue<int> xx,yy;
+    xx.push(i);
+    yy.push(j);
+    vis[i][j] = 1;
+
+    while(!xx.empty()) {        
+        int sx = xx.front();
+        int sy = yy.front();
+        xx.pop();
+        yy.pop();
+        if(sx == ending.ff and sy == ending.ss) {
+            flag = 1;
+            return;
+        }
+        re(i,4) {
+            int rr = sx + dr[i];
+            int cc = sy + dc[i];
+
+            if(explore(rr,cc)) {
+                xx.push(rr);
+                yy.push(cc);
+                vis[rr][cc]=1;
+                parent[{rr,cc}] = {sx,sy};
+            }
+        }
+    }
+}
 
 int32_t main()
 {
     FIO;
-    int t;
-    cin>>t;
-    while(t--) {
-        string s;
-        cin>>s;
-        int n=s.length();
-        string ans;
-        int curr=0;
-        map<int,int> hash;
-        vector<int> vis(27,0);
-        int prev=-1;
-        bool flag=1;
-        for(int i=0;i<n;i++) {
-            int letter=s[i]-'a';
-            if(hash.count(letter)==0) {
-                if(curr==ans.length()-1) {
-                    ans+=s[i];
-                    curr++;
-                } else if(curr==0) {
-                    ans = s[i]+ans;
-                } else {
-                    flag=0;
-                    break;
-                }
-                hash[letter]=1;
-            } else {
-                if(curr==ans.length()-1) {
-                    if(ans[curr-1]==s[i]) {
-                        curr--;
-                    } else {
-                        flag=0;
-                        break;
-                    }
-                } else if(curr==0) {
-                    if(ans[1]==s[i]) {
-                        curr++;
-                    } else {
-                        flag=0;
-                        break;
-                    }
-                } else {
-                    if(ans[curr+1]==s[i]) {
-                        curr++;
-                    } else if(ans[curr-1]==s[i]) {
-                        curr--;
-                    } else {
-                        flag=0;
-                        break;
-                    }
-                }
+    cin>>n>>m;
+    // vector<pii> dots;
+    re(i,n) {
+        re(j,m) {
+            cin>>grid[i][j];
+            if(grid[i][j]=='A') {
+                start = {i,j};
+            } else if(grid[i][j]=='B') {
+                ending = {i,j};
             }
-        }
-        if(flag) {
-            cout<<"YES\n";
-            for(int i=0;i<26;i++) {
-                if(hash.count(i)) {
-                    continue;
-                } else {
-                    ans+=char('a'+i);
-                }
-            }
-            cout<<ans<<endl;
-        } else {
-            cout<<"NO\n";
-        }
-
-        re(i,27) {
-            adj[i].clear();
         }
     }
+    int count=0;
+    bfs(start.ff, start.ss);
+    if(!flag) {
+        cout<<"NO";
+        return 0;
+    } else {
+        cout<<"YES\n";
+        vector<pii> res;
+        auto curr = ending;
+        while(curr != start) {
+            res.pb(curr);
+            curr = parent[curr];
+        }
+        cout<<res.size()<<endl;
+        res.pb(start);
+        reverse(all(res));
+        debug(res);
+        for(int i=1;i<res.size();i++) {
+            int dx = res[i].ff - res[i-1].ff;
+            int dy = res[i].ss - res[i-1].ss;
+
+            if(dx==1) {
+                cout<<"D";
+            } else if(dx==-1) {
+                cout<<"U";
+            } else if(dy==1) {
+                cout<<"R";
+            } else if(dy==-1) {
+                cout<<"L";
+            }
+        }
+    }
+
 }
