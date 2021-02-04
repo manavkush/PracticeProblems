@@ -64,44 +64,58 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N = 2e5+5;
-int n,m;
+const int N = 2505;
+const int MAXVAL = 1e15;
+struct node {
+    int u,v,w;
+};
+vector<node> adj;
+vector<int> dist(N,MAXVAL);
+map<int,int> parent;
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
-    while(t--) {
-        cin>>n>>m;
-        vi a(n),b(n);
-        vi ones, twos;
-        int sum = 0;
-        re(i,n) {
-            cin>>a[i];
-            sum+=a[i];
-        }
-        re(i,n) {
-            cin>>b[i];
-            if(b[i]==1) {
-                ones.pb(a[i]);
-            } else {
-                twos.pb(a[i]);
+    int n,m;
+    cin>>n>>m;
+    re(i,m) {
+        int a,b,c;
+        cin>>a>>b>>c;
+        adj.pb({a,b,c});
+    }
+    int flag=-1;
+    re(i,n) {
+        flag = -1;
+        for(auto x: adj) {
+            if(dist[x.v] > dist[x.u] + x.w) {
+                dist[x.v] = dist[x.u] + x.w;
+                parent[x.v] = x.u; 
+                flag = x.v;
             }
         }
-        sort(all(ones),greater<int>());
-        sort(all(twos),greater<int>());
-        int sones = ones.size();
-        int stwos = twos.size();
-
-        for(int i=1;i<sones;i++) {
-            ones[i]+=ones[i-1];
-        }
-        for(int i=1;i<stwos;i++) {
-            twos[i]+=twos[i-1];
-        }
-
-        int ans = INT_MAX;
-        .
     }
+    if(flag==-1) {
+        cout<<"NO\n";
+    } 
+    else {
+        cout<<"YES\n";
+        re(i,n) {       // Makes sure that we're in the cycle
+            flag = parent[flag];
+        }
+        debug(parent,flag);
+        int curr = flag;
+        vector<int> cycle;
+        while(parent[curr]!=flag) {
+            cycle.pb(curr);
+            curr = parent[curr];
+        }
+        cycle.pb(curr);
+        cycle.pb(flag);
+        reverse(all(cycle));
+        for(auto x: cycle) {
+            cout<<x<<" ";
+        }
+        
+    }
+
 }
