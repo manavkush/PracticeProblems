@@ -1,3 +1,6 @@
+// Author: manavkush
+// Date: 05/02/2021
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,44 +67,60 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N = 2e5+5;
-int n,m;
+
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
-    while(t--) {
-        cin>>n>>m;
-        vi a(n),b(n);
-        vi ones, twos;
-        int sum = 0;
-        re(i,n) {
-            cin>>a[i];
-            sum+=a[i];
-        }
-        re(i,n) {
-            cin>>b[i];
-            if(b[i]==1) {
-                ones.pb(a[i]);
+    int t;cin>>t;
+    while(t--)
+    {
+        int x,y;
+        cin>>x>>y;
+        string str;cin>>str;
+        int l,r,u,d;
+        l=d=u=r=0;
+        int sx,sy;
+        sx=sy=0;
+        re(i,str.length()) {
+            if(str[i]=='U') {
+                u++;
+            }
+            else if(str[i]=='D') {
+                d++;
+            }
+            else if(str[i]=='R') {
+                r++;
             } else {
-                twos.pb(a[i]);
+                l++;
+            }
+        }   
+        bool flag = 1;
+        if(x>=0) {
+            if(r<x) {
+                flag = 0;
+            }
+        } else {
+            if(l<abs(x)) {
+                flag=0;
             }
         }
-        sort(all(ones),greater<int>());
-        sort(all(twos),greater<int>());
-        int sones = ones.size();
-        int stwos = twos.size();
 
-        for(int i=1;i<sones;i++) {
-            ones[i]+=ones[i-1];
+        if(y>=0) {
+            if(u<y) {
+                flag = 0;
+            }
         }
-        for(int i=1;i<stwos;i++) {
-            twos[i]+=twos[i-1];
+        else {
+            if(d<abs(y)) {
+                flag = 0;
+            }
         }
-
-        int ans = INT_MAX;
-        .
+        
+        if(flag) {
+            cout<<"YES\n";
+        } else {
+            cout<<"NO\n";
+        }
     }
 }

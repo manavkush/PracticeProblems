@@ -1,3 +1,6 @@
+// Author: manavkush
+// Date: 05/02/2021
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,44 +67,36 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N = 2e5+5;
-int n,m;
+
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
-    while(t--) {
-        cin>>n>>m;
-        vi a(n),b(n);
-        vi ones, twos;
-        int sum = 0;
+    int t;cin>>t;
+    while(t--)
+    {
+        int n,k;
+        cin>>n>>k;
+        vi a(n);
         re(i,n) {
             cin>>a[i];
-            sum+=a[i];
         }
-        re(i,n) {
-            cin>>b[i];
-            if(b[i]==1) {
-                ones.pb(a[i]);
-            } else {
-                twos.pb(a[i]);
+        int curr = 0;
+        int idx = -1;
+        int i  = 1;
+        while(curr<k and i<n) {
+            if(a[i]>a[i-1]) {
+                a[i-1]++;
+                curr++;
+                if(curr>=k) {
+                    idx = i;
+                    break;
+                }
+                i=0;
             }
+            i++;
         }
-        sort(all(ones),greater<int>());
-        sort(all(twos),greater<int>());
-        int sones = ones.size();
-        int stwos = twos.size();
+        cout<<idx<<endl;
 
-        for(int i=1;i<sones;i++) {
-            ones[i]+=ones[i-1];
-        }
-        for(int i=1;i<stwos;i++) {
-            twos[i]+=twos[i-1];
-        }
-
-        int ans = INT_MAX;
-        .
     }
 }

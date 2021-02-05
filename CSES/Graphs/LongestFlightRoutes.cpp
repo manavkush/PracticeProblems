@@ -64,44 +64,41 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-const int N = 2e5+5;
 int n,m;
+const int N = 1e5+5;
+vector<int> adj[N];
+stack<int> st;
+vector<int> vis(N,0);
+vector<int> dist(N,INT_MAX);
+
+void dfs(int s) {
+    vis[s] = 1;
+    for(auto x: adj[s]) {
+        if(!vis[x]) {
+            dfs(s);
+        }
+    }
+    st.push(s);
+}
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
-    while(t--) {
-        cin>>n>>m;
-        vi a(n),b(n);
-        vi ones, twos;
-        int sum = 0;
-        re(i,n) {
-            cin>>a[i];
-            sum+=a[i];
+    cin>>n>>m;
+    re(i,m) {
+        int a,b;
+        cin>>a>>b;
+        adj[a].pb(b);
+    }
+    dfs(1);
+    if(vis[n]==0) {
+        cout<<"IMPOSSIBLE";
+    } else {
+        vector<int> ans;
+        while(!st.empty()) {
+            ans.pb(st.top());
+            st.pop();
         }
-        re(i,n) {
-            cin>>b[i];
-            if(b[i]==1) {
-                ones.pb(a[i]);
-            } else {
-                twos.pb(a[i]);
-            }
-        }
-        sort(all(ones),greater<int>());
-        sort(all(twos),greater<int>());
-        int sones = ones.size();
-        int stwos = twos.size();
-
-        for(int i=1;i<sones;i++) {
-            ones[i]+=ones[i-1];
-        }
-        for(int i=1;i<stwos;i++) {
-            twos[i]+=twos[i-1];
-        }
-
-        int ans = INT_MAX;
-        .
+        
     }
 }
