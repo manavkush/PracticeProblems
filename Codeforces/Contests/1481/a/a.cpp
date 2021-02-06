@@ -1,5 +1,5 @@
 // Author: manavkush
-// Date: 17/12/2020
+// Date: 05/02/2021
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -75,19 +75,52 @@ int32_t main()
     int t;cin>>t;
     while(t--)
     {
-        int x;
-        cin>>x;
-        
-        int n = ceil((sqrt(1+8*x)-1)/2);
-        debug(n);
-        if(x == n*(n+1)/2) {
-            cout<<n<<endl;
-            continue;
-        }
-        else if(x == n*(n+1)/2 - 1) {
-            cout<<n+1<<endl;
+        int x,y;
+        cin>>x>>y;
+        string str;cin>>str;
+        int l,r,u,d;
+        l=d=u=r=0;
+        int sx,sy;
+        sx=sy=0;
+        re(i,str.length()) {
+            if(str[i]=='U') {
+                u++;
+            }
+            else if(str[i]=='D') {
+                d++;
+            }
+            else if(str[i]=='R') {
+                r++;
+            } else {
+                l++;
+            }
+        }   
+        bool flag = 1;
+        if(x>=0) {
+            if(r<x) {
+                flag = 0;
+            }
         } else {
-            cout<<n<<endl;
+            if(l<abs(x)) {
+                flag=0;
+            }
+        }
+
+        if(y>=0) {
+            if(u<y) {
+                flag = 0;
+            }
+        }
+        else {
+            if(d<abs(y)) {
+                flag = 0;
+            }
+        }
+        
+        if(flag) {
+            cout<<"YES\n";
+        } else {
+            cout<<"NO\n";
         }
     }
 }

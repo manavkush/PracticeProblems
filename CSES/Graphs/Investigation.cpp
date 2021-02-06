@@ -1,6 +1,3 @@
-// Author: manavkush
-// Date: 17/12/2020
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -67,27 +64,17 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-
+const int N = 1e5+5;
+vector<pii> adj[N];
 
 int32_t main()
 {
     FIO;
-    int t;cin>>t;
-    while(t--)
-    {
-        int x;
-        cin>>x;
-        
-        int n = ceil((sqrt(1+8*x)-1)/2);
-        debug(n);
-        if(x == n*(n+1)/2) {
-            cout<<n<<endl;
-            continue;
-        }
-        else if(x == n*(n+1)/2 - 1) {
-            cout<<n+1<<endl;
-        } else {
-            cout<<n<<endl;
-        }
+    int n,m;
+    cin>>n>>m;
+    re(i,m) {
+        int a,b,c;
+        cin>>a>>b>>c;
+        adj[a].pb({b,c});
     }
 }

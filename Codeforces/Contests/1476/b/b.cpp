@@ -1,5 +1,5 @@
 // Author: manavkush
-// Date: 17/12/2020
+// Date: 29/01/2021
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -68,6 +68,13 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 
+void solve(vector<int> &p, int k, int idx) {
+    if( (p[idx+1]-p[idx])*100 <= k*p[idx]) {
+        return;
+    } else {
+        
+    }
+}
 
 int32_t main()
 {
@@ -75,19 +82,28 @@ int32_t main()
     int t;cin>>t;
     while(t--)
     {
-        int x;
-        cin>>x;
-        
-        int n = ceil((sqrt(1+8*x)-1)/2);
-        debug(n);
-        if(x == n*(n+1)/2) {
-            cout<<n<<endl;
-            continue;
+        int n,k;
+        cin>>n>>k;
+        vector<int> p(n+1);
+        vector<int> pref(n+1);
+        int sum = 0;
+        re(i,n) {
+            cin>>p[i+1];
+            pref[i+1] = pref[i] + p[i+1];
         }
-        else if(x == n*(n+1)/2 - 1) {
-            cout<<n+1<<endl;
-        } else {
-            cout<<n<<endl;
+        int res = 0;
+        for(int i=n-1;i>0;i--) {
+            if( p[i+1]*100 <= pref[i]*k ) {
+                continue;
+            } else {
+                int diff = p[i+1]*100 - pref[i]*k;
+                diff = ceil(diff*1.0/k);
+                res+=diff;
+                for(int j = 1;j<=n;j++) {
+                    pref[j] += diff;
+                }
+            }
         }
+        cout<<res<<endl;
     }
 }

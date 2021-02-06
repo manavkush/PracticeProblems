@@ -1,5 +1,5 @@
 // Author: manavkush
-// Date: 17/12/2020
+// Date: 05/02/2021
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -75,19 +75,28 @@ int32_t main()
     int t;cin>>t;
     while(t--)
     {
-        int x;
-        cin>>x;
-        
-        int n = ceil((sqrt(1+8*x)-1)/2);
-        debug(n);
-        if(x == n*(n+1)/2) {
-            cout<<n<<endl;
-            continue;
+        int n,k;
+        cin>>n>>k;
+        vi a(n);
+        re(i,n) {
+            cin>>a[i];
         }
-        else if(x == n*(n+1)/2 - 1) {
-            cout<<n+1<<endl;
-        } else {
-            cout<<n<<endl;
+        int curr = 0;
+        int idx = -1;
+        int i  = 1;
+        while(curr<k and i<n) {
+            if(a[i]>a[i-1]) {
+                a[i-1]++;
+                curr++;
+                if(curr>=k) {
+                    idx = i;
+                    break;
+                }
+                i=0;
+            }
+            i++;
         }
+        cout<<idx<<endl;
+
     }
 }

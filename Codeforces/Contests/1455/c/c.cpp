@@ -68,6 +68,25 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 
+void solve() {
+    int a,b;
+    cin>>a>>b;
+    if(a>b) {
+        cout<<a-1<<" "<<b<<endl;
+    } else if(b>a) {
+        if(a==1) {
+            cout<<0<<" "<<b<<endl;
+        } else {
+            cout<<a-1<<" "<<b<<endl;
+        }
+    } else {
+        if(a==1) {
+            cout<<0<<" "<<1<<endl;
+        } else {
+            cout<<a-1<<" "<<b<<endl;
+        }
+    }
+}
 
 int32_t main()
 {
@@ -75,6 +94,6 @@ int32_t main()
     int t;cin>>t;
     while(t--)
     {
-        
+        solve();
     }
 }

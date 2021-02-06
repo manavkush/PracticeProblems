@@ -68,6 +68,83 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 
+void solve() {
+    int n,x;
+    cin>>n>>x;
+    vi a(n);
+    re(i,n) {
+        cin>>a[i];
+    }
+    if(is_sorted(all(a))) {
+        cout<<0<<endl;
+        return;
+    }
+    vi lows(n);
+    bool flag = 1;
+    re(i,n) {
+        int count = 0;
+        re(j,i) {
+            if(a[i]<a[j]) {
+                count++;
+            }
+        }
+        lows[i] = count;
+        if(count>1) {
+            flag = 0;
+            break;
+        }
+    }
+    if(flag==0) {
+        cout<<-1<<endl;
+        return;
+    }
+    int curr = 0;   // index of element just greater than x;
+    re(i,n) {
+        if(a[i]>x) {
+            curr = i;
+            break;
+        }
+    }
+    int count = 0;
+    for(int i=0;i<n-1;i++) {
+        if(i==0) {
+            if(a[i]>a[i+1]) {
+                if(x<=a[i+1]) {
+                    count++;
+                    swap(x,a[i]);
+                } else {
+                    flag = 0;
+                    break;
+                }
+            }
+        } else {
+            if(a[i]>a[i+1]) {
+                if(x>=a[i-1] and x<=a[i+1]) {
+                    count++;
+                    swap(a[i],x);
+                } else if(x<a[i-1]) {
+                    for(int k=curr; k<=i; k++) {
+                        if(a[k]>x) {
+                            swap(x,a[k]);
+                            count++;
+                        }
+                    }
+                }
+                else {
+                    flag = 0;
+                    break;
+                }
+            }
+        }
+    }
+    if(flag==0) {
+        cout<<-1<<endl;
+    } else {
+        cout<<count<<endl;
+    }
+
+
+}
 
 int32_t main()
 {
@@ -75,6 +152,6 @@ int32_t main()
     int t;cin>>t;
     while(t--)
     {
-        
+        solve();
     }
 }

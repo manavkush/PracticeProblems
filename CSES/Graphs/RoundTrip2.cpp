@@ -1,6 +1,3 @@
-// Author: manavkush
-// Date: 17/12/2020
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -67,27 +64,62 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+int n,m;
+const int N = 1e5+5;
+vector<int> adj[N];
+vector<int> vis(N,0);
 
+stack<int> st;
+int start = -1;
+int ending = -1;
+
+bool dfs(int s) {
+    vis[s] = 2;
+    st.push(s);
+    for(auto x: adj[s]) {
+        if(vis[x]==0 and dfs(x)) {
+            return true;
+        }
+        else if(vis[x]==2) {
+            start = x;
+            ending = s;
+            return true;
+        }
+    }
+    vis[s] = 1;
+    st.pop();
+    return false;
+}
 
 int32_t main()
 {
     FIO;
-    int t;cin>>t;
-    while(t--)
-    {
-        int x;
-        cin>>x;
-        
-        int n = ceil((sqrt(1+8*x)-1)/2);
-        debug(n);
-        if(x == n*(n+1)/2) {
-            cout<<n<<endl;
-            continue;
+    cin>>n>>m;
+    re(i,m) {
+        int a,b;
+        cin>>a>>b;
+        adj[a].pb(b);
+    }
+    vector<int> ans;
+    bool flag = 0;
+    re(i,N) {
+        if(vis[i]==0 and dfs(i)) {
+            ans.pb(start);
+            while(st.top()!=start) {
+                ans.pb(st.top());
+                st.pop();
+            }
+            ans.pb(st.top());
+            break;
         }
-        else if(x == n*(n+1)/2 - 1) {
-            cout<<n+1<<endl;
-        } else {
-            cout<<n<<endl;
+    }
+    if(ans.size()==0) {
+        cout<<"IMPOSSIBLE";
+    } else {
+        reverse(all(ans));
+        cout<<ans.size()<<endl;
+        for(auto x: ans) {
+            cout<<x<<" ";
         }
     }
 }
