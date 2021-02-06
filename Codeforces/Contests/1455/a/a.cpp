@@ -75,6 +75,9 @@ int32_t main()
     int t;cin>>t;
     while(t--)
     {
-        
+        string n;
+        cin>>n;
+        cout<<n.size()<<endl;
+        // cout<<dig<<endl;
     }
 }
