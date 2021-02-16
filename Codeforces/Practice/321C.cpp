@@ -1,6 +1,3 @@
-// Author: manavkush
-// Date: 07/02/2021
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -67,60 +64,46 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+const int N = 1e5;
+vector<int> adj[N];
+vector<int> a;
+int n,m;
 
+int dfs(int s, int par, int rats) {
+    if(a[s]==1) {
+        rats++;
+    } else {
+        rats=0;
+    }
+    if(rats>m) {
+        return 0;
+    } 
+    int count = 0;
+    if(adj[s].size()==1 and adj[s][0]==par) {
+        return 1;
+    }
+    for(auto x: adj[s]) {
+        if(x!=par) {
+            count+=dfs(x,s,rats);
+        }
+    }
+    return count;
+}
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
-    while(t--)
-    {
-        int n;
-        cin>>n;
-        vi a(n);
-        re(i,n) {
-            cin>>a[i];
-        }
-        int last1,last2;
-        last1=last2=-1;
-        int frq1, frq2;
-        frq1=frq2 = 0;
-        vi f,s;
-        re(i,n) {
-            if(last1==a[i] and last2==a[i]) {
-                s.pb(a[i]);
-                last2=a[i];
-            } else if(last2==a[i]) {
-                f.pb(a[i]);
-                last1=a[i];
-            } else {
-                f.pb(a[i]);
-                last1=a[i];
-            }
-        }
-        int count=0;
-        for(int i=0;i<f.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(f[i]!=f[i-1]) {
-                count++;
-            }
-        }
-        for(int i=0;i<s.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(s[i]!=s[i-1]) {
-                count++;
-            }
-        }
-        debug(f);
-        debug(s);
-        cout<<count<<endl;
-
+    
+    cin>>n>>m;
+    a.resize(n+1);
+    re(i,n) {
+        cin>>a[i+1];
     }
+    re(i,n-1) {
+        int x,y;
+        cin>>x>>y;
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+    cout<<dfs(1,1,0)<<endl;
 }

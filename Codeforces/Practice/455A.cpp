@@ -1,6 +1,3 @@
-// Author: manavkush
-// Date: 07/02/2021
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -67,60 +64,25 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-
+const int N = 1e5+5;
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
-    while(t--)
-    {
-        int n;
-        cin>>n;
-        vi a(n);
-        re(i,n) {
-            cin>>a[i];
-        }
-        int last1,last2;
-        last1=last2=-1;
-        int frq1, frq2;
-        frq1=frq2 = 0;
-        vi f,s;
-        re(i,n) {
-            if(last1==a[i] and last2==a[i]) {
-                s.pb(a[i]);
-                last2=a[i];
-            } else if(last2==a[i]) {
-                f.pb(a[i]);
-                last1=a[i];
-            } else {
-                f.pb(a[i]);
-                last1=a[i];
-            }
-        }
-        int count=0;
-        for(int i=0;i<f.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(f[i]!=f[i-1]) {
-                count++;
-            }
-        }
-        for(int i=0;i<s.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(s[i]!=s[i-1]) {
-                count++;
-            }
-        }
-        debug(f);
-        debug(s);
-        cout<<count<<endl;
-
+    int n;
+    cin>>n;
+    vi a(n+1);
+    vi freq(N);
+    re(i,n) {
+        cin>>a[i+1];
+        freq[a[i+1]]++;
     }
+    int dp[N+1]; //States->index till taken
+    dp[1]=freq[1];
+    
+    for(int i=2;i<N;i++) {
+        dp[i]=max(dp[i-1], i*freq[i]+dp[i-2]);        
+    }
+    debug(dp[0],dp[1],dp[2]);
+    cout<<dp[N-1]<<endl;
 }

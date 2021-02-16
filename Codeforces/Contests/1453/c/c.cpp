@@ -1,5 +1,5 @@
 // Author: manavkush
-// Date: 07/02/2021
+// Date: 14/02/2021
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -67,60 +67,70 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+bool comp(pii &a, pii &b) {
+    if(a.ff!=b.ff) {
+        return a.ff<b.ff;
+    } else {
+        return a.ss>b.ss;
+    }
+}
 
+int indv(int x, int y, int n) {
+    return max(abs(x),abs(n-x-1))*max(abs(y),abs(n-y-1));
+}
 
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
+    int t;cin>>t;
     while(t--)
     {
         int n;
         cin>>n;
-        vi a(n);
+        int mat[n][n];
+        vector<pii> a[10];
         re(i,n) {
-            cin>>a[i];
-        }
-        int last1,last2;
-        last1=last2=-1;
-        int frq1, frq2;
-        frq1=frq2 = 0;
-        vi f,s;
-        re(i,n) {
-            if(last1==a[i] and last2==a[i]) {
-                s.pb(a[i]);
-                last2=a[i];
-            } else if(last2==a[i]) {
-                f.pb(a[i]);
-                last1=a[i];
-            } else {
-                f.pb(a[i]);
-                last1=a[i];
+            re(j,n) {
+                char val;
+                cin>>val;
+                mat[i][j]=val-'0';
             }
         }
-        int count=0;
-        for(int i=0;i<f.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(f[i]!=f[i-1]) {
-                count++;
-            }
-        }
-        for(int i=0;i<s.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(s[i]!=s[i-1]) {
-                count++;
-            }
-        }
-        debug(f);
-        debug(s);
-        cout<<count<<endl;
+        vector<int> maxc(10,-1);
+        vector<int> maxr(10,-1);
+        vector<int> minc(10,INT_MAX);
+        vector<int> minr(10,INT_MAX);
+        // int maxc[10]={-1};
+        // int maxr[10]={-1};
+        // int minc[10]={INT_MAX};
+        // int minr[10]={INT_MAX};
 
+        re(i,n) {
+            re(j,n) {
+                int dig= mat[i][j];
+                maxc[dig]=max(maxc[dig],j);
+                minc[dig]=min(minc[dig],j);
+                maxr[dig]=max(maxr[dig],i);
+                minr[dig]=min(minr[dig],i);                
+            }
+        }
+        // re(i,10) {
+        //     debug(i,maxc[i],maxr[i],minc[i], minr[i]);
+        // }
+        vi res(10,0);
+        re(i,n) {
+            re(j,n) {
+                int val = mat[i][j];
+                int a1 = max(abs(maxr[val]-i),abs(minr[val]-i))*max(abs(n-j-1),abs(j));
+                int a2 = max(abs(maxc[val]-j),abs(minc[val]-j))*max(abs(n-i-1),abs(i));
+                int area = max(a1,a2);
+                res[val] = max(res[val],area);
+            }
+        }
+
+        for(auto x: res) {
+            cout<<x<<" ";
+        }
+        cout<<endl;
     }
 }

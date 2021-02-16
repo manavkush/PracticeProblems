@@ -1,6 +1,3 @@
-// Author: manavkush
-// Date: 07/02/2021
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -72,55 +69,61 @@ void _print(T t, V... v)
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
-    while(t--)
-    {
-        int n;
-        cin>>n;
-        vi a(n);
-        re(i,n) {
-            cin>>a[i];
+    string str;
+    cin>>str;
+    int f,s,t;
+    bool flag = 1;
+    re(i,str.size()) {
+        if(str[i]=='0') {
+            flag = 0;
+            break;
         }
-        int last1,last2;
-        last1=last2=-1;
-        int frq1, frq2;
-        frq1=frq2 = 0;
-        vi f,s;
-        re(i,n) {
-            if(last1==a[i] and last2==a[i]) {
-                s.pb(a[i]);
-                last2=a[i];
-            } else if(last2==a[i]) {
-                f.pb(a[i]);
-                last1=a[i];
-            } else {
-                f.pb(a[i]);
-                last1=a[i];
-            }
-        }
-        int count=0;
-        for(int i=0;i<f.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(f[i]!=f[i-1]) {
-                count++;
-            }
-        }
-        for(int i=0;i<s.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(s[i]!=s[i-1]) {
-                count++;
-            }
-        }
-        debug(f);
-        debug(s);
-        cout<<count<<endl;
-
     }
+    if(!flag) {
+        cout<<"YES\n";
+        cout<<0<<endl;
+        return 0;
+    }
+    re(i,str.size()) {
+        if(str[i]=='8') {
+            flag = 0;
+            break;
+        }
+    }
+    if(!flag) {
+        cout<<"YES\n";
+        cout<<8<<endl;
+        return 0;
+    }
+    if(str.size()<=3  ) {
+        if(stoi(str)%8!=0) {
+            cout<<"NO\n";
+            return 0;
+        } else {
+            cout<<"YES\n";
+            cout<<str<<endl;
+            return 0;
+        }
+    }
+    int n = str.size();
+    for(int i=n-3;i>=0 and flag; i--) {
+        for(int j=n-2;j>i and flag; j--) {
+            for(int k=n-1;k>j and flag; k--) {
+                string temp;
+                temp+=(str[i]);
+                temp+=(str[j]);
+                temp+=(str[k]);
+                int val = stoi(temp);
+                if(val%8==0) {
+                    cout<<"YES\n";
+                    cout<<val<<endl;
+                    flag = 0;
+                }
+            }
+        }
+    }
+    if(flag) {
+        cout<<"NO\n";
+    }
+
 }

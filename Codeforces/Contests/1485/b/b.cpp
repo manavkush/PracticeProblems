@@ -1,5 +1,5 @@
 // Author: manavkush
-// Date: 07/02/2021
+// Date: 12/02/2021
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -76,51 +76,57 @@ int32_t main()
     // cin>>t;
     while(t--)
     {
-        int n;
-        cin>>n;
-        vi a(n);
-        re(i,n) {
+        int n,q,k;
+        cin>>n>>q>>k;
+        vi a(n+1);
+        re1(i,1,n) {
             cin>>a[i];
         }
-        int last1,last2;
-        last1=last2=-1;
-        int frq1, frq2;
-        frq1=frq2 = 0;
-        vi f,s;
-        re(i,n) {
-            if(last1==a[i] and last2==a[i]) {
-                s.pb(a[i]);
-                last2=a[i];
-            } else if(last2==a[i]) {
-                f.pb(a[i]);
-                last1=a[i];
-            } else {
-                f.pb(a[i]);
-                last1=a[i];
-            }
-        }
-        int count=0;
-        for(int i=0;i<f.size();i++) {
+        vi store(n+1);
+        vi pref(n+1);
+        re1(i,1,n) {
             if(i==0) {
-                count++;
-                continue;
-            }
-            if(f[i]!=f[i-1]) {
-                count++;
-            }
-        }
-        for(int i=0;i<s.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(s[i]!=s[i-1]) {
-                count++;
+                store[i] = a[i]-1;
+                store[i] += a[i+1]-1-a[i];
+            } else if(i==n) {
+                store[i] += k-a[i];
+                store[i] +=a[i]-a[i-1]-1;
+            } 
+            else {
+                store[i] += a[i+1]-1-a[i];
+                store[i] += a[i]-1-a[i-1];
             }
         }
-        debug(f);
-        debug(s);
-        cout<<count<<endl;
+        re1(i,1,n) {
+            pref[i]=pref[i-1]+store[i];
+        }
+        debug(store);
+        debug(pref);
+        while(q--) {
+            int l,r;
+            cin>>l>>r;
+            int ans=0;
 
+            if(r>l) {
+                ans+=pref[r-1]-pref[l];
+                debug("@",ans);
+            }
+            ans+=a[l]-1;
+            ans+=k-a[r];
+            if(l!=r) {
+                ans+=a[l+1]-a[l]-1;
+                ans+=a[r]-a[r-1]-1;
+            } 
+
+            // ans+=store[l]-1;
+            // ans+=k-store[r];
+            // if(l!=n and (l!=r)) {
+            //     ans+=a[l+1]-a[l]-1;
+            // } 
+            // if(r!=1 and (l!=r) ) {
+            //     ans+=a[r]-a[r-1]-1;
+            // }
+            cout<<ans<<endl;
+        }
     }
 }

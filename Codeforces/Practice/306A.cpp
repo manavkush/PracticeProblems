@@ -1,6 +1,3 @@
-// Author: manavkush
-// Date: 07/02/2021
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -72,55 +69,43 @@ void _print(T t, V... v)
 int32_t main()
 {
     FIO;
-    int t=1;
-    // cin>>t;
-    while(t--)
-    {
-        int n;
-        cin>>n;
-        vi a(n);
-        re(i,n) {
-            cin>>a[i];
+    string str;
+    cin>>str;
+    bool flag = 0;
+    string tar1 = "AB";
+    string tar2 = "BA";
+    auto it = str.find(tar1);
+    if(it==string::npos) {
+        cout<<"NO\n";
+        return 0;
+    } else {
+        string pref = str.substr(0,it);
+        string suff = str.substr(it+2);
+        if(pref.find(tar2)==string::npos and suff.find(tar2)==string::npos) {
+            ;
+        } else {
+            cout<<"YES\n";
+            flag=1;
+            return 0;
         }
-        int last1,last2;
-        last1=last2=-1;
-        int frq1, frq2;
-        frq1=frq2 = 0;
-        vi f,s;
-        re(i,n) {
-            if(last1==a[i] and last2==a[i]) {
-                s.pb(a[i]);
-                last2=a[i];
-            } else if(last2==a[i]) {
-                f.pb(a[i]);
-                last1=a[i];
-            } else {
-                f.pb(a[i]);
-                last1=a[i];
-            }
+        
+    }
+    it =str.find(tar2);
+    if(it==string::npos) {
+        cout<<"NO\n";
+        return 0;
+    } else {
+        string pref = str.substr(0,it);
+        string suff = str.substr(it+2);
+        if(pref.find(tar1)==string::npos and suff.find(tar1)==string::npos) {
+            ;
+        } else {
+            cout<<"YES\n";
+            flag=1;
+            return 0;
         }
-        int count=0;
-        for(int i=0;i<f.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(f[i]!=f[i-1]) {
-                count++;
-            }
-        }
-        for(int i=0;i<s.size();i++) {
-            if(i==0) {
-                count++;
-                continue;
-            }
-            if(s[i]!=s[i-1]) {
-                count++;
-            }
-        }
-        debug(f);
-        debug(s);
-        cout<<count<<endl;
-
+    }
+    if(!flag) {
+        cout<<"NO\n";
     }
 }
