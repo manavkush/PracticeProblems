@@ -64,20 +64,24 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve() {
-    int n;cin>>n;
-    vi a(n);
-    re(i,n) {
-        cin>>a[i];
-    }
-}
+
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
-    while(t--)
-    {
-        solve();
+    int n;
+    cin>>n;
+    int s = 0;
+    vi a(n+1);
+    re(i,n) {
+        cin>>a[i+1];
+        s+=a[i+1];
     }
+    if(s&1) {
+        cout<<"NO\n";
+        return 0;
+    }
+    s/=2;
+    int dp[n];
+
+    
 }
