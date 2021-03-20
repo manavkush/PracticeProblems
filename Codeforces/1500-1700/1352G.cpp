@@ -5,16 +5,19 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
-#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
+#define FIO                           \
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);                    \
+    cout.tie(NULL)
+#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i,n)        for(int i=0;i<(n);i++)
+#define re(i, n) for (int i = 0; i < (n); i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
+#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -28,7 +31,7 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
- 
+
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
@@ -64,18 +67,48 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-int k;
-void solve() {
-    int a,b;
-    cin>>a>>b;
-    
+void solve()
+{
+    int n;
+    cin >> n;
+    if (n <= 3)
+    {
+        cout << -1 << endl;
+        return;
+    }
+    if (n & 1)
+    {
+        for (int i = 1; i <= n; i = i + 2)
+        {
+            cout << i << " ";
+        }
+        cout << n - 3 << " " << n - 1 << " ";
+        for (int i = n - 5; i >= 2; i = i - 2)
+        {
+            cout << i << " ";
+        }
+        cout << endl;
+    }
+    else
+    {
+        for (int i = 2; i <= n; i = i + 2)
+        {
+            cout << i << " ";
+        }
+        cout << n - 3 << " " << n - 1 << " ";
+        for (int i = n - 5; i >= 1; i = i - 2)
+        {
+            cout << i << " ";
+        }
+        cout << endl;
+    }
 }
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t>>k;
-    while(t--)
+    int t = 1;
+    cin >> t;
+    while (t--)
     {
         solve();
     }
