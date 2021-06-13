@@ -1,3 +1,5 @@
+// Soldier and Number Game
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -67,38 +69,43 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+const int N = 5e6+5;
+vi seive(N, 0);
+vi value(N, 0);
+
+void precompute() {
+    fill(seive.begin()+2, seive.end(), 1);
+    for(int i=2;i<N; i++) {
+        if(seive[i]) {
+            for(int j=1;j*i<N;j++) {    // Multiples of 'i'
+                seive[i*j]=0;
+                value[i*j]++;
+                int curr = i*i;
+                while((i*j)%curr == 0) {    // For powers of a number
+                    value[i*j]++;
+                    curr*=i;
+                }
+            }
+        }
+    }
+    for(int i=2;i<N;i++) {
+        value[i]+=value[i-1];
+    }
+}
+
 void solve()
 {
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
-    vi a(n);
-    re(i, n)
-    {
-        a[i] = str[i] - 'a';
-    }
-    int l = 0;
-
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
-    {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
-        {
-            cnt[a[l]]--;
-            l++;
-        }
-        ans = max(ans, r - l + 1);
-    }
-    cout << ans << endl;
+    int a, b;
+    cin >> a >> b;
+    cout<< value[a]-value[b]<<endl;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
-    // cin>>t;
+    cin >> t;
+    precompute();
+
     while (t--)
     {
         solve();

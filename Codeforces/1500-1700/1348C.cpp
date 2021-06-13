@@ -71,34 +71,60 @@ void solve()
 {
     int n, k;
     cin >> n >> k;
-    string str;
-    cin >> str;
-    vi a(n);
+    vector<string> str(k);
+    string s;
+    cin >> s;
+    vi freq(26, 0);
     re(i, n)
     {
-        a[i] = str[i] - 'a';
+        freq[s[i] - 'a']++;
     }
-    int l = 0;
+    sort(all(s));
 
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
+    // If the 1st and the kth aren't equal
+    if (s[0] != s[k - 1])
     {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
-        {
-            cnt[a[l]]--;
-            l++;
-        }
-        ans = max(ans, r - l + 1);
+        cout << s[k - 1] << endl;
+        return;
     }
-    cout << ans << endl;
+
+    // If there's single type of remaining letters
+    int cnt = 1;
+
+    for (int i = k; i < n - 1; i++)
+    {
+        if (s[i] != s[i + 1])
+        {
+            cnt++;
+        }
+    }
+    if (cnt <= 1)
+    {
+        int ctr = 0;
+        for (int i = 0; i < n; i++)
+        {
+            str[ctr] += s[i];
+            ctr = (ctr + 1) % k;
+        }
+        sort(all(str));
+        cout << str.back() << endl;
+    }
+    else
+    {
+        string ans;
+        ans += (s[0]);
+        for (int i = k; i < n; i++)
+        {
+            ans += s[i];
+        }
+        cout << ans << endl;
+    }
 }
 int32_t main()
 {
     FIO;
     int t = 1;
-    // cin>>t;
+    cin >> t;
     while (t--)
     {
         solve();

@@ -5,19 +5,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,7 +28,7 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
@@ -67,40 +64,70 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve()
-{
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
-    vi a(n);
-    re(i, n)
+int cost(vi a, int n) {
+    int cost = 0;
+    for (int i = 0; i < n - 1; i++)
     {
-        a[i] = str[i] - 'a';
-    }
-    int l = 0;
-
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
-    {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
+        int low = a[i];
+        int idx = i;
+        for (int j = i; j < n; j++)
         {
-            cnt[a[l]]--;
-            l++;
+            if (a[j] < low)
+            {
+                low = a[j];
+                idx = j;
+            }
         }
-        ans = max(ans, r - l + 1);
+        cost += idx - i + 1;
+        reverse(a.begin() + i, a.begin() + idx + 1);
     }
-    cout << ans << endl;
+    return cost;
+}
+
+void solve(int k) {
+    int n,c;
+    
+    cin>>n>>c;
+    if((c>=n*(n+1)/2) or (c<n-1)){
+        cout<<"Case #"<<k<<": "<<"IMPOSSIBLE"<<endl;
+        return;
+    }
+    
+    vi res(n);
+    re(i,n) {
+        res[i] = i+1;
+    }
+    if(cost(res,n)==c) {
+        cout<<"Case #"<<k<<": ";
+        for(auto x: res) {
+            cout<<x<<" ";
+        }
+        cout<<endl;
+        return;
+    }
+    
+    while(next_permutation(all(res))) {
+        // debug(res);
+        if(cost(res,n)==c) {
+            cout<<"Case #"<<k<<": ";
+            for(auto x: res) {
+                cout<<x<<" ";
+            }
+            cout<<endl;
+            return;
+        } 
+    }    
+    cout<<"Case #"<<k<<": ";
+    cout<<"IMPOSSIBLE\n";
+    
 }
 int32_t main()
 {
     FIO;
-    int t = 1;
-    // cin>>t;
-    while (t--)
+    int t=1;
+    cin>>t;
+    re(k,t)
     {
-        solve();
+        solve(k+1);
     }
 }

@@ -5,19 +5,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,7 +28,7 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
@@ -67,40 +64,49 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve()
-{
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
-    vi a(n);
-    re(i, n)
-    {
-        a[i] = str[i] - 'a';
-    }
-    int l = 0;
-
-    vi cnt(2, 0);
+void solve(int k) {
     int ans = 0;
-    re(r, n)
-    {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
-        {
-            cnt[a[l]]--;
-            l++;
-        }
-        ans = max(ans, r - l + 1);
+    int x,y;
+    cin>>x>>y;
+    string str;
+    cin>>str;
+    int n = str.size();
+    if(str.size()==1) {
+        cout<<"Case #"<<k<<": 0"<<endl;
+        return;
     }
-    cout << ans << endl;
+    re(i,n) {
+        if(str[i]!='?') {
+            continue;
+        }
+        if(i==0) {
+            if(str[i+1]=='?') {
+                continue;
+            }
+            else {
+                if(str[i+1]=='C') {
+                    ans+=min(0ll,y);
+                } else if(str[i]=='J') {
+                    ans+=min(0ll,x);
+                }
+            }
+        }
+        else if(i==n-1) {
+               
+        } else {
+            
+        }
+    }
+    
+    cout<<"Case #"<<k<<": "<<ans<<endl;
 }
 int32_t main()
 {
     FIO;
-    int t = 1;
-    // cin>>t;
-    while (t--)
+    int t=1;
+    cin>>t;
+    re(k,t)
     {
-        solve();
+        solve(k+1);
     }
 }

@@ -5,19 +5,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,7 +28,7 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
@@ -67,39 +64,64 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve()
-{
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
-    vi a(n);
-    re(i, n)
-    {
-        a[i] = str[i] - 'a';
-    }
-    int l = 0;
+map<int,int> h;
+void primeFactors(int n) 
+{ 
+    while (n % 2 == 0) 
+    { 
+        h[2]++;
+        n = n/2; 
+    } 
+    for (int i = 3; i <= sqrt(n); i = i + 2) 
+    { 
+        while (n % i == 0) 
+        { 
+            h[i]++;
+            n = n/i; 
+        } 
+    } 
+    if (n > 2) 
+        h[n]++;
+}
 
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
-    {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
-        {
-            cnt[a[l]]--;
-            l++;
-        }
-        ans = max(ans, r - l + 1);
+void solve() {
+    int n;
+    cin>>n;
+    if(n==1 or n==2 or n==3) {
+        cout<<n<<endl;
+        return;
     }
-    cout << ans << endl;
+    // vi factors;
+    // for(int i=2;i<=sqrt(n);i++) {
+    //     if((n%i)==0) {
+    //         factors.pb(i);
+    //     }
+    // }
+    // if(factors.empty()) {
+    //     cout<<n<<endl;
+    //     return;
+    // }
+    // vi a(n);
+    primeFactors(n);
+    if(h.empty()) {
+        cout<<n<<endl;
+        return;
+    }
+    if(h.size()>1) {
+        cout<<1<<endl;
+        return;
+    } else {
+        cout<<(h.begin()->ff)<<endl;
+        return;
+    }
+    
 }
 int32_t main()
 {
     FIO;
-    int t = 1;
+    int t=1;
     // cin>>t;
-    while (t--)
+    while(t--)
     {
         solve();
     }

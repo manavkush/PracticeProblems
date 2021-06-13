@@ -67,40 +67,40 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve()
+void solve(int k)
 {
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
+    int n;
+    cin >> n;
     vi a(n);
     re(i, n)
     {
-        a[i] = str[i] - 'a';
+        cin >> a[i];
     }
-    int l = 0;
-
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
+    int cost = 0;
+    for (int i = 0; i < n - 1; i++)
     {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
+        int low = a[i];
+        int idx = i;
+        for (int j = i; j < n; j++)
         {
-            cnt[a[l]]--;
-            l++;
+            if (a[j] < low)
+            {
+                low = a[j];
+                idx = j;
+            }
         }
-        ans = max(ans, r - l + 1);
+        cost += idx - i + 1;
+        reverse(a.begin() + i, a.begin() + idx + 1);
     }
-    cout << ans << endl;
+    cout << "Case #" << k << ": " << cost << endl;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
-    // cin>>t;
-    while (t--)
+    cin >> t;
+    re(k, t)
     {
-        solve();
+        solve(k + 1);
     }
 }

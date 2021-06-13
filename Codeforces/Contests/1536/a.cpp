@@ -69,38 +69,15 @@ void _print(T t, V... v)
 //====================================DEBUG TEMPLATE==============================================
 void solve()
 {
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
-    vi a(n);
-    re(i, n)
-    {
-        a[i] = str[i] - 'a';
-    }
-    int l = 0;
-
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
-    {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
-        {
-            cnt[a[l]]--;
-            l++;
-        }
-        ans = max(ans, r - l + 1);
-    }
-    cout << ans << endl;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
-    // cin>>t;
-    while (t--)
-    {
-        solve();
-    }
+    cin >> t;
+    cout << t;
+    // while (t--)
+    // {
+    //     solve();
+    // }
 }

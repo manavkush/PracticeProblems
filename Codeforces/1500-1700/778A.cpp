@@ -1,3 +1,5 @@
+// String Game
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -5,19 +7,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,7 +30,7 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
@@ -67,40 +66,51 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve()
-{
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
-    vi a(n);
-    re(i, n)
-    {
-        a[i] = str[i] - 'a';
-    }
-    int l = 0;
+string a, b;
+vi arr;
 
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
-    {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
-        {
-            cnt[a[l]]--;
-            l++;
-        }
-        ans = max(ans, r - l + 1);
+bool isSubSequence(string &str1, string &str2, int m, int n)
+{
+    int j = 0;
+    for (int i = 0; i < n && j < m; i++)
+        if (str1[j] == str2[i])
+            j++;
+    return (j == m);
+}
+
+bool solve(int mid) {
+    string copy = a;
+    re(i,mid) {
+        copy[arr[i]-1] = '*';
     }
-    cout << ans << endl;
+    string temp;
+    re(i,copy.length()) {
+        if(copy[i]!='*') {
+            temp+=copy[i];
+        }
+    }
+    debug(temp, copy, b);
+    return isSubSequence(b, temp, b.length() , temp.length());
 }
 int32_t main()
 {
     FIO;
-    int t = 1;
-    // cin>>t;
-    while (t--)
-    {
-        solve();
+    cin>>a>>b;
+    arr.resize(a.length());
+    re(i,a.length()) {
+        cin>>arr[i];
     }
+    int l=0;
+    int r=a.length();
+    while(l+1<r) {
+        int mid = (l+r)/2;
+        debug(l,r,mid);
+        if(solve(mid)) {
+            l=mid;
+        } else {
+            r=mid;
+        }
+    }
+    cout<<l<<endl;
+    
 }

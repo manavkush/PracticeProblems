@@ -67,38 +67,26 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+struct node
+{
+    int t, l, h;
+};
 void solve()
 {
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
-    vi a(n);
+    int n, m;
+    cin >> n >> m;
+    vector<node> a(n);
+    vector<pii> temp(m + 1, {INT_MIN, INT_MAX});
     re(i, n)
     {
-        a[i] = str[i] - 'a';
+        cin >> a[i].t >> a[i].l >> a[i].h;
     }
-    int l = 0;
-
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
-    {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
-        {
-            cnt[a[l]]--;
-            l++;
-        }
-        ans = max(ans, r - l + 1);
-    }
-    cout << ans << endl;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
-    // cin>>t;
+    cin >> t;
     while (t--)
     {
         solve();

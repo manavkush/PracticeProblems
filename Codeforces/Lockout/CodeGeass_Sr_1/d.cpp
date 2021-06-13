@@ -5,19 +5,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,7 +28,7 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
@@ -67,39 +64,45 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve()
-{
-    int n, k;
-    cin >> n >> k;
-    string str;
-    cin >> str;
+void solve() {
+    int n;
+    cin>>n;
     vi a(n);
-    re(i, n)
-    {
-        a[i] = str[i] - 'a';
+    re(i,n) {
+        cin>>a[i];
     }
-    int l = 0;
-
-    vi cnt(2, 0);
-    int ans = 0;
-    re(r, n)
-    {
-        cnt[a[r]]++;
-        while (cnt[0] > k and cnt[1] > k)
-        {
-            cnt[a[l]]--;
-            l++;
+    map<int,int> h;
+    for(int i=0;i<n;i++) {
+        h[a[i]]=max(1ll, h[a[i]-1]+1);
+    }
+    int high=INT_MIN;
+    int cnt = 0;
+    
+    tr(itr,h) {
+        if(itr->second > cnt) {
+            cnt=itr->second;
+            high=itr->first;
         }
-        ans = max(ans, r - l + 1);
     }
-    cout << ans << endl;
+    cout<<cnt<<endl;
+    int curr = high-cnt+1;
+    for(int i=0;i<n;i++) {
+        if(a[i]==curr) {
+            cout<<i+1<<" ";
+            curr++;
+        }
+    }
+    // for(int i=0;i<cnt;i++) {
+    //     cout<<high-cnt+i+1<<" ";
+    // }
+    cout<<endl;
 }
 int32_t main()
 {
     FIO;
-    int t = 1;
+    int t=1;
     // cin>>t;
-    while (t--)
+    while(t--)
     {
         solve();
     }
