@@ -67,16 +67,67 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve() {
-    
-}
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
+    int t;cin>>t;
     while(t--)
     {
-        solve();    
+        int n;
+        cin>>n;
+        vi a(n), b(n);
+        re(i,n) {
+            cin>>a[i];
+        }
+        re(i,n) {
+            cin>>b[i];
+        }
+
+        int curr1 = a[0];
+        int ans = 0;
+        //----------------------------------
+        for(int i=30;i>=0;i--) {
+            bool flag = 0;
+            for(int j=0;j<n;j++) {
+                if((a[j]&ans)==ans) {
+                    if((a[j]&(1<<i))==(1<<i)) {
+                        continue;
+                    }
+                } 
+                if((b[j]&ans)==ans) {
+                    if((b[j]&(1<<i))==(1<<i)) {
+                        continue;
+                    }
+                }
+                flag=1;
+                break;
+            }
+            // debug(i, ans);
+            if(flag) {
+                continue;
+            } else {
+                ans |= (1<<i);
+            }
+        }
+        //-------------------------------------------
+        // for(int i=1;i<n;i++) {
+        //     curr1 = max(curr1&a[i], curr1&b[i]);
+        // }
+        // int curr2 = b[0];
+        // for(int i=1;i<n;i++) {
+        //     curr2 = max(curr2&a[i], curr2&b[i]);
+        // }
+        int result = ans;
+        cout<<result<<" ";
+        
+        int low = 0;
+        for(int i=0;i<n;i++) {
+            if((a[i]&result)!=result) {
+                low++;
+            }
+        }
+        
+        cout<<low<<endl;
+
     }
 }

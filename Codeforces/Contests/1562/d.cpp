@@ -67,16 +67,57 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+class node {
+    public:
+    int odd, even, sum;
+    node() {
+        this->odd = 0;
+        this->even = 0;
+        this->sum = 0;
+    }
+};
+
 void solve() {
-    
+    int n,q;
+    cin>>n>>q;
+    string str;
+    cin>>str;
+    vector<node> pref(n+1);
+    re(i,n) {
+        pref[i+1] = pref[i];
+        if(str[i]=='+') {
+            if(i&1) pref[i+1].sum--;
+            else pref[i+1].sum ++;
+        } else {
+            if(i&1) pref[i+1].sum++;
+            else pref[i+1].sum--;
+        }
+        // if(i&1) {
+        //     pref[i+1].odd += -1*(str[i]=='+'? 1: -1);
+        // } else {
+        //     pref[i+1].even += 1*(str[i]=='+'? 1: -1);
+        // }
+    }
+    re(i,q) {
+        int l, r;
+        cin>>l>>r;
+        if(pref[r].sum-pref[l-1].sum==0) {
+            cout<<0<<endl;
+            continue;
+        } else if((r-l+1)&1) {
+            cout<<1<<endl;
+        } else {
+            cout<<2<<endl;
+        }
+    }
 }
+
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
+    int t;cin>>t;
     while(t--)
     {
-        solve();    
+        solve();
     }
 }

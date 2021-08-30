@@ -1,5 +1,5 @@
-// Author: $%U%$
-// Date: $%D%$/$%M%$/$%Y%$
+// Author: manavkush
+// Date: 29/08/2021
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -68,7 +68,74 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
+    int n;
+    cin>>n;
+    vi a(n);
+    vector<int> odds, evens;
+    // odds = evens = 0;
+    re(i,n) {
+        cin>>a[i];
+        if(a[i]&1) odds.push_back(i);
+        else evens.push_back(i);
+    }
+    int n1 = odds.size();
+    int m1 = evens.size();
+    if(abs(n1-m1)>1) {
+        cout<< -1<<endl;
+        return;
+    }
+    int a1, a2;
+    a1=a2=0;
+    int f=0,s=0;
+    if(evens.size()>odds.size()) {
+        for(int i=0;i<n;i++) {
+            // odd at odd
+            if(i&1) {
+                a1 += abs(i-odds[s]);
+                s++;
+            } else {
+                a1 += abs(i-evens[f]);
+                f++;
+            }
+        }
+        cout<<a1/2<<endl;
+    } else if(evens.size()<odds.size()) {
+        for(int i=0;i<n;i++) {
+            if(i&1) {
+                a2+=abs(i-evens[f]);
+                f++;
+            } else {
+                a2+=abs(i-odds[s]);
+                s++;
+            }
+        }
+        cout<<a2/2<<endl;
+    } else {
+        for(int i=0;i<n;i++) {
+            // odd at odd
+            if(i&1) {
+                a1 += abs(i-odds[s]);
+                s++;
+            } else {
+                a1 += abs(i-evens[f]);
+                f++;
+            }
+        }
+        f=0,s=0;
+        for(int i=0;i<n;i++) {
+            if(i&1) {
+                a2+=abs(i-evens[f]);
+                f++;
+            } else {
+                a2+=abs(i-odds[s]);
+                s++;
+            }
+        }
+        cout<<min(a1,a2)/2<<endl;
+
+    }
     
+
 }
 int32_t main()
 {

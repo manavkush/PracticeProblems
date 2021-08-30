@@ -1,5 +1,5 @@
-// Author: $%U%$
-// Date: $%D%$/$%M%$/$%Y%$
+// Author: manavkush
+// Date: 29/08/2021
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -68,13 +68,43 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
-    
+    int n;
+    cin>>n;
+    int ans = 0;
+    int sum = 0;
+    int count = 0;  // Stores the completed brackets
+    int curr = 0;   // Stores the current opened brackets
+    vi a(n);
+    re(i,n) {
+        cin>>a[i];
+    }
+    for(int i=0;i<n;i++) {
+        if(i&1) {
+            int closed = min(curr, a[i]);
+            sum += closed;
+            if(a[i]>=a[i-1]) {
+                sum+=count;
+            } else {
+                count=1;
+            }
+            // sum += count;
+            count++;
+            curr = curr - a[i];
+            if(curr<0) {
+                curr=0;
+                count=0;
+            }
+        } else {
+            curr+=a[i];
+        }
+    }
+    cout<<sum<<endl;
 }
 int32_t main()
 {
     FIO;
     int t=1;
-    cin>>t;
+    // cin>>t;
     while(t--)
     {
         solve();    

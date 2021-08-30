@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -5,19 +8,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,7 +31,7 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
@@ -67,58 +67,27 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve()
-{
-    int n;
-    cin >> n;
-    vi a(n);
-    re(i, n)
-    {
-        cin >> a[i];
+void solve() {
+    int n,k;
+    cin>>n>>k;
+    vector<string> A(n);
+    re(i,n) {
+        cin>>A[i];
     }
-    vi b = a;
-    sort(all(a));
-    int count = 0;
-    re(i, n)
-    {
-        if (a[i] != b[i])
-            count++;
+    vector<string> coins(n);
+    re(i,n) {
+        cin>>coins[i];
     }
-    if (count == 2)
-    {
-        cout << "YES\n";
-    }
-    else if (count > 2 or count == 1)
-    {
-        cout << "NO\n";
-    }
-    else
-    {
-        bool dbl = 0;
-        for (int i = 0; i < n - 1; i++)
-        {
-            if (a[i] == a[i + 1])
-            {
-                dbl = 1;
-                break;
-            }
-        }
-        if (dbl)
-        {
-            cout << "YES\n";
-        }
-        else
-        {
-            cout << "NO\n";
-        }
-    }
+    int X,Y;
+    X=0,Y=0;
+    // dfs(A, coins, X, Y)
 }
+
 int32_t main()
 {
     FIO;
-    int t = 1;
-    cin >> t;
-    while (t--)
+    int t;cin>>t;
+    while(t--)
     {
         solve();
     }
