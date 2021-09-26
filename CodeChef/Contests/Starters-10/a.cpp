@@ -67,16 +67,28 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve() {
-    
-}
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
+    int t;cin>>t;
     while(t--)
     {
-        solve();    
+        int n,k;
+        cin>>n>>k;
+        vi a(n);
+        re(i,n) {
+            cin>>a[i];
+        }
+        sort(all(a));
+        int sum=0;
+        for(int i=0;i<n;i++) {
+            if(a[i]<0 and k>0) {
+                k--;
+                sum+=-1*a[i];
+            } else if(a[i]>0) {
+                sum+=a[i];
+            }
+        }
+        cout<<sum<<endl;
     }
 }

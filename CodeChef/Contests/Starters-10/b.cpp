@@ -67,16 +67,39 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve() {
-    
-}
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
+    int t;cin>>t;
     while(t--)
     {
-        solve();    
+        int n;
+        cin>>n;
+        vi a(n);
+        set<int> s;
+        re(i,n) {
+            cin>>a[i];
+            s.insert(a[i]);
+        }
+        vi b(n-1);
+        re(i,n-1) cin>>b[i];
+        sort(all(a)); sort(all(b));
+        int a1 = b[n-2] - a[n-1];
+        int a2 = b[n-2] - a[n-2];
+        bool flag = 0;
+        for(int i=0;i<n-1;i++) {
+            if(s.count(b[i]-a1)) {
+                continue;
+            } else {
+                flag=1;
+                break;
+            }
+        }
+        if(!flag and a1>0) {
+            cout<<a1<<endl;
+        } else {
+            cout<<a2<<endl;
+        }
+
     }
 }

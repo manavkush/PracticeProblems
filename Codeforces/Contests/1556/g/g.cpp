@@ -1,5 +1,5 @@
-// Author: $%U%$
-// Date: $%D%$/$%M%$/$%Y%$
+// Author: manavkush
+// Date: 29/08/2021
 
 #include <bits/stdc++.h>
 using namespace std;

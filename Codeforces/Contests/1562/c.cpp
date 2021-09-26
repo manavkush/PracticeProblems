@@ -68,15 +68,35 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
+    // f(t)=f(w)⋅k.
+    int n;
+    cin>>n;
+    string str;
+    cin>>str;
+    vector<int> location;
+    for(int i=0;i<n;i++) {
+        if(str[i]=='0') {
+            location.push_back(i);
+        }
+    }
+    if(location.empty()) {
+        cout<<1<<" "<<n-1<<" "<<2<<" "<<n<<endl;
+    } else {
+        if(location[0]+1<=n/2) {
+            cout<<location[0]+1<<" "<<n<<" "<<location[0]+2<<" "<<n<<endl;
+        } else {
+            cout<<1<<" "<<location[0]+1<<" "<<1<<" "<<location[0]<<endl;
+        }
+    }
     
+
 }
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
+    int t;cin>>t;
     while(t--)
     {
-        solve();    
+        solve();
     }
 }

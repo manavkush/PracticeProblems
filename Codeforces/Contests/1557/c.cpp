@@ -68,15 +68,47 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
-    
+    int n,k;
+    cin>>n>>k;
+    if(k==0) {
+        cout<<1<<endl;
+        return;
+    }
+    int dp[k+1][2];
+    memset(dp, 0, sizeof(dp));
+    int twon=1;
+    int twon1=1;
+    for(int i=0;i<n;i++) {
+        if(i>0) {
+            twon1= (twon1*2)%mod;
+        }
+        twon = (twon*2)%mod;
+    }
+    if(n&1) {
+        dp[0][0] = 0;
+        dp[0][1] = twon1+1;
+    } else {
+        dp[0][0] = 1;
+        dp[0][1] = twon1-1;
+    }
+    for(int i=1;i<k;i++) {
+        if(n&1) {
+            dp[i][0] = (dp[i-1][0]*twon)%mod;
+            dp[i][1] = ((dp[i-1][1])*(twon1+1))%mod;
+        } else {
+            dp[i][0] = ((dp[i-1][0]*twon)%mod + (dp[i-1][1]))%mod;
+            dp[i][1] = (dp[i-1][1]*(twon1 - 1))%mod;
+        }
+    }
+    cout<<(dp[k-1][1]+dp[k-1][0])%mod<<endl;
 }
+
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
+    int t;cin>>t;
     while(t--)
     {
-        solve();    
+        solve();
     }
 }

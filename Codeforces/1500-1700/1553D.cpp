@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -5,19 +8,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,7 +31,7 @@ void __print(char x) { cerr << '\'' << x << '\''; }
 void __print(const char *x) { cerr << '\"' << x << '\"'; }
 void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
@@ -67,93 +67,56 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-vector<int> pref(1e5 + 5, 1);
-void solve()
-{
-    int n;
-    cin >> n;
-    vi a(n);
-    set<int> s;
-    re(i, n)
-    {
-        cin >> a[i];
-        s.insert(a[i]);
+bool util(int i, int j, string &s, string &t) {
+    if(j<0) {
+        return 1;
     }
-    sort(all(a));
-    int first = -1;
-    if (a[0] != 0)
-    {
-        cout << pref[n] << endl;
-        return;
+    if(i<0) {
+        return 0;
     }
-    for (int i = 1; i < n; i++)
-    {
-        if (a[i] - a[i - 1] > 1)
-        {
-            first = i;
-            break;
-        }
+    if(s[i]==t[j]) {
+        return util(i-1,j-1, s, t);
+    } else {
+        return util(i-2, j, s, t);
     }
-    if (first == -1)
-    {
-        map<int, int> freq;
-        re(i, n)
-        {
-            freq[a[i]]++;
-        }
-        int ans = 1;
-        tr(it, freq)
-        {
-            if (it->second > 1)
-            {
-                auto cnt = it->second;
-                // debug(cnt);
-                ans = (ans * (pref[cnt])) % mod;
-            }
-        }
-
-        cout << ans << endl;
-        return;
-    }
-    vi b;
-    for (int i = first; i < n; i++)
-    {
-        b.pb(a[i]);
-    }
-    int ans = pref[b.size()];
-    cout << ans << endl;
-    // map<int, int> freq;
-    // re(i, b.size())
-    // {
-    //     freq[b[i]]++;
-    // }
-    // tr(it, freq)
-    // {
-    //     if (it->second > 1)
-    //     {
-    //         auto cnt = it->second;
-
-    //         ans /= (pref[cnt]);
-    //     }
-    // }
-    cout << ans << endl;
 }
+
+void solve() {
+    string s,t;
+    cin>>s>>t;
+    if(s.length()<t.length() ) {
+        cout<<"NO\n";
+        return;
+    }
+    int i,j;
+    i=s.length()-1;
+    j=t.length()-1;
+    int count = 0;
+    while(i>=0 and j>=0) {
+        if(s[i]==t[j]) {
+            i--;
+            j--;
+            // continue;
+        } else {
+            i = i-2;
+            count++;
+        }
+    }
+    if(j>=0) {
+        cout<<"NO\n";
+        return;
+    } 
+    cout<<"YES\n";
+    // util(i, j, s, t) ? cout<<"YES\n": cout<<"NO\n";
+    return;
+}
+
 int32_t main()
 {
     FIO;
-    int t = 1;
-    cin >> t;
-    for (int i = 1; i < (1e5); i++)
+    int t;cin>>t;
+    while(t--)
     {
-        pref[i] = (pref[i - 1] * i) % mod;
-    }
-    // re(i, 30)
-    // {
-    //     debug(pref[i]);
-    // }
-    while (t--)
-    {
-        // debug("*");
         solve();
     }
 }

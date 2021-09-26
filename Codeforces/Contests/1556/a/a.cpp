@@ -1,5 +1,5 @@
-// Author: $%U%$
-// Date: $%D%$/$%M%$/$%Y%$
+// Author: manavkush
+// Date: 29/08/2021
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -68,7 +68,21 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
-    
+    int c,d;
+    cin>>c>>d;
+    int a, b;
+    a=b=0;
+    if(d==c and d==0) {
+        cout<<0<<endl;
+        return;
+    }
+    if(c==d) {
+        cout<<1<<endl;
+    } else if((max(c,d)-min(c,d))&1) {
+        cout<<-1<<endl;
+    } else {
+        cout<<2<<endl;
+    }
 }
 int32_t main()
 {
