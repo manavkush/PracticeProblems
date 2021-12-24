@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,60 +67,31 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-pii intersect(pii &a, pii &b) {
-    pii ret;
-    ret.first = max(a.ff, b.ff);
-    ret.second = min(a.ss, b.ss);
-    return ret;
-}
 void solve() {
-    int n,m;
-    cin>>n>>m;
-    string str;
-    cin>>str;
-    pii xrange = {1, m};
-    pii yrange = {1, n};
-    int x, y;
-    x = y = 0;
-    pii ans = {1,1};
-    for(int i=0;i<str.size();i++) {
-        if(str[i]=='L') {
-            x--;
-        } else if(str[i]=='U') {
-            y--;
-        } else if(str[i]=='R') {
-            x++;
-        } else {
-            y++;
-        }
-        pii x1,y1;
-        if(x>=0) {
-            x1 = {1, m-x};
-        } else {
-            x1 = {1-x, m};
-        }
-        if(y>=0) {
-            y1 = {1, n-y};
-        } else {
-            y1 = {1-y, n};
-        }
-
-        xrange = intersect(x1, xrange);
-        yrange = intersect(y1, yrange);
-        if(xrange.first > xrange.second || yrange.first>yrange.second) {
-            break;
-        } else {
-            ans = {xrange.first, yrange.first};
-        }
-        // debug(xrange, yrange);
+    string s,t;
+    cin>>s>>t;
+    int diff = (t[0]-s[0]);
+    if(diff<0) {
+        diff += 26;
     }
-    cout<<ans.second<<" "<<ans.first<<endl;
+    // cout<<diff<<"\n";
+    for(int i=1;i<s.size();i++) {
+        char c2 = s[i] + diff;
+        // char c2 = t[i] - diff;
+        if(c2<'a')  c2 = c2 + 'z'-'a' + 1;
+        if(c2>'z')  c2 = c2 - 'z' + 'a' - 1;
+        if(c2!=t[i]) {
+            cout<<"No\n";
+            return;
+        }
+    }
+    cout<<"Yes\n";
 }
-
 int32_t main()
 {
     FIO;
-    int t;cin>>t;
+    int t=1;
+    // cin>>t;
     while(t--)
     {
         solve();

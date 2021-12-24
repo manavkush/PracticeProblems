@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,62 +67,71 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-pii intersect(pii &a, pii &b) {
-    pii ret;
-    ret.first = max(a.ff, b.ff);
-    ret.second = min(a.ss, b.ss);
-    return ret;
-}
 void solve() {
-    int n,m;
-    cin>>n>>m;
-    string str;
-    cin>>str;
-    pii xrange = {1, m};
-    pii yrange = {1, n};
-    int x, y;
-    x = y = 0;
-    pii ans = {1,1};
-    for(int i=0;i<str.size();i++) {
-        if(str[i]=='L') {
-            x--;
-        } else if(str[i]=='U') {
-            y--;
-        } else if(str[i]=='R') {
-            x++;
-        } else {
-            y++;
-        }
-        pii x1,y1;
-        if(x>=0) {
-            x1 = {1, m-x};
-        } else {
-            x1 = {1-x, m};
-        }
-        if(y>=0) {
-            y1 = {1, n-y};
-        } else {
-            y1 = {1-y, n};
-        }
-
-        xrange = intersect(x1, xrange);
-        yrange = intersect(y1, yrange);
-        if(xrange.first > xrange.second || yrange.first>yrange.second) {
-            break;
-        } else {
-            ans = {xrange.first, yrange.first};
-        }
-        // debug(xrange, yrange);
+    int r,g,b;
+    cin>>r>>g>>b;
+    if(b > max(r,g)+1 || r==0 || g==0) {
+        cout<<-1<<endl;
+        return;
     }
-    cout<<ans.second<<" "<<ans.first<<endl;
+    string str;
+    if(r<g) {
+        str += 'R';
+        for(int i=0;i<g;i++) {
+            str += 'G';
+        }
+        for(int i=0;i<b;i++) {
+            str += 'B';
+        }
+        for(int i=1;i<r;i++) {
+            str += 'R';
+        }
+        cout<<str<<endl;
+        for(int i=0;i<g;i++) {
+            cout<<"1 "<<i+2<<endl;
+        }
+        for(int i=1;i<=(min(b,g));i++) {
+            cout<<i+1<<" "<<i+g+1<<endl;
+        }
+        if(b>g) {
+            cout<<1<<" "<<g+b+1<<endl;
+        }
+        for(int i=1;i<r;i++) {
+            cout<<1<<" "<<g+b+1+i<<endl;
+        }
+    } else {
+        str += 'G';
+        for(int i=0;i<r;i++) {
+            str += 'R';
+        }
+        for(int i=0;i<b;i++) {
+            str += 'B';
+        }
+        for(int i=1;i<g;i++) {
+            str += 'G';
+        }
+        cout<<str<<endl;
+        for(int i=0;i<r;i++) {
+            cout<<"1 "<<i+2<<endl;
+        }
+        for(int i=1;i<=(min(b,r));i++) {
+            cout<<i+1<<" "<<i+r+1<<endl;
+        }
+        if(b>r) {
+            cout<<1<<" "<<r+b+1<<endl;
+        }
+        for(int i=1;i<g;i++) {
+            cout<<1<<" "<<r+b+1+i<<endl;
+        }
+    }
 }
-
 int32_t main()
 {
     FIO;
-    int t;cin>>t;
+    int t=1;
+    cin>>t;
     while(t--)
     {
-        solve();
+        solve();   
     }
 }

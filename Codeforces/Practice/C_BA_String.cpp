@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,62 +67,49 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-pii intersect(pii &a, pii &b) {
-    pii ret;
-    ret.first = max(a.ff, b.ff);
-    ret.second = min(a.ss, b.ss);
-    return ret;
-}
 void solve() {
-    int n,m;
-    cin>>n>>m;
-    string str;
-    cin>>str;
-    pii xrange = {1, m};
-    pii yrange = {1, n};
-    int x, y;
-    x = y = 0;
-    pii ans = {1,1};
-    for(int i=0;i<str.size();i++) {
-        if(str[i]=='L') {
-            x--;
-        } else if(str[i]=='U') {
-            y--;
-        } else if(str[i]=='R') {
-            x++;
+    int n,k,x;
+    cin>>n>>k>>x;
+    x--;
+    string s;
+    cin>>s;
+    bool prev = false;
+    vector<int> vec;    // Stores the segment lengths
+    int curr = 0;
+    for(int i=0;i<n;i++) {
+        if(s[i]=='*') {
+            curr+=k;
         } else {
-            y++;
+            if(curr!=0) {
+                vec.push_back(curr+1);
+                curr = 0;
+            }
+            vec.pb(-1);
         }
-        pii x1,y1;
-        if(x>=0) {
-            x1 = {1, m-x};
-        } else {
-            x1 = {1-x, m};
-        }
-        if(y>=0) {
-            y1 = {1, n-y};
-        } else {
-            y1 = {1-y, n};
-        }
-
-        xrange = intersect(x1, xrange);
-        yrange = intersect(y1, yrange);
-        if(xrange.first > xrange.second || yrange.first>yrange.second) {
-            break;
-        } else {
-            ans = {xrange.first, yrange.first};
-        }
-        // debug(xrange, yrange);
     }
-    cout<<ans.second<<" "<<ans.first<<endl;
-}
+    if(curr!=0) vec.pb(curr+1);
+    // debug(vec);
 
+    int m = vec.size();
+    string ans;
+    for(int i=m-1;i>=0;i--) {
+        if(vec[i]==-1) 
+            ans = 'a' + ans;
+        else {
+            ans = string(x%vec[i], 'b') + ans;
+            x/=vec[i];
+        }
+    }
+    cout<<ans<<endl;
+
+}
 int32_t main()
 {
     FIO;
-    int t;cin>>t;
+    int t=1;
+    cin>>t;
     while(t--)
     {
-        solve();
+        solve();    
     }
 }
