@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,62 +67,43 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-pii intersect(pii &a, pii &b) {
-    pii ret;
-    ret.first = max(a.ff, b.ff);
-    ret.second = min(a.ss, b.ss);
-    return ret;
-}
 void solve() {
-    int n,m;
-    cin>>n>>m;
-    string str;
-    cin>>str;
-    pii xrange = {1, m};
-    pii yrange = {1, n};
-    int x, y;
-    x = y = 0;
-    pii ans = {1,1};
-    for(int i=0;i<str.size();i++) {
-        if(str[i]=='L') {
-            x--;
-        } else if(str[i]=='U') {
-            y--;
-        } else if(str[i]=='R') {
-            x++;
-        } else {
-            y++;
-        }
-        pii x1,y1;
-        if(x>=0) {
-            x1 = {1, m-x};
-        } else {
-            x1 = {1-x, m};
-        }
-        if(y>=0) {
-            y1 = {1, n-y};
-        } else {
-            y1 = {1-y, n};
-        }
-
-        xrange = intersect(x1, xrange);
-        yrange = intersect(y1, yrange);
-        if(xrange.first > xrange.second || yrange.first>yrange.second) {
-            break;
-        } else {
-            ans = {xrange.first, yrange.first};
-        }
-        // debug(xrange, yrange);
+    int n;
+    cin>>n;
+    string a,b;
+    cin>>a>>b;
+    if(a==b)    {
+        cout<<0<<endl;
+        return;
     }
-    cout<<ans.second<<" "<<ans.first<<endl;
+    int a0,a1,b0,b1, oneone = 0;
+    a0 = a1 = b0 = b1 = 0;
+    re(i,a.length()) {
+        if(a[i]==b[i] and a[i]=='1')    oneone++;
+        if(a[i]=='1')   a1++;
+        else a0++;
+    }
+    re(i,b.length()) {
+        if(b[i]=='1')   b1++;
+        else b0++;
+    }
+    if(a1==0) {
+        cout<<-1<<endl;
+        return;
+    }
+    if(a1==b1 || b1 == a0 + 1) {
+        cout<<oneone+1<<endl;
+    } else {
+        cout<<-1<<endl;
+    }
 }
-
 int32_t main()
 {
     FIO;
-    int t;cin>>t;
+    int t=1;
+    cin>>t;
     while(t--)
     {
-        solve();
+        solve();    
     }
 }

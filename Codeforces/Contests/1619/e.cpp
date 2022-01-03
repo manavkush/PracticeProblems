@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,56 +67,51 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-pii intersect(pii &a, pii &b) {
-    pii ret;
-    ret.first = max(a.ff, b.ff);
-    ret.second = min(a.ss, b.ss);
-    return ret;
-}
 void solve() {
-    int n,m;
-    cin>>n>>m;
-    string str;
-    cin>>str;
-    pii xrange = {1, m};
-    pii yrange = {1, n};
-    int x, y;
-    x = y = 0;
-    pii ans = {1,1};
-    for(int i=0;i<str.size();i++) {
-        if(str[i]=='L') {
-            x--;
-        } else if(str[i]=='U') {
-            y--;
-        } else if(str[i]=='R') {
-            x++;
-        } else {
-            y++;
-        }
-        pii x1,y1;
-        if(x>=0) {
-            x1 = {1, m-x};
-        } else {
-            x1 = {1-x, m};
-        }
-        if(y>=0) {
-            y1 = {1, n-y};
-        } else {
-            y1 = {1-y, n};
-        }
-
-        xrange = intersect(x1, xrange);
-        yrange = intersect(y1, yrange);
-        if(xrange.first > xrange.second || yrange.first>yrange.second) {
-            break;
-        } else {
-            ans = {xrange.first, yrange.first};
-        }
-        // debug(xrange, yrange);
+    int n;
+    cin>>n;
+    vi a(n);
+    vi hash(n+1);
+    vector<pair<int,int>> dp;
+    re(i,n) {
+        cin>>a[i];
+        hash[a[i]]++;
     }
-    cout<<ans.second<<" "<<ans.first<<endl;
+    cout<<hash[0]<<" ";
+    if(hash[0]>1) dp.push_back({0, hash[0]});
+    int tot = hash[0];
+    int curr = 1;
+    int cost = 0;
+    while(curr<=n) {
+        if(tot<curr) {
+            cout<<-1<<" ";
+            curr++;
+            continue;
+        } 
+        if(hash[curr]==0) {
+            cout<<cost<<" ";
+            if(!dp.empty()) {
+                auto p = dp.back();
+                dp.pop_back();
+                cost += curr - p.first;
+                // debug(cost);
+                if(p.second > 2) {
+                    dp.push_back({p.first, p.second-1});
+                }
+            }
+            curr++;
+            
+        } else {
+            cout<<hash[curr]+cost<<" ";
+            tot += hash[curr];
+            if(hash[curr]>1) {
+                dp.push_back({curr, hash[curr]});
+            }
+            curr++;
+        }
+    }
+    cout<<endl;
 }
-
 int32_t main()
 {
     FIO;

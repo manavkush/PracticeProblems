@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,56 +67,21 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-pii intersect(pii &a, pii &b) {
-    pii ret;
-    ret.first = max(a.ff, b.ff);
-    ret.second = min(a.ss, b.ss);
-    return ret;
-}
 void solve() {
-    int n,m;
-    cin>>n>>m;
-    string str;
-    cin>>str;
-    pii xrange = {1, m};
-    pii yrange = {1, n};
-    int x, y;
-    x = y = 0;
-    pii ans = {1,1};
-    for(int i=0;i<str.size();i++) {
-        if(str[i]=='L') {
-            x--;
-        } else if(str[i]=='U') {
-            y--;
-        } else if(str[i]=='R') {
-            x++;
+    int n;
+    cin>>n;
+    if(n&1) {
+        n--;
+        if(n%4==0) {
+            cout<<n/2+1<<" "<<n/2-1<<" "<<1<<endl;
         } else {
-            y++;
+            cout<<n/2+2<<" "<<n/2-2<<" "<<1<<endl;
         }
-        pii x1,y1;
-        if(x>=0) {
-            x1 = {1, m-x};
-        } else {
-            x1 = {1-x, m};
-        }
-        if(y>=0) {
-            y1 = {1, n-y};
-        } else {
-            y1 = {1-y, n};
-        }
-
-        xrange = intersect(x1, xrange);
-        yrange = intersect(y1, yrange);
-        if(xrange.first > xrange.second || yrange.first>yrange.second) {
-            break;
-        } else {
-            ans = {xrange.first, yrange.first};
-        }
-        // debug(xrange, yrange);
+        // cout<<  <<" "<<  <<" "<< 1;
+    } else {
+        cout<<(n-1)/2<<" "<<(n-1)/2+1<<" "<<1<<endl;
     }
-    cout<<ans.second<<" "<<ans.first<<endl;
 }
-
 int32_t main()
 {
     FIO;

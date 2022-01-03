@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -64,62 +67,75 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-pii intersect(pii &a, pii &b) {
-    pii ret;
-    ret.first = max(a.ff, b.ff);
-    ret.second = min(a.ss, b.ss);
-    return ret;
-}
 void solve() {
     int n,m;
     cin>>n>>m;
-    string str;
-    cin>>str;
-    pii xrange = {1, m};
-    pii yrange = {1, n};
-    int x, y;
-    x = y = 0;
-    pii ans = {1,1};
-    for(int i=0;i<str.size();i++) {
-        if(str[i]=='L') {
-            x--;
-        } else if(str[i]=='U') {
-            y--;
-        } else if(str[i]=='R') {
-            x++;
-        } else {
-            y++;
+    vector<int> isprime(2*m+1, 1);
+    
+    int sqt = sqrt(2*m);
+    for(int i=2;i<=sqt;i++) {
+        if(!isprime[i]) continue;
+        else {
+            int j = i+i;
+            while(j<=2*m) {
+                isprime[j] = 0;
+                j += i;
+            }
         }
-        pii x1,y1;
-        if(x>=0) {
-            x1 = {1, m-x};
-        } else {
-            x1 = {1-x, m};
-        }
-        if(y>=0) {
-            y1 = {1, n-y};
-        } else {
-            y1 = {1-y, n};
-        }
+    }
+    debug(isprime);
 
-        xrange = intersect(x1, xrange);
-        yrange = intersect(y1, yrange);
-        if(xrange.first > xrange.second || yrange.first>yrange.second) {
+    int diff = 0;
+    for(int i=n-1;i>=1;i--) {
+        if(isprime[i]) {
             break;
         } else {
-            ans = {xrange.first, yrange.first};
+            diff++;
         }
-        // debug(xrange, yrange);
     }
-    cout<<ans.second<<" "<<ans.first<<endl;
-}
+    int prime = n-1-diff;
+    
+    vector<pair<int,int>> adj[n+1];
+    re(i,prime) {
+        if(i==(prime-1)) {
+            adj[i+1].pb({n, 1});
+        } else {
+            adj[i+1].pb({i+2, 1});
+        }
+    }
+    int edge_left = m-prime;
+    int i;
+    for(i=m;i<=2*m;i++) {
+        if(isprime[i]) break;
+    }
+    cout<<prime<<" "<<i<<endl;
+    int weight_left = i-prime;
+    
+    for(int i=1;i<n and edge_left>0 ;i++) {
+        for(int j=i+2;j<=n and edge_left>0;j++) {
+            if(edge_left==1) {
+                adj[i].push_back({j, weight_left});
+            } else {
+                adj[i].push_back({j, 1});
+                weight_left--;
+            }
+        } 
+    }
+    // cout<<prime<<" "<<
+    for(int i=1;i<n;i++) {
+        for(auto x: adj[i]) {
+            cout<<i<<" "<<x.ff<<" "<<x.ss<<endl;
+        }
+    }
 
+}
 int32_t main()
 {
     FIO;
-    int t;cin>>t;
+    int t=1;
+    // cin>>t;
     while(t--)
     {
-        solve();
+        solve();    
     }
 }
