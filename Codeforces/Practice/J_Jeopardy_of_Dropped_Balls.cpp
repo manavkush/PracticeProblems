@@ -8,19 +8,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,12 +28,12 @@ void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char* x) { cerr << '\"' << x << '\"'; }
-void __print(const string& x) { cerr << '\"' << x << '\"'; }
+void __print(const char *x) { cerr << '\"' << x << '\"'; }
+void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
-void __print(const pair<T, V>& x)
+void __print(const pair<T, V> &x)
 {
     cerr << '{';
     __print(x.first);
@@ -45,11 +42,11 @@ void __print(const pair<T, V>& x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T& x)
+void __print(const T &x)
 {
     int f = 0;
     cerr << '{';
-    for (auto& i : x)
+    for (auto &i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -70,53 +67,48 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve()
-{
-    int n;
-    cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
+void solve() {
+    int n,m,k;
+    cin>>n>>m>>k;
+    vector<vector<int>> grid(n+1, vector<int> (m+1, 0));
+    
+    re(i,n) {
+        re(j,m) {
+            cin>>grid[i+1][j+1];
+        }
     }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
+    vector<int> ans;
+    for(int j=1;j<=k;j++) {
+        int x;
+        cin>>x;
+        for(int i=1;i<=n;) {
+            debug(i,x);
+            if(x<=0 || x>m) {
+                break;
+            }
+            if(grid[i][x]==2) {
+                i++;
+                continue;
+            } else if(grid[i][x]==1) {
+                grid[i][x] = 2;
+                x++;
+            } else {
+                grid[i][x] = 2;
+                x--;
+            }
+        }
+        cout<<x<<" ";
     }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
-
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
-    }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
-
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
-    }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
+    
+    cout<<endl;
 }
 int32_t main()
 {
     FIO;
-    int t = 1;
-    cin >> t;
-    while (t--) {
-        solve();
+    int t=1;
+    // cin>>t;
+    while(t--)
+    {
+        solve();    
     }
 }

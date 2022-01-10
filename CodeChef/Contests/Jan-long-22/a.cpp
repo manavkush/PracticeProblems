@@ -70,46 +70,51 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+int getxx(int x, int n)
+{
+    return ((x & 1) ? (x + 1) / 2 : (n + x) / 2);
+}
+
 void solve()
 {
-    int n;
-    cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
-    }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
-    }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
+    int n, k;
+    cin >> n >> k;
 
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
-    }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
+    unordered_map<int, int> hash;
+    unordered_map<int, int> fin;
 
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
+    for (int x = 2; x < n; x++) {
+        // If we found the cycle of x
+        if (hash.find(x) != hash.end()) {
+            x++;
+            continue;
+        }
+
+        vector<int> list;
+        list.push_back(x);
+        hash[x]++;
+
+        int xx = getxx(x, n); // next element in the cycle
+        while (xx != x) {
+            list.push_back(xx);
+            hash[xx]++;
+            xx = getxx(xx, n);
+        }
+        int cycle_len = list.size();
+
+        for (int i = 0; i < cycle_len; i++) {
+            int j = (i + k) % cycle_len;
+            fin[list[j]] = list[i];
+        }
     }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
+    for (int i = 1; i < n; i++) {
+        if (i == 1)
+            cout << i << " ";
+        else
+            cout << fin[i] << " ";
+    }
+    cout << n << endl;
+    // cout << endl;
 }
 int32_t main()
 {
