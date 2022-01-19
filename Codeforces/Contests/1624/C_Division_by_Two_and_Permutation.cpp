@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -5,16 +8,19 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
-#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
+#define FIO                           \
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);                    \
+    cout.tie(NULL)
+#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i,n)        for(int i=0;i<(n);i++)
+#define re(i, n) for (int i = 0; i < (n); i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
+#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -25,12 +31,12 @@ void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char *x) { cerr << '\"' << x << '\"'; }
-void __print(const string &x) { cerr << '\"' << x << '\"'; }
+void __print(const char* x) { cerr << '\"' << x << '\"'; }
+void __print(const string& x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
- 
+
 template <typename T, typename V>
-void __print(const pair<T, V> &x)
+void __print(const pair<T, V>& x)
 {
     cerr << '{';
     __print(x.first);
@@ -39,11 +45,11 @@ void __print(const pair<T, V> &x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T &x)
+void __print(const T& x)
 {
     int f = 0;
     cerr << '{';
-    for (auto &i : x)
+    for (auto& i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -64,20 +70,38 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-
-
+void solve()
+{
+    int n;
+    cin >> n;
+    vi a(n);
+    re(i, n) cin >> a[i];
+    map<int, int> hash;
+    for (int i = 0; i < n; i++) {
+        while (a[i] > n) {
+            a[i] = a[i] >> 1;
+        }
+        while (a[i] > 0) {
+            if (hash.find(a[i]) == hash.end()) {
+                hash[a[i]]++;
+                break;
+            } else {
+                a[i] >>= 1;
+            }
+        }
+        if (a[i] == 0) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    cout << "YES\n";
+}
 int32_t main()
 {
     FIO;
-    int t;cin>>t;
-    while(t--)
-    {
-        int n,k;
-        cin>>n>>k;
-        vector<int> a(n);
-        re(i,n) {
-            cin>>a[i];
-        }
-        
+    int t = 1;
+    cin >> t;
+    while (t--) {
+        solve();
     }
 }

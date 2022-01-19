@@ -70,96 +70,76 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-/* 
-    crux lies in the relationship i.e. the statement
-    we make a truth table and infer that for a statement
-    x --- z----> y
-    is same as
-    x ^ z = y
-    when imposter = 1, crewmate = 0;
-
-    using property of xor we infer that the y^z = x
-    
-    IMP
-    ## thus making the graph undirected
-*/
-vector<vector<pii>> adj;
-vector<int> vis;
-vector<int> col;
-bool flag = 0;
-vector<int> counts(2, 0);
-int n, m;
-
-void dfs(int s, int status)
-{
-    vis[s] = 1;
-    col[s] = status;
-    counts[status]++;
-
-    for (auto x : adj[s]) {
-        int y = x.first;
-        int z = x.second;
-
-        if (vis[y] == -1) {
-            dfs(y, status ^ z);
-        } else {
-            if (col[y] == status ^ z) {
-                continue;
-            } else {
-                flag = 1;
-                return;
-            }
-        }
-    }
-    // debug(s, counts, flag);
-}
 void solve()
 {
-    cin >> n >> m;
-    adj.assign(n + 1, {});
-    int c = 0;
-    int ans = 0;
-    flag = 0;
-    // input
-    re(i, m)
+    int n;
+    cin >> n;
+    vi a(n);
+    re(i, n)
     {
-        int u, v;
-        string w;
-        cin >> u >> v >> w;
-        if (w[0] == 'i')
-            c = 1;
-        else
-            c = 0;
-        adj[u].push_back({ v, c });
-        adj[v].push_back({ u, c });
+        cin >> a[i];
     }
+    int l = 0, r = n - 1;
+    int prev = INT_MIN;
+    int count = 0;
+    string ans;
+    while (l <= r) {
+        if (max(a[l], a[r]) <= prev)
+            break;
 
-    // execution
-    vis.assign(n + 1, -1);
-    col.assign(n + 1, -1);
-    // for (int i = 1; i <= n; i++) {
-    //     debug(adj[i]);
-    // }
-    for (int i = 1; i <= n; i++) {
-        if (vis[i] == -1) {
-            counts.assign(2, 0);
-            dfs(i, 1);
-            ans += (*max_element(all(counts)));
-            // debug(ans);
+        if (a[l] > prev && (a[r] > a[l] || a[r] <= prev)) {
+            ans += 'L';
+            prev = a[l];
+            l++;
+        } else if (a[r] > prev && (a[l] > a[r] || a[l] <= prev)) {
+            ans += 'R';
+            prev = a[r];
+            r--;
+        } else if (a[l] == a[r]) {
+            if (l == r) {
+                if (a[l] > prev) {
+                    ans += 'L';
+                    l++;
+                }
+                break;
+            }
+            int cl = 0, cr = 0;
+            for (int i = l + 1; i <= r; i++) {
+                if (a[i] <= a[i - 1]) {
+                    break;
+                }
+                cl++;
+            }
+            for (int i = r - 1; i >= l; i--) {
+                if (a[i] <= a[i + 1]) {
+                    break;
+                }
+                cr++;
+            }
+
+            if (cr > cl) {
+                for (int i = 0; i <= cr; i++) {
+                    ans += 'R';
+                    r++;
+                }
+            } else {
+                for (int i = 0; i <= cl; i++) {
+                    ans += 'L';
+                    l--;
+                }
+            }
+            break;
         }
     }
-    // debug(ans, flag);
 
-    if (flag) {
-        cout << -1 << endl;
-    } else
-        cout << ans << endl;
+    cout << ans.length() << endl;
+    cout << ans << endl;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--) {
         solve();
     }

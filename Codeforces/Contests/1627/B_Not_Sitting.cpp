@@ -1,3 +1,6 @@
+// Author: $%U%$
+// Date: $%D%$/$%M%$/$%Y%$
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -28,12 +31,12 @@ void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char *x) { cerr << '\"' << x << '\"'; }
-void __print(const string &x) { cerr << '\"' << x << '\"'; }
+void __print(const char* x) { cerr << '\"' << x << '\"'; }
+void __print(const string& x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
 
 template <typename T, typename V>
-void __print(const pair<T, V> &x)
+void __print(const pair<T, V>& x)
 {
     cerr << '{';
     __print(x.first);
@@ -42,11 +45,11 @@ void __print(const pair<T, V> &x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T &x)
+void __print(const T& x)
 {
     int f = 0;
     cerr << '{';
-    for (auto &i : x)
+    for (auto& i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -67,27 +70,37 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-
+void solve()
+{
+    int n, m;
+    cin >> n >> m;
+    if (n > m)
+        swap(n, m);
+    int curr = 1;
+    vi vec;
+    re(i, n)
+    {
+        re(j, m)
+        {
+            int dis1 = abs(i) + abs(j);
+            int dis2 = abs(n - 1 - i) + abs(j);
+            int dis3 = abs(i) + abs(m - 1 - j);
+            int dis4 = abs(n - 1 - i) + abs(m - 1 - j);
+            vec.push_back(max({ dis1, dis2, dis3, dis4 }));
+        }
+    }
+    sort(vec.begin(), vec.end());
+    for (auto& x : vec) {
+        cout << x << " ";
+    }
+    cout << endl;
+}
 int32_t main()
 {
     FIO;
-    int t;
+    int t = 1;
     cin >> t;
-    while (t--)
-    {
-        int n;
-        cin >> n;
-        vector<int> a(n);
-        re(i, n)
-        {
-            cin >> a[i];
-        }
-        int res = 0;
-        for (int i = 0; i < n - 1; i++)
-        {
-            int curr = a[i] * a[i + 1];
-            res = max(curr, res);
-        }
-        cout << res << endl;
+    while (t--) {
+        solve();
     }
 }

@@ -70,96 +70,43 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-/* 
-    crux lies in the relationship i.e. the statement
-    we make a truth table and infer that for a statement
-    x --- z----> y
-    is same as
-    x ^ z = y
-    when imposter = 1, crewmate = 0;
-
-    using property of xor we infer that the y^z = x
-    
-    IMP
-    ## thus making the graph undirected
-*/
-vector<vector<pii>> adj;
-vector<int> vis;
-vector<int> col;
-bool flag = 0;
-vector<int> counts(2, 0);
-int n, m;
-
-void dfs(int s, int status)
-{
-    vis[s] = 1;
-    col[s] = status;
-    counts[status]++;
-
-    for (auto x : adj[s]) {
-        int y = x.first;
-        int z = x.second;
-
-        if (vis[y] == -1) {
-            dfs(y, status ^ z);
-        } else {
-            if (col[y] == status ^ z) {
-                continue;
-            } else {
-                flag = 1;
-                return;
-            }
-        }
-    }
-    // debug(s, counts, flag);
-}
 void solve()
 {
-    cin >> n >> m;
-    adj.assign(n + 1, {});
-    int c = 0;
-    int ans = 0;
-    flag = 0;
-    // input
-    re(i, m)
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    map<char, char> hash;
+    re(i, 9)
     {
-        int u, v;
-        string w;
-        cin >> u >> v >> w;
-        if (w[0] == 'i')
-            c = 1;
-        else
-            c = 0;
-        adj[u].push_back({ v, c });
-        adj[v].push_back({ u, c });
+        char c;
+        cin >> c;
+        hash['0' + i + 1] = c;
     }
+    int ii = 0, ff = 0;
+    bool flag = 0;
 
-    // execution
-    vis.assign(n + 1, -1);
-    col.assign(n + 1, -1);
-    // for (int i = 1; i <= n; i++) {
-    //     debug(adj[i]);
-    // }
-    for (int i = 1; i <= n; i++) {
-        if (vis[i] == -1) {
-            counts.assign(2, 0);
-            dfs(i, 1);
-            ans += (*max_element(all(counts)));
-            // debug(ans);
+    for (ff = 0; ff < s.length(); ff++) {
+        if (hash[s[ff]] > s[ff]) {
+            s[ff] = hash[s[ff]];
+        } else if (hash[s[ff]] == s[ff]) {
+            if (ii == ff) {
+                ii++;
+            }
+        } else {
+            if (ii != ff)
+                break;
+            ii++;
         }
     }
-    // debug(ans, flag);
-
-    if (flag) {
-        cout << -1 << endl;
-    } else
-        cout << ans << endl;
+    cout << s << endl;
+    return;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
-    cin >> t;
+    // cin>>t;
     while (t--) {
         solve();
     }
