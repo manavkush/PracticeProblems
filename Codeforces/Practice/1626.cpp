@@ -70,61 +70,24 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-
-int not_ans;
-int ans;
-vector<vector<pii>> adj;
-bool flag = 0;
-int cnt;
-vector<int> vis;
-
-void dfs(int s, int bit)
+string comb(char a, char b)
 {
-    vis[s] = 1;
-    cnt++;
-    for (auto x : adj[s]) {
-        int edge = x.ss;
-        int neigh = x.ff;
-        if (vis[neigh])
-            continue;
-        if ((edge & (1 << bit)) || (not_ans & edge)) {
-            continue;
-        } else {
-            dfs(neigh, bit);
-        }
-    }
+    return to_string((a - '0') + (b - '0'));
 }
-
 void solve()
 {
-    int n, m;
-    cin >> n >> m;
-    adj.assign(n + 1, vector<pii>());
-    re(i, m)
-    {
-        int u, v, w;
-        cin >> u >> v >> w;
-        adj[u].push_back({ v, w });
-        adj[v].push_back({ u, w });
-    }
-    not_ans = 0;
-    ans = 0;
-    for (int i = 0; i <= 30; i++) {
-        ans |= (1 << i);
-    }
-    // initial answer
+    string s;
+    cin >> s;
+    string ans = comb(s[0], s[1]) + s.substr(2);
 
-    for (int i = 30; i >= 0; i--) {
-        vis.assign(n + 1, 0);
-        cnt = 0;
-
-        ans ^= (1 << i); // trying to unset the bit
-        dfs(1, i);
-
-        if (cnt == n) {
-            not_ans |= (1 << i);
-        } else {
-            ans ^= (1 << i); // resetting the bit
+    bool flag = 0;
+    int i = 1;
+    for (i = s.length() - 2; i >= 0; i--) {
+        string temp = comb(s[i], s[i + 1]);
+        if (comb(s[i], s[i + 1]).length() == 2) {
+            ans = s.substr(0, i) + comb(s[i], s[i + 1]) + s.substr(i + 2);
+            flag = 1;
+            break;
         }
     }
     cout << ans << endl;

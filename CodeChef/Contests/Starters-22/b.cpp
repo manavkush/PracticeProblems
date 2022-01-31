@@ -70,71 +70,41 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-
-int not_ans;
-int ans;
-vector<vector<pii>> adj;
-bool flag = 0;
-int cnt;
-vector<int> vis;
-
-void dfs(int s, int bit)
-{
-    vis[s] = 1;
-    cnt++;
-    for (auto x : adj[s]) {
-        int edge = x.ss;
-        int neigh = x.ff;
-        if (vis[neigh])
-            continue;
-        if ((edge & (1 << bit)) || (not_ans & edge)) {
-            continue;
-        } else {
-            dfs(neigh, bit);
-        }
-    }
-}
-
 void solve()
 {
-    int n, m;
-    cin >> n >> m;
-    adj.assign(n + 1, vector<pii>());
-    re(i, m)
-    {
-        int u, v, w;
-        cin >> u >> v >> w;
-        adj[u].push_back({ v, w });
-        adj[v].push_back({ u, w });
-    }
-    not_ans = 0;
-    ans = 0;
-    for (int i = 0; i <= 30; i++) {
-        ans |= (1 << i);
-    }
-    // initial answer
-
-    for (int i = 30; i >= 0; i--) {
-        vis.assign(n + 1, 0);
-        cnt = 0;
-
-        ans ^= (1 << i); // trying to unset the bit
-        dfs(1, i);
-
-        if (cnt == n) {
-            not_ans |= (1 << i);
-        } else {
-            ans ^= (1 << i); // resetting the bit
-        }
-    }
-    cout << ans << endl;
+    int n;
+    cin >> n;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
     cin >> t;
+    set<int> ans;
+    for (int i = 1; i < 19; i++) {
+        for (int j = 0; j < i; j++) {
+            int x = (1 << i) + (1 << j);
+            ans.insert(x);
+        }
+    }
+    for (int i = 1; i < 19; i++) {
+        for (int j = 0; j < i; j++) {
+            for (int k = 0; k < j; k++) {
+                for (int l = 0; l < k; l++) {
+                    int x = (1 << i) + (1 << j) + (1 << k) + (1 << l);
+                    ans.insert(x);
+                }
+            }
+        }
+    }
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+        auto itr = ans.begin();
+        for (int i = 0; i < n; i++) {
+            cout << (*itr) << " ";
+            itr++;
+        }
+        cout << endl;
     }
 }

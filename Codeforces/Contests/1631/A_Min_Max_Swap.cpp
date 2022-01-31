@@ -70,64 +70,26 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-
-int not_ans;
-int ans;
-vector<vector<pii>> adj;
-bool flag = 0;
-int cnt;
-vector<int> vis;
-
-void dfs(int s, int bit)
-{
-    vis[s] = 1;
-    cnt++;
-    for (auto x : adj[s]) {
-        int edge = x.ss;
-        int neigh = x.ff;
-        if (vis[neigh])
-            continue;
-        if ((edge & (1 << bit)) || (not_ans & edge)) {
-            continue;
-        } else {
-            dfs(neigh, bit);
-        }
-    }
-}
-
 void solve()
 {
-    int n, m;
-    cin >> n >> m;
-    adj.assign(n + 1, vector<pii>());
-    re(i, m)
+    int n;
+    cin >> n;
+    vi a(n), b(n);
+    re(i, n)
     {
-        int u, v, w;
-        cin >> u >> v >> w;
-        adj[u].push_back({ v, w });
-        adj[v].push_back({ u, w });
+        cin >> a[i];
     }
-    not_ans = 0;
-    ans = 0;
-    for (int i = 0; i <= 30; i++) {
-        ans |= (1 << i);
+    re(i, n)
+    {
+        cin >> b[i];
     }
-    // initial answer
-
-    for (int i = 30; i >= 0; i--) {
-        vis.assign(n + 1, 0);
-        cnt = 0;
-
-        ans ^= (1 << i); // trying to unset the bit
-        dfs(1, i);
-
-        if (cnt == n) {
-            not_ans |= (1 << i);
-        } else {
-            ans ^= (1 << i); // resetting the bit
+    re(i, n)
+    {
+        if (a[i] > b[i]) {
+            swap(a[i], b[i]);
         }
     }
-    cout << ans << endl;
+    cout << (*max_element(all(a))) * (*max_element(all(b))) << endl;
 }
 int32_t main()
 {
