@@ -72,51 +72,23 @@ void _print(T t, V... v)
 //====================================DEBUG TEMPLATE==============================================
 void solve()
 {
-    int n;
-    cin >> n;
-    string a, b;
-    cin >> a >> b;
-    vi prefa(n + 1, 0), prefb(n + 1, 0);
-    for (int i = n - 1; i >= 0; i--) {
-        prefa[i] = prefa[i + 1] + ((a[i] - '0') ^ 1);
-        prefb[i] = prefb[i + 1] + ((b[i] - '0') ^ 1);
-    }
-    // debug(prefa, prefb);
-    vector<vector<int>> dp(n + 1, vector<int>(n + 1, INT_MAX));
-    dp[n][n] = 0;
-    for (int i = n - 1; i >= 0; i--) {
-        if (a[i] == '1')
-            dp[i][n] = dp[i + 1][n] + prefa[i + 1];
-        else
-            dp[i][n] = dp[i + 1][n];
-    }
-    for (int i = n - 1; i >= 0; i--) {
-        if (b[i] == '1')
-            dp[n][i] = dp[n][i + 1] + prefb[i + 1];
-        else
-            dp[n][i] = dp[n][i + 1];
-    }
+    int hc, dc, hm, dm;
+    cin >> hc >> dc;
+    cin >> hm >> dm;
+    int k, w, a;
+    cin >> k >> w >> a;
+    for (int i = 0; i <= k; i++) {
+        int health = (hc + i * a);
+        int attack = (dc + (k - i) * w);
 
-    for (int i = n - 1; i >= 0; i--) {
-        for (int j = n - 1; j >= 0; j--) {
-            int prevzeros = prefa[i + 1] + prefb[j + 1];
-            if (a[i] == '1') {
-                if (b[j] == '1') {
-                    dp[i][j] = min(dp[i + 1][j], dp[i][j + 1]) + prevzeros;
-                } else {
-                    dp[i][j] = min(dp[i + 1][j] + prevzeros + 1, dp[i][j + 1]);
-                }
-            } else {
-                if (b[j] == '1') {
-                    dp[i][j] = min(dp[i + 1][j], dp[i][j + 1] + prevzeros + 1);
-                } else {
-                    dp[i][j] = min(dp[i + 1][j], dp[i][j + 1]);
-                }
-            }
+        int mons = ((health + dm - 1) / dm);
+        int hero = ((hm + attack - 1) / attack);
+        if (hero <= mons) {
+            cout << "YES\n";
+            return;
         }
     }
-    // debug(dp);
-    cout << dp[0][0] << endl;
+    cout << "NO\n";
 }
 int32_t main()
 {
