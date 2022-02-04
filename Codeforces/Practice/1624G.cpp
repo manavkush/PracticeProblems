@@ -67,41 +67,68 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve() {
-    int n,k;
-    cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
-    re(i,n) {
-        cin>>a[i];
-    }
-    
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
-        cout<<0<<endl;
-        return;
-    }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
-    }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
+vector<vector<pii>> adj;
+int ans = 0;
 
+void dfs(int s, vector<int> &vis, int curr) {
+    vis[s] = 1;
+    // debug(vis);
+    for(auto x: adj[s]) {
+        if(vis[x.ff] ==0 and ((x.ss & curr) <= ans)) {
+            dfs(x.ff, vis, curr);
+        }
+            // cout<<"*";
+    }
+}
+
+void solve() {
+    int n,m;
+    cin>>n>>m;
+    adj.assign(n+1, vector<pii> ());
+    re(i,m) {
+        int u,v,w;
+        cin>>u>>v>>w;
+        adj[u].pb({v, w});
+        adj[v].pb({u, w});
+    }
+    ans = 0;
+    for(int i=0;i<30;i++) {
+        ans = (ans + (1<<i));
+        // debug(ans);
+    }
+    int curr = 0;
+
+    for(int i=29;i>=0;i--) {
+        curr = curr + (1<<i);
+        vector<int> vis(n+1, 0);
+        // for(int j=29;j>=0;j--) {
+        //     cout<<(curr&(1<<j) ? "1" : "0")<<" ";
+        // }
+        // cout<<endl;
+        ans = ans^(1<<i);   // unsetting the bit
+        for(int j=29;j>=0;j--) {
+            cout<<(curr&(1<<j) ? "1" : "0")<<"";
+        }
+        cout<<endl;
+        for(int j=29;j>=0;j--) {
+            cout<<(ans&(1<<j) ? "1" : "0")<<"";
+        }
+        cout<<endl<<endl;
+        // debug(ans);
+        dfs(1, vis, curr);
+        bool flag = 0;
+        for(int i=0;i<n;i++) {
+            if(vis[i+1]==0) {
+                flag = 1;
+            }
+        }
+        if(flag) {
+            ans = ans^(1<<i);
+        }
+    }
     cout<<ans<<endl;
+    adj.clear();
+    return;
 }
 int32_t main()
 {

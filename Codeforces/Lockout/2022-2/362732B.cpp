@@ -68,40 +68,41 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
-    int n,k;
-    cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
+    string s,c;
+    cin>>s>>c;
+    map<char,int> hash;
+    int n = s.length(), m = c.length();
     re(i,n) {
-        cin>>a[i];
+        hash[s[i]]++;
     }
-    
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
-        cout<<0<<endl;
+    string low;
+    tr(it, hash) {
+        low += string(it->second, it->first);
+    }
+    int i=0;
+    for(i=0;i<n;i++) {
+        if(low[i]!=s[i])    break;
+    }
+    if(i==n) {
+        if(s<c) {
+            cout<<s<<endl;
+        } else {
+            cout<<"---"<<endl;
+        }
         return;
+    } else {
+        for(int j=n-1;j>=i;j--) {
+            if(s[j]==low[i]) {
+                swap(s[j], s[i]);
+                break;
+            }
+        }
+        if(s<c) {
+            cout<<s<<endl;
+        } else {
+            cout<<"---"<<endl;
+        }
     }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
-    }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
-
-    cout<<ans<<endl;
 }
 int32_t main()
 {

@@ -68,40 +68,68 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
-    int n,k;
-    cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
+    int n;
+    cin>>n;
+    vector<int> l(n), r(n), c(n);
+    map<int, int> start;
+    map<int, int> end;
+    map<pii, int> hash;
+    int cost = 0;
+    vector<int> low(n+1, INT_MAX);
+    vector<int> high(n+1, 0);
+
     re(i,n) {
-        cin>>a[i];
+        cin>>l[i]>>r[i]>>c[i];
+        
+        if(hash.find({l[i], r[i]}) == hash.end()) {
+            hash[{l[i], r[i]}] = c[i];
+        } else {
+            hash[{l[i], r[i]}] = min(hash[{l[i], r[i]}], c[i]);
+        }
+        
+        if(l[i]==low[i]) {
+            start[l[i]] = min(start[l[i]], c[i]);
+        } else if(l[i]<low[i]) {
+            start[l[i]] = c[i];
+        }
+
+        if(r[i]==high[i]) {
+            end[r[i]] = min(end[r[i]], c[i]);
+        } else if(r[i]>high[i]) {
+            end[r[i]] = c[i];
+        }
+
+        low[i+1] = min(low[i], l[i]);
+        high[i+1] = max(high[i], r[i]);
+
+        int cost = INT_MAX;
+        // debug(low[i+1], high[i+1]);
+        if(hash.find({low[i+1], high[i+1]}) != hash.end()) {
+            cost = hash[{low[i+1], high[i+1]}];
+        }
+        int costl = start[low[i+1]];
+        int costr = end[high[i+1]];
+        cost = min(cost, costl + costr);
+        cout<<cost<<endl;
+
+        // if(l[i]>low[i] and r[i]<high[i]) continue;
+        
+        // if(l[i]<=low[i]) {
+        //     low[i+1] = l[i];
+        //     if(start[low[i+1]])
+        // }
+
+
+        // if(start.find(low[i+1]) == start.end()) {
+        //     start[low[i+1]] = c[i];
+        // } else {
+        //     start[low[i+1]] = min(start[low[i+1]], c[i]) 
+        // }
+        // start[ l[i] ] = pb({c[i], r[i]});
+        // end[r[i]].pb({c[i], l[i]});
     }
     
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
-        cout<<0<<endl;
-        return;
-    }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
-    }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
 
-    cout<<ans<<endl;
 }
 int32_t main()
 {

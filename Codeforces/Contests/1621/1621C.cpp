@@ -12,7 +12,7 @@ typedef vector<int> vi;
 #define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
-#define endl "\n"
+// #define endl "\n"
 #define pb push_back
 #define mp make_pair
 #define re(i,n)        for(int i=0;i<(n);i++)
@@ -67,41 +67,41 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+int query(int n) {
+    int ret;
+    cout<<"? "<<n<<endl;
+    cin>>ret;
+    return ret;
+}
 void solve() {
-    int n,k;
-    cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
-    re(i,n) {
-        cin>>a[i];
+    int n;cin>>n;
+    vi p(n+1, -1);
+    query(1);
+    int prev, curr;
+    int idx = 1;
+    prev = curr = 1;
+    while(idx<=n) {
+        if(p[curr]==-1) {
+            if(prev==-1) {
+                curr = prev = query(idx);
+                continue;
+            }
+            prev = curr;
+            curr = query(idx);
+            p[prev] = curr;
+        } else {
+            idx++;
+            curr = idx;
+            prev = -1;
+        }
     }
-    
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
-        cout<<0<<endl;
-        return;
+    cout<<"! ";
+    for(int i=1;i<=n;i++) {
+        cout<<p[i]<<" ";
     }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
-    }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
+    cout<<endl;
+    cout.flush();
 
-    cout<<ans<<endl;
 }
 int32_t main()
 {

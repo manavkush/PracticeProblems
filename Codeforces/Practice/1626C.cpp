@@ -68,38 +68,29 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
-    int n,k;
-    cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
+    int n;
+    cin>>n;
+    vi seconds(n), health(n);
     re(i,n) {
-        cin>>a[i];
+        cin>>seconds[i];
     }
-    
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
-        cout<<0<<endl;
-        return;
+    re(i,n) {
+        cin>>health[i];
     }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
+    int ans = 0;
+    int fin = n-1;
+    int finh = n;
+    for(int i=n-2;i>=0;i--) {
+        if(seconds[fin]-seconds[i]>=health[fin]) {
+            int diff = seconds[fin]-seconds[i];
+            ans += (diff*(diff+1))/2;
+            fin = i;
+        }
     }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
+    if(fin==1)
+    ans += (health[fin]*(health[fin]+1))/2;
+    else
+    ans += (seconds[fin]*(seconds[fin]+1))/2;
 
     cout<<ans<<endl;
 }

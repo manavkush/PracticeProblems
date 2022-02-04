@@ -67,42 +67,45 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+const int N = 1e5+5;
+vector<int> adj[N];
+vector<int> vis(N, -1);
+
+int dfs(int s, int par, vector<int> &a) {
+    int ans = a[s];
+    for(auto x: adj[s]) {
+        if(x!=par) {
+            ans ^=dfs(x, s, a);
+        }
+    }
+    vis[s] = ans;
+    return ans;
+}
+
 void solve() {
     int n,k;
     cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
-    re(i,n) {
-        cin>>a[i];
-    }
     
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
-        cout<<0<<endl;
-        return;
+    re(i,n) {
+        adj[i].clear();
     }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
-    }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
 
-    cout<<ans<<endl;
+    vi a(n+1);
+    re(i,n) {
+        cin>>a[i+1];
+    }
+    re(i,n-1) {
+        int u,v;
+        cin>>u>>v;
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+    dfs(1,1,a);
+    vector<int> ans = vector<int> (vis.begin()+1, vis.begin()+n+1);
+    debug(ans);
+    // cout<<dfs(1,1, a)<<endl;
 }
+
 int32_t main()
 {
     FIO;

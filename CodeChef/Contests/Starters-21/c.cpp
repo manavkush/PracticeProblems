@@ -1,6 +1,3 @@
-// Author: $%U%$
-// Date: $%D%$/$%M%$/$%Y%$
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -68,48 +65,47 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
-    int n,k;
-    cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
-    re(i,n) {
-        cin>>a[i];
-    }
-    
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
+    int n,m;
+    cin>>n>>m;
+    int n2 = n, m2 = m;
+    vector<int> primes;
+    map<int,int> hash;
+    if(m==1) {
         cout<<0<<endl;
         return;
     }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
+    while(m%2==0) {
+        hash[2]++;
+        m /= 2;
     }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
 
-    cout<<ans<<endl;
+    for(int i=2;i<=sqrt(m);i++) {
+        if(m%i==0) {
+            hash[i]++;
+            while(m%i==0) {
+                m/= i;
+            }
+        }
+    }
+    if(m>2) {
+        hash[m]++;
+    }
+    int curr = hash.size();
+    for(;curr>=1;curr--) {
+        if(n%curr==0) break;
+    }
+    
+    cout<<curr<<endl;
+    
+    
 }
+
 int32_t main()
 {
     FIO;
-    int t=1;
-    cin>>t;
+    int t;cin>>t;
     while(t--)
     {
-        solve();    
+        solve();
     }
 }

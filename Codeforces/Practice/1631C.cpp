@@ -67,41 +67,63 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+int complement(int x, int bits) {
+    int ret = 0;
+    for(int i=0;i<bits;i++) {
+        if( x & (1<<i) ) {
+            continue;
+        } else {
+            ret |= (1<<i);
+        }
+    }
+    return ret;
+}
 void solve() {
     int n,k;
     cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
-    re(i,n) {
-        cin>>a[i];
+    int n2 = n-1;
+    int bits = 0;
+    // getting total bits
+    while(n2) {
+        n2>>=1;
+        bits++;
     }
-    
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
-        cout<<0<<endl;
-        return;
-    }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
-    }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
+    map<int,int> vis;
+    if(k==0) {
 
-    cout<<ans<<endl;
+    } else if(k==n-1) {
+        if(n==4) {
+            cout<<-1<<endl;
+            return;
+        }
+        else {
+            vis[n-1] = 1;
+            vis[n-2] = 1;
+            vis[n-3] = 1;
+            vis[0] = 1;
+            vis[1] = 1;
+            vis[2] = 1;
+            cout<<0<<" "<<2<<endl;
+            cout<<n-3<<" "<<1<<endl;
+            cout<<n-1<<" "<<n-2<<endl;
+        }
+    } else {
+        vis[n-1] = 1;
+        vis[k] = 1;
+        vis[0] = 1;
+        vis[complement(k, bits)] = 1;
+        cout<<n-1<<" "<<k<<endl;
+        cout<<complement(k,bits)<<" "<<0<<endl;
+    }
+    for(int i=0;i<n;i++) {
+        if(!vis[i]) {
+            int comp = complement(i, bits);
+            cout<<i<<" "<<comp<<endl;
+            vis[i] = 1;
+            vis[comp] = 1;
+        }
+    }
+    // cout<<endl;
 }
 int32_t main()
 {

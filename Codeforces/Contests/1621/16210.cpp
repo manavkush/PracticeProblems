@@ -70,38 +70,20 @@ void _print(T t, V... v)
 void solve() {
     int n,k;
     cin>>n>>k;
-    vi a(n);
-    vector<int> pref(n+1, 0);
-    re(i,n) {
-        cin>>a[i];
+    int count = k;
+    if(k>(n+1)/2) cout<<-1<<endl;
+    else {
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<n;j++) {
+                if(i==j and i%2==0 and count>0) {
+                    cout<<"R";
+                    count--;
+                }
+                else cout<<".";
+            }
+            cout<<endl;
+        }
     }
-    
-    sort(all(a));
-    re(i,n)
-        pref[i+1] = pref[i] + a[i];
-    if(pref[n]<=k) {
-        cout<<0<<endl;
-        return;
-    }
-    int ans = pref[n]-k;
-    int res = 1e18;
-    for(int y=0;y<=n-1;y++) {   // no of maximums to be reduced
-        int curr = y;
-        int num = pref[n-y] - k - a[0];
-        int div = (num+y)/(y+1) + a[0];
-        if(div>0)
-            curr += div;
-        ans = min(ans, curr);
-    }
-    // for(int i=n-1;i>0;i--) {
-    //     int y = n-i;
-    //     int num = (k + a[0] - pref[i])/(y+1);
-    //     // int div = (num+y)/(y+1);
-    //     int curr = a[0]-num;
-    //     ans = min(ans, curr+y);
-    // }
-
-    cout<<ans<<endl;
 }
 int32_t main()
 {
