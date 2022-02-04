@@ -70,52 +70,51 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+vi cost(1005, INT_MAX);
 void solve()
 {
-    int n;
-    cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
-    }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
-    }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
+    int n, k;
+    cin >> n >> k;
+    vi b(n), coins(n);
 
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
+    re(i, n)
+    {
+        cin >> b[i];
     }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
+    re(i, n)
+    {
+        cin >> coins[i];
+    }
+    k = min((12 * 1000 + 5ll), k);
+    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0)); // dp[n][k]
 
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
+    for (int sum = 0; sum <= k; sum++) {
+        for (int j = 1; j <= n; j++) {
+            int idx = j - 1;
+            int num = b[idx];
+
+            if (cost[num] <= sum) {
+                dp[j][sum] = max(dp[j - 1][sum], dp[j - 1][sum - cost[num]] + coins[idx]);
+            } else {
+                dp[j][sum] = dp[j - 1][sum];
+            }
+        }
     }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
+    cout << dp[n][k] << endl;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
     cin >> t;
+
+    cost[1] = 0;
+    for (int i = 1; i <= 1000; i++) {
+        for (int j = 1; j <= i; j++) {
+            if (i + (i / j) <= 1000)
+                cost[i + (i / j)] = min(cost[i + (i / j)], cost[i] + 1);
+        }
+    }
     while (t--) {
         solve();
     }

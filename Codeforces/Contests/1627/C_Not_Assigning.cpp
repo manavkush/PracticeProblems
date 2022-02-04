@@ -70,46 +70,76 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+const int N = 1e5 + 5;
+vector<vector<int>> adj;
+map<pii, int> weights;
+void bfs(int s, vector<bool>& vis)
+{
+    queue<int> q;
+    q.push(s);
+    vis[s] = 1;
+    int sz = q.size();
+    int dis = 0;
+    while (!q.empty()) {
+        int top = q.front();
+        // debug(top);
+        q.pop();
+        sz--;
+
+        for (auto x : adj[top]) {
+            if (!vis[x]) {
+                vis[x] = 1;
+                q.push(x);
+                if (dis & 1) {
+                    weights[{ x, top }] = 2;
+                    weights[{ top, x }] = 2;
+                } else {
+                    weights[{ x, top }] = 3;
+                    weights[{ top, x }] = 3;
+                }
+            }
+        }
+        if (sz == 0) {
+            sz = q.size();
+            dis++;
+        }
+    }
+    // debug("");
+}
+
 void solve()
 {
     int n;
     cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
+    adj.assign(n + 1, vector<int>());
+    vector<pii> vec;
+    re(i, n - 1)
+    {
+        int a, b;
+        cin >> a >> b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+        vec.pb({ a, b });
     }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
+    int start = 1;
+    // remove those with more than 2 neighbours
+    for (int i = 1; i <= n; i++) {
+        if (adj[i].size() > 2) {
+            cout << -1 << endl;
+            return;
+        } else if (adj[i].size() == 1) {
+            start = i;
+        }
     }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
 
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
+    vector<bool> vis(n + 1, 0);
+    bfs(start, vis);
+    for (auto x : vec) {
+        cout << weights[x] << " ";
     }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
-
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
-    }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
+    cout << endl;
+    adj.clear();
+    weights.clear();
 }
 int32_t main()
 {

@@ -73,43 +73,63 @@ void _print(T t, V... v)
 void solve()
 {
     int n;
-    cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
+    string s;
+    cin >> n >> s;
+    if (n & 1) {
+        cout << "NO\n";
         return;
-    }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
-    }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
+    } else {
+        map<char, int> hash;
+        for (int i = 0; i < n; i++) {
+            hash[s[i]]++;
+        }
 
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
-    }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
+        for (auto x : hash) {
+            if (x.second > n / 2) {
+                cout << "NO\n";
+                return;
+            }
+        }
+        cout << "YES\n";
+        vector<pair<int, char>> vec;
+        for (auto x : hash) {
+            vec.push_back({ x.second, x.first });
+        }
+        sort(all(vec));
+        // reverse(all(vec));
+        string ans = string(n, '.');
+        int odd = n / 2;
+        int even = 0;
+        int turn = 0;
+        for (int j = vec.size() - 1; j >= 0; j--) {
+            char c = vec[j].second;
+            int val = vec[j].first;
 
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
-    }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
+            if (turn == 0) {
+                for (int i = 0; i < val; i++) {
+                    if (even < n / 2) {
+                        ans[even] = c;
+                        even++;
+                    } else {
+                        ans[odd] = c;
+                        odd++;
+                    }
+                }
+            } else {
+                for (int i = 0; i < val; i++) {
+                    if (odd < n) {
+                        ans[odd] = c;
+                        odd++;
+                    } else {
+                        ans[even] = c;
+                        even++;
+                    }
+                }
+            }
+            turn ^= 1;
+        }
         cout << ans << endl;
+    }
 }
 int32_t main()
 {

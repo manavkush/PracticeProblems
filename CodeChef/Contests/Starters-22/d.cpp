@@ -76,40 +76,47 @@ void solve()
     cin >> n;
     string a, b;
     cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
+    vi prefa(n + 1, 0), prefb(n + 1, 0);
+    for (int i = n - 1; i >= 0; i--) {
+        prefa[i] = prefa[i + 1] + ((a[i] - '0') ^ 1);
+        prefb[i] = prefb[i + 1] + ((b[i] - '0') ^ 1);
     }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
+    // debug(prefa, prefb);
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, INT_MAX));
+    dp[n][n] = 0;
+    for (int i = n - 1; i >= 0; i--) {
+        if (a[i] == '1')
+            dp[i][n] = dp[i + 1][n] + prefa[i + 1];
+        else
+            dp[i][n] = dp[i + 1][n];
     }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
+    for (int i = n - 1; i >= 0; i--) {
+        if (b[i] == '1')
+            dp[n][i] = dp[n][i + 1] + prefb[i + 1];
+        else
+            dp[n][i] = dp[n][i + 1];
+    }
 
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = n - 1; j >= 0; j--) {
+            int prevzeros = prefa[i + 1] + prefb[j + 1];
+            if (a[i] == '1') {
+                if (b[j] == '1') {
+                    dp[i][j] = min(dp[i + 1][j], dp[i][j + 1]) + prevzeros;
+                } else {
+                    dp[i][j] = min(dp[i + 1][j] + prevzeros + 1, dp[i][j + 1]);
+                }
+            } else {
+                if (b[j] == '1') {
+                    dp[i][j] = min(dp[i + 1][j], dp[i][j + 1] + prevzeros + 1);
+                } else {
+                    dp[i][j] = min(dp[i + 1][j], dp[i][j + 1]);
+                }
+            }
+        }
     }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
-
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
-    }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
+    // debug(dp);
+    cout << dp[0][0] << endl;
 }
 int32_t main()
 {

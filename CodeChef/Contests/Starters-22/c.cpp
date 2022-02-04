@@ -74,42 +74,41 @@ void solve()
 {
     int n;
     cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
+    if (n == 2) {
+        cout << "NO\n";
         return;
+    } else if (n & 1) {
+        cout << "YES\n";
+        int mid = n / 2 + 1;
+        int inc = mid + 1;
+        int dec = mid - 1;
+        cout << mid << " ";
+        for (int i = 1; i < n; i++) {
+            if (i & 1) {
+                cout << inc << " ";
+                inc++;
+            } else {
+                cout << dec << " ";
+                dec--;
+            }
+        }
+        cout << endl;
+    } else {
+        cout << "YES\n";
+        int high = n;
+        int low = 1;
+        cout << n / 2 << " ";
+        for (int i = 1; i < n; i++) {
+            if (i & 1) {
+                cout << high << " ";
+                high--;
+            } else {
+                cout << low << " ";
+                low++;
+            }
+        }
+        cout << endl;
     }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
-    }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
-
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
-    }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
-
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
-    }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
 }
 int32_t main()
 {

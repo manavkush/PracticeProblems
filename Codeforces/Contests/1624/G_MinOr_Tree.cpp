@@ -70,46 +70,64 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+
+int not_ans;
+int ans;
+vector<vector<pii>> adj;
+bool flag = 0;
+int cnt;
+vector<int> vis;
+
+void dfs(int s, int bit)
+{
+    vis[s] = 1;
+    cnt++;
+    for (auto x : adj[s]) {
+        int edge = x.ss;
+        int neigh = x.ff;
+        if (vis[neigh])
+            continue;
+        if ((edge & (1 << bit)) || (not_ans & edge)) {
+            continue;
+        } else {
+            dfs(neigh, bit);
+        }
+    }
+}
+
 void solve()
 {
-    int n;
-    cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
+    int n, m;
+    cin >> n >> m;
+    adj.assign(n + 1, vector<pii>());
+    re(i, m)
+    {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({ v, w });
+        adj[v].push_back({ u, w });
     }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
+    not_ans = 0;
+    ans = 0;
+    for (int i = 0; i <= 30; i++) {
+        ans |= (1 << i);
     }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
+    // initial answer
 
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
-    }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
+    for (int i = 30; i >= 0; i--) {
+        vis.assign(n + 1, 0);
+        cnt = 0;
 
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
+        ans ^= (1 << i); // trying to unset the bit
+        dfs(1, i);
+
+        if (cnt == n) {
+            not_ans |= (1 << i);
+        } else {
+            ans ^= (1 << i); // resetting the bit
+        }
     }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
+    cout << ans << endl;
 }
 int32_t main()
 {

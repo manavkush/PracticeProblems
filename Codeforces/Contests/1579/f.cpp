@@ -70,46 +70,52 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+
 void solve()
 {
-    int n;
-    cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
-    }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
+    int n, d;
+    cin >> n >> d;
+    vector<char> a(n);
+
     for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
+        cin >> a[i];
     }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
 
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
-    }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
+    int gc = __gcd(n, d);
+    vector<string> groups(gc);
 
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
+    for (int i = 0; i < gc; i++) {
+        groups[i] += a[i];
+        for (int j = (i + d) % n; j != i; j = (j + d) % n) {
+            groups[i] += a[j];
+        }
     }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
+    // debug(groups);
+    int ans = 0;
+
+    for (int i = 0; i < gc; i++) {
+        groups[i] += groups[i];
+
+        int m = groups[i].size();
+        int ii = 0, ff = 0;
+        int count = 0;
+
+        while (ff <= m) {
+            if (groups[i][ff] == '1') {
+                ff++;
+            } else {
+                ii = ff = ff + 1;
+            }
+            count = max(count, ff - ii);
+        }
+        if (count == m) {
+            cout << -1 << endl;
+            return;
+        }
+        ans = max(ans, count);
+    }
+    cout << ans << endl;
+    return;
 }
 int32_t main()
 {

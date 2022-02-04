@@ -74,48 +74,39 @@ void solve()
 {
     int n;
     cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
+    string s;
+    cin >> s;
+    map<char, char> hash;
+    re(i, 9)
+    {
+        char c;
+        cin >> c;
+        hash['0' + i + 1] = c;
     }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
-    }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
+    int ii = 0, ff = 0;
+    bool flag = 0;
 
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
+    for (ff = 0; ff < s.length(); ff++) {
+        if (hash[s[ff]] > s[ff]) {
+            s[ff] = hash[s[ff]];
+        } else if (hash[s[ff]] == s[ff]) {
+            if (ii == ff) {
+                ii++;
+            }
+        } else {
+            if (ii != ff)
+                break;
+            ii++;
+        }
     }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
-
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
-    }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
+    cout << s << endl;
+    return;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
-    cin >> t;
+    // cin>>t;
     while (t--) {
         solve();
     }

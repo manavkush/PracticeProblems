@@ -72,44 +72,32 @@ void _print(T t, V... v)
 //====================================DEBUG TEMPLATE==============================================
 void solve()
 {
-    int n;
-    cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
+    int x, a, b;
+    cin >> x >> a >> b;
+    if (x % a != 0) {
+        cout << -1 << endl;
+    } else {
+        int n = (x / a) * b;
+        if (n > x) {
+            cout << -1 << endl;
+            return;
+        }
+        int sum = 0;
+        for (int i = 1; i * i <= n; i++) {
+            if (n % i == 0) {
+                sum += i;
+                sum += (n / i);
+                if (i * i == n) {
+                    sum -= i;
+                }
+            }
+        }
+        if (sum == x) {
+            cout << n << endl;
+        } else {
+            cout << -1 << endl;
+        }
     }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
-    }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
-
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
-    }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
-
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
-    }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
 }
 int32_t main()
 {

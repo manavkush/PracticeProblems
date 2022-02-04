@@ -74,49 +74,37 @@ void solve()
 {
     int n;
     cin >> n;
-    string a, b;
-    cin >> a >> b;
-    if (a == b) {
-        cout << 0 << endl;
-        return;
-    }
-    int count = 0; // Places diff
-    int acount[2] = { 0, 0 };
-    int bcount[2] = { 0, 0 };
-    for (int i = 0; i < n; i++) {
-        acount[a[i] - '0']++;
-        bcount[b[i] - '0']++;
-        if (a[i] != b[i])
-            count++;
-    }
-    // operations will be like
-    // lit     unlit
-    // a        b
-    // b+1      a-1
-    // a        b
-
-    int ans = n + 1; // Case when #lit are same
-    if (acount[1] == bcount[1]) {
-        ans = min(ans, count);
-    }
-    // Case when #lit in b == #unlit in a + 1
-    // (One of 1 in a will be there which would map to 1 in target)
-    //as count of lit is greater than unlit in a
-
-    if (bcount[1] == acount[0] + 1) {
-        ans = min(ans, n - count);
-    }
-    if (ans > n)
-        cout << "-1" << endl;
-    else
-        cout << ans << endl;
 }
 int32_t main()
 {
     FIO;
     int t = 1;
     cin >> t;
+    set<int> ans;
+    for (int i = 1; i < 19; i++) {
+        for (int j = 0; j < i; j++) {
+            int x = (1 << i) + (1 << j);
+            ans.insert(x);
+        }
+    }
+    for (int i = 1; i < 19; i++) {
+        for (int j = 0; j < i; j++) {
+            for (int k = 0; k < j; k++) {
+                for (int l = 0; l < k; l++) {
+                    int x = (1 << i) + (1 << j) + (1 << k) + (1 << l);
+                    ans.insert(x);
+                }
+            }
+        }
+    }
     while (t--) {
-        solve();
+        int n;
+        cin >> n;
+        auto itr = ans.begin();
+        for (int i = 0; i < n; i++) {
+            cout << (*itr) << " ";
+            itr++;
+        }
+        cout << endl;
     }
 }
