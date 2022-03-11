@@ -70,44 +70,23 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
+void solve()
 {
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
-    }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    if (a.first != b.first) {
-        return a.first < b.first;
+    int b, c;
+    cin >> b >> c;
+    int gcd = __gcd(b, c);
+    if (c % b == 0) {
+        cout << c / b << endl;
     } else {
-        return a.second < b.second;
+        cout << c / gcd << endl;
     }
 }
 int32_t main()
 {
     FIO;
-    int n;
-    cin >> n;
-    vector<pii> vec;
-    re(i, n)
-    {
-        int a, b;
-        cin >> a >> b;
-        vec.pb({ a, b });
+    int t = 1;
+    cin >> t;
+    while (t--) {
+        solve();
     }
-    sort(all(vec), comp);
-    vector<pii> dp;
-    debug(vec);
-    dp.push_back({ vec[0].ss, 1 }); // pushing ends
-    for (int i = 1; i < n; i++) {
-        int start = vec[i].ff;
-        int end = vec[i].ss;
-        auto itr = lower_bound(all(dp), mp(start, 0), comp2);
-        if ()
-            int val = (*itr).second + 1;
-        dp.push_back({ end, val });
-    }
-    debug(dp);
 }

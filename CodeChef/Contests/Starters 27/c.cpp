@@ -70,44 +70,36 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
+void solve()
 {
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
+    int n;
+    cin >> n;
+    vi a(n);
+    re(i, n)
+    {
+        cin >> a[i];
     }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    if (a.first != b.first) {
-        return a.first < b.first;
-    } else {
-        return a.second < b.second;
+    for (int i = 1; i < n; i += 3) {
+        a[i - 1] = 2 * a[i];
+        if (i + 1 < n) {
+            a[i + 1] = 2 * a[i];
+        }
     }
+    if (n % 3 == 1) {
+        a[n - 1] = 2 * a[n - 1];
+    }
+    re(i, n)
+    {
+        cout << a[i] << " ";
+    }
+    cout << endl;
 }
 int32_t main()
 {
     FIO;
-    int n;
-    cin >> n;
-    vector<pii> vec;
-    re(i, n)
-    {
-        int a, b;
-        cin >> a >> b;
-        vec.pb({ a, b });
+    int t = 1;
+    cin >> t;
+    while (t--) {
+        solve();
     }
-    sort(all(vec), comp);
-    vector<pii> dp;
-    debug(vec);
-    dp.push_back({ vec[0].ss, 1 }); // pushing ends
-    for (int i = 1; i < n; i++) {
-        int start = vec[i].ff;
-        int end = vec[i].ss;
-        auto itr = lower_bound(all(dp), mp(start, 0), comp2);
-        if ()
-            int val = (*itr).second + 1;
-        dp.push_back({ end, val });
-    }
-    debug(dp);
 }

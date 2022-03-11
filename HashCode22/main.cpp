@@ -1,6 +1,3 @@
-// Author: $%U%$
-// Date: $%D%$/$%M%$/$%Y%$
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ff first
@@ -15,7 +12,7 @@ typedef vector<int> vi;
 #define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
-#define endl "\n"
+// #define endl "\n"
 #define pb push_back
 #define mp make_pair
 #define re(i, n) for (int i = 0; i < (n); i++)
@@ -69,45 +66,67 @@ void _print(T t, V... v)
 #else
 #define debug(x...)
 #endif
-//====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
-{
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
-    }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    if (a.first != b.first) {
-        return a.first < b.first;
-    } else {
-        return a.second < b.second;
-    }
-}
-int32_t main()
+//=====================DEBUG TEMPLATE=========================
+ifstream fin;
+ofstream fout;
+int c, p; // #contributors, #projects
+
+// A role in a project
+struct role {
+    string name;
+    int level;
+};
+
+// A project
+struct project {
+    string name;
+    int days, score, bestbefore, num_roles;
+    vector<role> roles;
+};
+
+struct contributor {
+    string name;
+    int num_skills;
+    vector<role> skills;
+};
+
+vector<project> projects;
+vector<contributor> contrib;
+
+int32_t main(int argc, char* args[])
 {
     FIO;
-    int n;
-    cin >> n;
-    vector<pii> vec;
-    re(i, n)
-    {
-        int a, b;
-        cin >> a >> b;
-        vec.pb({ a, b });
+    cout << args[1] << endl;
+    fin.open(args[1]);
+    fout.open("output.txt");
+    fin >> c >> p;
+    fout << c << " " << p << endl;
+    for (int i = 0; i < c; i++) {
+        // Loop for each contributer
+        contributor x;
+        fin >> x.name >> x.num_skills;
+        fout << x.name << x.num_skills << endl;
+        ;
+
+        for (int j = 0; j < x.num_skills; j++) {
+            role y;
+            fin >> y.name >> y.level;
+            fout << y.name << y.level << endl;
+            x.skills.push_back(y);
+        }
+        contrib.push_back(x); // push into vector
     }
-    sort(all(vec), comp);
-    vector<pii> dp;
-    debug(vec);
-    dp.push_back({ vec[0].ss, 1 }); // pushing ends
-    for (int i = 1; i < n; i++) {
-        int start = vec[i].ff;
-        int end = vec[i].ss;
-        auto itr = lower_bound(all(dp), mp(start, 0), comp2);
-        if ()
-            int val = (*itr).second + 1;
-        dp.push_back({ end, val });
+
+    for (int i = 0; i < p; i++) {
+        project x;
+        fin >> x.name >> x.days >> x.score >> x.bestbefore >> x.num_roles;
+        fout << x.name << x.days << x.score << x.bestbefore << x.num_roles << endl;
+        for (int j = 0; j < x.num_roles; j++) {
+            role y;
+            fin >> y.name >> y.level;
+            fout << y.name << y.level << endl;
+            x.roles.push_back(y);
+        }
+        projects.push_back(x);
     }
-    debug(dp);
 }
