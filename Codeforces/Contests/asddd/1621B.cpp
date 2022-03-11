@@ -8,19 +8,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,12 +28,12 @@ void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char* x) { cerr << '\"' << x << '\"'; }
-void __print(const string& x) { cerr << '\"' << x << '\"'; }
+void __print(const char *x) { cerr << '\"' << x << '\"'; }
+void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
-void __print(const pair<T, V>& x)
+void __print(const pair<T, V> &x)
 {
     cerr << '{';
     __print(x.first);
@@ -45,11 +42,11 @@ void __print(const pair<T, V>& x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T& x)
+void __print(const T &x)
 {
     int f = 0;
     cerr << '{';
-    for (auto& i : x)
+    for (auto &i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -71,44 +68,7 @@ void _print(T t, V... v)
 #endif
 //====================================DEBUG TEMPLATE==============================================
 void solve() {
-    int n;
-    cin>>n;
-    vi seconds(n), health(n);
-    re(i,n) {
-        cin>>seconds[i];
-    }
-    re(i,n) {
-        cin>>health[i];
-    }
-    int ans = 0;
-    int ll = -1;
-    int rr = -1;
-    vector<pii> segments;
-    for(int i=0;i<n;i++) {
-        segments.push_back({seconds[i]-health[i], seconds[i]});  // starttime, endtime
-    }
-    // We are sorting so that we get segments with increasing ll value instead 
-    // of the increasing rr value that is input by default
-
-    // With the increasing ll value it's easier to solve as we can just check the rr
-    // for the segments to see if they conflict or not
-
-    sort(all(segments));
-    for(int i=0;i<n;i++) {
-        int nl = segments[i].ff;
-        int nr = segments[i].ss;
-        if(nl>=rr) {
-            int len = (rr-ll);
-            ans += (len*(len+1))/2;
-            ll = nl;
-            rr = nr;
-        } else {
-            rr = max(rr, nr);
-        }
-    }
-    int len = rr-ll;
-    ans += (len*(len+1))/2;
-    cout<<ans<<endl;
+    
 }
 int32_t main()
 {

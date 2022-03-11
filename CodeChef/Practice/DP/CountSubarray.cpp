@@ -64,8 +64,7 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-
-vi dp;
+const int N = 1e5+5;
 
 int32_t main()
 {
@@ -77,22 +76,21 @@ int32_t main()
         int n;
         cin>>n;
         vi a(n);
-        dp.resize(n+1,1);
-        re(i,n)
-        {
+        re(i,n) {
             cin>>a[i];
         }
-        for(int i=1;i<n;i++)
-        {
-            if(a[i]>=a[i-1])
-            {
-                dp[i]= dp[i-1]+1; 
+        vector<int> dp(n+1, 0);
+        dp[1] = 1;
+        for(int i=1;i<n;i++) {
+            if(a[i]>=a[i-1]) {
+                dp[i+1] = dp[i] + 1;
+            } else {
+                dp[i+1] = 1; 
             }
         }
-        int sum=0;
-        re(i,n)
-        {
-            sum+=dp[i];
+        int sum = 0;
+        re(i,n) {
+            sum += dp[i+1];
         }
         cout<<sum<<endl;
     }

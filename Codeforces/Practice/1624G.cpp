@@ -8,19 +8,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,12 +28,12 @@ void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char* x) { cerr << '\"' << x << '\"'; }
-void __print(const string& x) { cerr << '\"' << x << '\"'; }
+void __print(const char *x) { cerr << '\"' << x << '\"'; }
+void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
-void __print(const pair<T, V>& x)
+void __print(const pair<T, V> &x)
 {
     cerr << '{';
     __print(x.first);
@@ -45,11 +42,11 @@ void __print(const pair<T, V>& x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T& x)
+void __print(const T &x)
 {
     int f = 0;
     cerr << '{';
-    for (auto& i : x)
+    for (auto &i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -70,45 +67,68 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+vector<vector<pii>> adj;
+int ans = 0;
+
+void dfs(int s, vector<int> &vis, int curr) {
+    vis[s] = 1;
+    // debug(vis);
+    for(auto x: adj[s]) {
+        if(vis[x.ff] ==0 and ((x.ss & curr) <= ans)) {
+            dfs(x.ff, vis, curr);
+        }
+            // cout<<"*";
+    }
+}
+
 void solve() {
-    int n;
-    cin>>n;
-    vi seconds(n), health(n);
-    re(i,n) {
-        cin>>seconds[i];
+    int n,m;
+    cin>>n>>m;
+    adj.assign(n+1, vector<pii> ());
+    re(i,m) {
+        int u,v,w;
+        cin>>u>>v>>w;
+        adj[u].pb({v, w});
+        adj[v].pb({u, w});
     }
-    re(i,n) {
-        cin>>health[i];
+    ans = 0;
+    for(int i=0;i<30;i++) {
+        ans = (ans + (1<<i));
+        // debug(ans);
     }
-    int ans = 0;
-    int ll = -1;
-    int rr = -1;
-    vector<pii> segments;
-    for(int i=0;i<n;i++) {
-        segments.push_back({seconds[i]-health[i], seconds[i]});  // starttime, endtime
-    }
-    // We are sorting so that we get segments with increasing ll value instead 
-    // of the increasing rr value that is input by default
+    int curr = 0;
 
-    // With the increasing ll value it's easier to solve as we can just check the rr
-    // for the segments to see if they conflict or not
-
-    sort(all(segments));
-    for(int i=0;i<n;i++) {
-        int nl = segments[i].ff;
-        int nr = segments[i].ss;
-        if(nl>=rr) {
-            int len = (rr-ll);
-            ans += (len*(len+1))/2;
-            ll = nl;
-            rr = nr;
-        } else {
-            rr = max(rr, nr);
+    for(int i=29;i>=0;i--) {
+        curr = curr + (1<<i);
+        vector<int> vis(n+1, 0);
+        // for(int j=29;j>=0;j--) {
+        //     cout<<(curr&(1<<j) ? "1" : "0")<<" ";
+        // }
+        // cout<<endl;
+        ans = ans^(1<<i);   // unsetting the bit
+        for(int j=29;j>=0;j--) {
+            cout<<(curr&(1<<j) ? "1" : "0")<<"";
+        }
+        cout<<endl;
+        for(int j=29;j>=0;j--) {
+            cout<<(ans&(1<<j) ? "1" : "0")<<"";
+        }
+        cout<<endl<<endl;
+        // debug(ans);
+        dfs(1, vis, curr);
+        bool flag = 0;
+        for(int i=0;i<n;i++) {
+            if(vis[i+1]==0) {
+                flag = 1;
+            }
+        }
+        if(flag) {
+            ans = ans^(1<<i);
         }
     }
-    int len = rr-ll;
-    ans += (len*(len+1))/2;
     cout<<ans<<endl;
+    adj.clear();
+    return;
 }
 int32_t main()
 {

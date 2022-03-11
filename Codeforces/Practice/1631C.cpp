@@ -8,19 +8,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,12 +28,12 @@ void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char* x) { cerr << '\"' << x << '\"'; }
-void __print(const string& x) { cerr << '\"' << x << '\"'; }
+void __print(const char *x) { cerr << '\"' << x << '\"'; }
+void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
-void __print(const pair<T, V>& x)
+void __print(const pair<T, V> &x)
 {
     cerr << '{';
     __print(x.first);
@@ -45,11 +42,11 @@ void __print(const pair<T, V>& x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T& x)
+void __print(const T &x)
 {
     int f = 0;
     cerr << '{';
-    for (auto& i : x)
+    for (auto &i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -70,45 +67,63 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-void solve() {
-    int n;
-    cin>>n;
-    vi seconds(n), health(n);
-    re(i,n) {
-        cin>>seconds[i];
-    }
-    re(i,n) {
-        cin>>health[i];
-    }
-    int ans = 0;
-    int ll = -1;
-    int rr = -1;
-    vector<pii> segments;
-    for(int i=0;i<n;i++) {
-        segments.push_back({seconds[i]-health[i], seconds[i]});  // starttime, endtime
-    }
-    // We are sorting so that we get segments with increasing ll value instead 
-    // of the increasing rr value that is input by default
-
-    // With the increasing ll value it's easier to solve as we can just check the rr
-    // for the segments to see if they conflict or not
-
-    sort(all(segments));
-    for(int i=0;i<n;i++) {
-        int nl = segments[i].ff;
-        int nr = segments[i].ss;
-        if(nl>=rr) {
-            int len = (rr-ll);
-            ans += (len*(len+1))/2;
-            ll = nl;
-            rr = nr;
+int complement(int x, int bits) {
+    int ret = 0;
+    for(int i=0;i<bits;i++) {
+        if( x & (1<<i) ) {
+            continue;
         } else {
-            rr = max(rr, nr);
+            ret |= (1<<i);
         }
     }
-    int len = rr-ll;
-    ans += (len*(len+1))/2;
-    cout<<ans<<endl;
+    return ret;
+}
+void solve() {
+    int n,k;
+    cin>>n>>k;
+    int n2 = n-1;
+    int bits = 0;
+    // getting total bits
+    while(n2) {
+        n2>>=1;
+        bits++;
+    }
+    map<int,int> vis;
+    if(k==0) {
+
+    } else if(k==n-1) {
+        if(n==4) {
+            cout<<-1<<endl;
+            return;
+        }
+        else {
+            vis[n-1] = 1;
+            vis[n-2] = 1;
+            vis[n-3] = 1;
+            vis[0] = 1;
+            vis[1] = 1;
+            vis[2] = 1;
+            cout<<0<<" "<<2<<endl;
+            cout<<n-3<<" "<<1<<endl;
+            cout<<n-1<<" "<<n-2<<endl;
+        }
+    } else {
+        vis[n-1] = 1;
+        vis[k] = 1;
+        vis[0] = 1;
+        vis[complement(k, bits)] = 1;
+        cout<<n-1<<" "<<k<<endl;
+        cout<<complement(k,bits)<<" "<<0<<endl;
+    }
+    for(int i=0;i<n;i++) {
+        if(!vis[i]) {
+            int comp = complement(i, bits);
+            cout<<i<<" "<<comp<<endl;
+            vis[i] = 1;
+            vis[comp] = 1;
+        }
+    }
+    // cout<<endl;
 }
 int32_t main()
 {

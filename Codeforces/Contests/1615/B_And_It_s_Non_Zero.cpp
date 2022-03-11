@@ -67,67 +67,31 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
+vector<vector<int>> pref(2e5+5, vector<int>(22, 0));
 void solve() {
     int l,r;
     cin>>l>>r;
-    
-    int cnt1 = 0, cnt2 = 0;
-    int ll = l, rr = r;
-    while(ll) {
-        cnt1++;
-        ll = ll>>1;
+    int n = (r-l+1);
+    int ans = n;
+    for(int i=0;i<22;i++) {
+        ans = min(ans, n - pref[r][i] + pref[l-1][i]);
     }
-    while(rr) {
-        cnt2++;
-        rr = rr>>1;
-    }
-    if(cnt1 == cnt2) {
-        cout<<0<<endl;
-        return;
-    } 
-    
-    int m1 = 0;
-    
-    re(i,cnt1) {
-        m1 = (m1<<1)|1;
-    }
-    
-    int n = r-l+1;
-
-    int even;
-    if((r&1) and (l&1)) {
-        even = (n/2);
-    }else if((r%2==0) and (l%2==0)) {
-        even = (n/2)+1;
-    } else {
-        even = n/2;
-    }
-    int ans = even;
-    int cnt = cnt1;
-    // debug(ans);
-    for(int i=cnt1; i<=cnt2;i++) {
-        if(i==cnt1)
-            ans = min(ans,r - m1);
-        else if(i==cnt2)
-            ans = min(ans, (1<<(cnt2-1)) - l );
-        else {
-            ans = min(ans, (r-m1) + (1<<(i-1)) - l);
-        }
-        m1 = (m1<<1)|1;
-        // debug(i,ans, m1);
-    }
-    cout<< ans<<endl;
-    return;
-    
-    // int ans1 = r - m1 + 1 + (1<<cnt) - l;
-    // int ans2 = r - m2 + 1 + (1<<(cnt+1)) -l;
-    // cout<< min(ans1, ans2) <<endl;
+    cout<< ans <<endl;
 }
 int32_t main()
 {
     FIO;
     int t=1;
     cin>>t;
+    for(int i=1;i<=2e5;i++) {
+        for(int j=0;j<22;j++) {
+            if(i & (1ll<<j)) {
+                pref[i][j] = pref[i-1][j] + 1;
+            } else {
+                pref[i][j] = pref[i-1][j];
+            }
+        }
+    }
     while(t--)
     {
         solve();    
