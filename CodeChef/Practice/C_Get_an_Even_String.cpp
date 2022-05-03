@@ -24,7 +24,7 @@ typedef vector<int> vi;
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
-const int mod = 100000000;
+const int mod = 1000000007;
 //===================================DEBUG TEMPLATE=================================================
 void __print(int x) { cerr << x; }
 void __print(float x) { cerr << x; }
@@ -70,50 +70,64 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
+void solve()
 {
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
+    string s;
+    cin >> s;
+    int n = s.length();
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        int j = 0;
+        map<int, int> hash;
+        hash[s[i]]++;
+        bool found = 0;
+        for (j = i + 1; j < n; j++) {
+            hash[s[j]]++;
+            if (hash[s[j]] > 1) {
+                found = 1;
+                break;
+            }
+        }
+        if (found) {
+            count += (j - i - 1);
+            i = j;
+        } else {
+            count += (j - i);
+            i = j;
+        }
     }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    return b.first >= a.second;
+    cout << count << endl;
+    // for (int i = 0; i < n;) {
+    //     if (i + 1 >= n) {
+    //         count++;
+    //         i++;
+    //         continue;
+    //     }
+    //     if (s[i] == s[i + 1]) {
+    //         i += 2;
+    //         continue;
+    //     }
+    //     if (i + 2 >= n) {
+    //         count += 2;
+    //         i += 2;
+    //         continue;
+    //     }
+    //     if (s[i] == s[i + 2]) {
+    //         count++;
+    //         i += 3;
+    //         continue;
+    //     }
+    //     i++;
+    //     count++;
+    // }
+    // cout << count << endl;
 }
 int32_t main()
 {
     FIO;
-    while (1) {
-        int n;
-        cin >> n;
-        if (n == -1)
-            return 0;
-        vector<pii> vec;
-        re(i, n)
-        {
-            int a, b;
-            cin >> a >> b;
-            vec.pb({ a, b });
-        }
-        sort(all(vec), comp);
-        vector<int> dp(n, 0);
-        dp[0] = 1;
-        // debug(vec);
-        for (int i = 1; i < n; i++) {
-            auto prev = lower_bound(all(vec), vec[i], comp2);
-            int pos = prev - vec.begin();
-            // debug(vec[pos].second, vec[i].first);
-            if (vec[pos].second > vec[i].first) {
-                pos--;
-            }
-            if (pos == -1) {
-                dp[i] = (1 + dp[i - 1]) % mod;
-            } else {
-                dp[i] = (dp[i - 1] + dp[pos] + 1) % mod;
-            }
-        }
-        cout << setw(8) << setfill('0') << dp[n - 1] << endl;
+    int t = 1;
+    cin >> t;
+    while (t--) {
+        solve();
     }
-    // debug(dp);
 }
