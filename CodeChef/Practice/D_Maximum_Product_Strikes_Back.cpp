@@ -24,7 +24,7 @@ typedef vector<int> vi;
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
-const int mod = 100000000;
+const int mod = 1000000007;
 //===================================DEBUG TEMPLATE=================================================
 void __print(int x) { cerr << x; }
 void __print(float x) { cerr << x; }
@@ -70,50 +70,65 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
+void solve()
 {
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
+    int n;
+    cin >> n;
+    vi a(n);
+    vi neg(n + 1, 0);
+    vi pos(n + 1, 0);
+    vi zero(n + 1, 0);
+    int prod = 1;
+    int start = 0;
+    set<pair<int, pii>, greater<pair<int, pii>>> hash;
+    hash.insert({ 1, { 0, -1 } });
+    re(i, n)
+    {
+        cin >> a[i];
+        if (a[i] < 0) {
+            neg[i + 1] = neg[i] + 1;
+        } else if (a[i] > 0) {
+            pos[i + 1] = pos[i] + 1;
+        } else {
+            zero[i + 1] = (zero[i] + 1);
+        }
     }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    return b.first >= a.second;
+    
+    re(i, n)
+    {
+        prod = (prod * a[i]);
+        if (prod == 0) {
+            prod = 1;
+            start = i + 1;
+        } else if (prod > 0) {
+            hash.insert({ prod, { start, i } });
+        }
+    }
+
+    start = n - 1;
+    prod = 1;
+
+    for (int i = n - 1; i >= 0; i--) {
+        prod = (prod * a[i]);
+        if (prod == 0) {
+            prod = 1;
+            start = i - 1;
+        } else if (prod > 0) {
+            hash.insert({ prod, { i, start } });
+        }
+    }
+    debug(hash);
+    auto ans = (*hash.begin());
+    int beg = ans.second.first;
+    int end = n - 1 - ans.second.second;
+    cout << beg << " " << end << endl;
 }
 int32_t main()
 {
     FIO;
-    while (1) {
-        int n;
-        cin >> n;
-        if (n == -1)
-            return 0;
-        vector<pii> vec;
-        re(i, n)
-        {
-            int a, b;
-            cin >> a >> b;
-            vec.pb({ a, b });
-        }
-        sort(all(vec), comp);
-        vector<int> dp(n, 0);
-        dp[0] = 1;
-        // debug(vec);
-        for (int i = 1; i < n; i++) {
-            auto prev = lower_bound(all(vec), vec[i], comp2);
-            int pos = prev - vec.begin();
-            // debug(vec[pos].second, vec[i].first);
-            if (vec[pos].second > vec[i].first) {
-                pos--;
-            }
-            if (pos == -1) {
-                dp[i] = (1 + dp[i - 1]) % mod;
-            } else {
-                dp[i] = (dp[i - 1] + dp[pos] + 1) % mod;
-            }
-        }
-        cout << setw(8) << setfill('0') << dp[n - 1] << endl;
+    int t = 1;
+    cin >> t;
+    while (t--) {
+        solve();
     }
-    // debug(dp);
 }

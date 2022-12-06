@@ -24,7 +24,7 @@ typedef vector<int> vi;
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
-const int mod = 100000000;
+const int mod = 1000000007;
 //===================================DEBUG TEMPLATE=================================================
 void __print(int x) { cerr << x; }
 void __print(float x) { cerr << x; }
@@ -70,50 +70,46 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
+void solve()
 {
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
+    int n, q;
+    cin >> n >> q;
+    vector<int> adj[n + 1];
+    re(i, n - 1)
+    {
+        int a, b;
+        cin >> a >> b;
+        adj[a].pb(b);
+        adj[b].pb(a);
     }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    return b.first >= a.second;
+    int sum = 0;
+    for (int i = 1; i <= n; i++) {
+        int d = adj[i].size();
+        sum += (d * (d + 1)) / 2;
+    }
+    sum -= (n - 1);
+    cout << sum << endl;
+    re(i, q)
+    {
+        int a, b, c, d, sum2 = sum;
+        cin >> a >> b >> c >> d;
+        sum2 -= adj[a].size();
+        sum2 -= adj[b].size();
+        adj[a].pop_back();
+        adj[b].pop_back();
+        sum2 += (adj[c].size() + 1);
+        sum2 += (adj[d].size() + 1);
+        cout << sum2 << endl;
+        adj[a].push_back(1);
+        adj[b].push_back(1);
+    }
 }
 int32_t main()
 {
     FIO;
-    while (1) {
-        int n;
-        cin >> n;
-        if (n == -1)
-            return 0;
-        vector<pii> vec;
-        re(i, n)
-        {
-            int a, b;
-            cin >> a >> b;
-            vec.pb({ a, b });
-        }
-        sort(all(vec), comp);
-        vector<int> dp(n, 0);
-        dp[0] = 1;
-        // debug(vec);
-        for (int i = 1; i < n; i++) {
-            auto prev = lower_bound(all(vec), vec[i], comp2);
-            int pos = prev - vec.begin();
-            // debug(vec[pos].second, vec[i].first);
-            if (vec[pos].second > vec[i].first) {
-                pos--;
-            }
-            if (pos == -1) {
-                dp[i] = (1 + dp[i - 1]) % mod;
-            } else {
-                dp[i] = (dp[i - 1] + dp[pos] + 1) % mod;
-            }
-        }
-        cout << setw(8) << setfill('0') << dp[n - 1] << endl;
+    int t = 1;
+    cin >> t;
+    while (t--) {
+        solve();
     }
-    // debug(dp);
 }
