@@ -89,14 +89,39 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /******************* EXPLANATION *************************/
 /*
-    
+    This problem is similar to LIS. The brute solution is taking O(n^2)
+    This is solved by the constraints given to us for the array A
+    The values are in range [0, 200].
+    On observing we get that a[i] only affects 8 digits.
+    For the condition a[x]^y < a[y]^x (where x<y) 
+    we find that the a[] values can affect the x, y 
+    values only by +-200. Thus if we take the lower starting
+    index for x as y-402, we can encounter all valid possiblities.
+    For x lower than that, a[x]^y could get to y-200 and 
+    a[y]^x could get to x+200. But still it wouldn't be able to satisfy
+    the given condition
 */
 /******************* EXPLANATION *************************/
 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    vector<int> a(n+1);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    vector<int> dp(n, 1);
+    for(int i=1;i<n;i++) {
+        for(int j=max(0, i-402);j<i;j++) {
+            if((a[i]^j) > (a[j]^i)) {
+                dp[i] = max(dp[i], dp[j]+1);
+            }
+        }
+        // debug(dp);
+    }
+    cout<< *max_element(dp.begin(), dp.end())<<endl;
 }
 
 int main(void)

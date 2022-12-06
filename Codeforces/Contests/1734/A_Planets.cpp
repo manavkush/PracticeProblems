@@ -96,6 +96,24 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,c;
+    cin>>n>>c;
+
+    vi a(n);
+    long long ans = 0;
+    map<int,int> hash;
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+        hash[a[i]]++;
+    }
+    for(auto &x: hash) {
+        if(x.second>c) {
+            ans += c;
+        } else {
+            ans += x.second;
+        }
+    }
+    cout<<ans<<endl;
 
 }
 

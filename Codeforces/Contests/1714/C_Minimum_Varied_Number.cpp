@@ -96,7 +96,21 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int s;
+    cin>>s;
+    string ans;
+    while(s>0) {
+        for(int i=9;i>0;i--) {
+            if(s<i) {
+                continue;
+            } else {
+                ans += to_string(i);
+                s-=i;
+            }
+        }
+    }
+    reverse(ans.begin(), ans.end());
+    cout<<ans<<endl;
 }
 
 int main(void)

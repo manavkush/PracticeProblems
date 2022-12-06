@@ -96,6 +96,55 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    long long n,k,b,s;
+    cin>>n>>k>>b>>s;
+    if(b*k>s) {
+        cout<<-1<<endl;
+        return;
+    }
+    vector<long long> ans(n);
+    long long last = min((b+1)*(k)-1, s);
+    if(last>1e18) {
+        cout<<-1<<endl;
+        return;
+    }
+    long long rem = s - last;
+    // debug(last, rem, k-1); 
+    if(n==1) {
+        if(rem==0) {
+            cout<<last<<endl;
+        } else {
+            cout<< -1<<endl;
+        }
+        return;
+    }
+    ans[n-1] = last;
+    // long long diff = rem/(n-1);
+    
+    for(int i=n-2;i>0;i--) {
+        if(rem>=k-1) {
+            ans[i] = k-1;
+            rem -= (k-1);
+        } else {
+            ans[i] = rem;
+            rem = 0;
+            break;
+        }
+    }
+    ans[0] = rem;
+    // debug(ans);
+    if(ans[0]>=k) {
+        cout<<-1<<endl;
+        return;
+    }
+    for(auto &x: ans) {
+        cout<<x<<" ";
+    }
+    cout<<endl;
+
+    
+
+
 
 }
 

@@ -95,8 +95,68 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+int util(vector<int> &a, vector<int> &b, int bit) {
+    int ans = 0;
+    int n = a.size();
+    bool flag = 0;
+    vector<int> afirst, asec, bfirst, bsec;
+    
+    for(;bit>=0;bit--) {
+        for(int i=0;i<n;i++) {
+            if(a[i]&(1<<bit)) {
+                afirst.push_back(a[i]);
+            } else {
+                asec.push_back(a[i]);
+            }
+            
+            if(b[i]&(1<<bit))   bsec.push_back(b[i]);
+            else   bfirst.push_back(b[i]);
+        }
+        if(afirst.size()+bsec.size()==n) {
+            ans |= (1<<bit);
+            int ret1 = util(afirst, bfirst, bit-1);
+            int ret2 = util(asec, bsec, bit-1);
 
+            ans |= (ret1&ret2);
+        } else {
+            afirst.clear(), bfirst.clear(), asec.clear(), bsec.clear();
+        }
+    }
+    return ans;
+}
+
+bool check(vector<int> &a, vector<int> &b, int mask) {
+    unordered_map<int,int> hash;
+    for(auto &x: a) {
+        hash[x&mask]++;
+    }
+    for(auto &x: b) {
+        hash[~x&mask]--;
+    }
+    for(auto &x: hash) {
+        if(x.second!=0) 
+            return false;
+    }
+    return true;
+}
+
+void solve() {
+    int n;
+    cin>>n;
+    vector<int> a(n), b(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    for(int i=0;i<n;i++) {
+        cin>>b[i];
+    }
+    int ans = 0;
+    for(int i=30;i>=0;i--) {
+        if(check(a, b, ans|(1<<i))) {
+            ans |= (1<<i);
+        }
+    }
+    cout<<ans<<endl;
 }
 
 int main(void)

@@ -8,35 +8,32 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
-const int mod = 1000000007;
+const int mod = 32768;
 //===================================DEBUG TEMPLATE=================================================
 void __print(int x) { cerr << x; }
 void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char* x) { cerr << '\"' << x << '\"'; }
-void __print(const string& x) { cerr << '\"' << x << '\"'; }
+void __print(const char *x) { cerr << '\"' << x << '\"'; }
+void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
-void __print(const pair<T, V>& x)
+void __print(const pair<T, V> &x)
 {
     cerr << '{';
     __print(x.first);
@@ -45,11 +42,11 @@ void __print(const pair<T, V>& x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T& x)
+void __print(const T &x)
 {
     int f = 0;
     cerr << '{';
-    for (auto& i : x)
+    for (auto &i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -70,53 +67,65 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
-{
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
-    }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    if (a.first != b.first) {
-        return a.first < b.first;
-    } else {
-        return a.second < b.second;
+void solve() {
+    int n;
+    cin>>n;
+    vi a(n);
+    re(i,n) {
+        cin>>a[i];
+        int num = a[i];
+        if(a[i]==0) {
+            cout<<0<<" ";
+            continue;
+        }
+        int cnt = 0;
+        while(num) {
+            num>>=1;
+            cnt++;
+        }
+        num = a[i];
+        // power of 2
+        if( (num&(num-1)) == 0) {
+            cout<<16-cnt<<" ";
+            continue;
+        }
+        int cnt1 = 15, cnt2 = 0;
+        
+        for(int j=0;j<15;j++) {
+            num = (a[i]+j)%mod;
+            if(num==0) {
+                cnt1 = min(cnt1, j);
+            }
+            int dig = 0;
+            while((num!=0) and !(num&1)) {
+                num>>=1;
+                dig++;
+            }
+            cnt1 = min({cnt1, j + 15-dig});
+        }
+        // cnt1 = 16-(cnt+1) + (1<<(cnt)) - a[i];
+
+        cnt = 0;
+        num=a[i];
+        while(!(num&1)) {
+            num>>=1;
+            cnt++;
+        }
+
+        cnt2 = 15-cnt;
+        // debug(a[i], cnt1, cnt2);
+
+        cout<<min(cnt1, cnt2)<<" ";
+
     }
 }
 int32_t main()
 {
     FIO;
-    int n;
-    cin >> n;
-    vector<pii> vec;
-    re(i, n)
+    int t=1;
+    // cin>>t;
+    while(t--)
     {
-        int a, b;
-        cin >> a >> b;
-        vec.pb({ a, b });
+        solve();    
     }
-    sort(all(vec), comp);
-    vector<pii> dp;
-    debug(vec);
-    dp.push_back({ vec[0].ss, 1 }); // pushing ends
-    for (int i = 1; i < n; i++) {
-        int start = vec[i].ff;
-        int end = vec[i].ss;
-        auto itr = lower_bound(all(dp), mp(start, 0), comp2);
-        int val;
-        if((*itr).first > start) {
-            if(itr == dp.begin()) {
-                val = 1;
-            } else {
-                itr--;
-                val = (*itr).second + 1;
-            }
-        } else {
-            val = (*itr).second + 1;
-        }
-        dp.push_back({ end, val });
-    }
-    debug(dp);
 }

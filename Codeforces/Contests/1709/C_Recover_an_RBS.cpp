@@ -95,8 +95,62 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
 
+void solve() {
+    string str;
+    cin>>str;
+    int n = str.length();
+
+    int pos=0, neg = 0, ques = 0;
+    for(int i=0;i<n;i++) {
+        if(str[i]=='(')
+            pos++;
+        else if(str[i]==')')
+            neg++;
+        else 
+            ques++;
+    }
+    pos = n/2-pos;
+    neg = n/2-neg;
+    if(pos==0 || neg==0) {
+        cout<<"YES\n";
+        return;
+    }
+    int last_pos, first_neg;
+    
+    for(int i=0;i<n;i++) {
+        if(str[i]=='?') {
+            if(pos>1) {
+                pos--;
+                str[i] = '(';
+            } else if(pos==1) {
+                pos--;
+                last_pos = i;
+                str[i] = ')';
+            } else {
+                str[i] = '(';
+                first_neg = i;
+                break;
+            }
+        }
+    }
+    for(int i = first_neg; i<n; i++) {
+        if(str[i]=='?') {
+            str[i] = ')';
+        }
+    }
+    int sum = 0;
+    for(int i=0;i<n;i++) {
+        if(str[i]=='(')
+            sum++;
+        else sum--;
+
+        if(sum<0) {
+            cout<<"YES\n";
+            return;
+        }
+    }
+    cout<<"NO\n";
 }
 
 int main(void)

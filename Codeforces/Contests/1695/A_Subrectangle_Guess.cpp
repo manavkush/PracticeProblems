@@ -96,6 +96,23 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,m;
+    cin>>n>>m;
+    int high = INT_MIN;
+    vector<vector<int>> grid(n, vector<int>(m, 0));
+    int row, col;
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            cin>>grid[i][j];
+            if(grid[i][j]>high) {
+                row = i; col = j;
+                high = grid[i][j];
+            }
+            // high = max(high, grid[i][j]); 
+        }
+    }
+    // debug(row, col);
+    cout<<max(row+1, n-row)*max(col+1, m-col)<<endl;
 
 }
 

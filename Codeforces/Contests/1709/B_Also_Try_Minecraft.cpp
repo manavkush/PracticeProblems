@@ -96,14 +96,46 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n,m;
+    cin>>n>>m;
+    vi a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    vector<long long> forward(n), backward(n);
+    for(int i=1;i<n;i++) {
+        int diff = a[i] - a[i-1];
+        if(diff>=0) {
+            forward[i] = forward[i-1];
+        } else {
+            forward[i] = forward[i-1] + abs(diff);
+        }
+        // forward[i] = (forward[i-1]+(diff >= 0 ? 0 : -diff));
+    }
+    for(int i=n-2;i>=0;i--) {
+        int diff = a[i] - a[i+1];
+        backward[i] = (backward[i+1] + (diff >= 0 ? 0 : -diff));
+    }
+    // debug(forward);
+    // debug(backward);
+    for(int i=0;i<m;i++) {
+        int s,t;
+        cin>>s>>t;
+        s--; t--;
+        if(t>=s) {
+            cout<<forward[t]-forward[s];
+        } else {
+            cout<<backward[t]-backward[s];
+        }
+        cout<<endl;
+    }
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

@@ -95,15 +95,63 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+long long half, n, m, k;
+long long ans = 0;
+unordered_map<long long, long long> mp[20][20];
 
+void solveup(long long row, long long col, long long curxor, long long steps, vector<vector<long long>> &grid) {
+    
+    curxor ^= grid[row][col];
+
+    if(row+col == half) {
+        mp[row][col][curxor] += steps;
+        return;
+    }
+    if(row<n-1) {
+        solveup(row+1, col, curxor, steps, grid);
+    }
+    if(col<m-1) {
+        solveup(row, col+1, curxor, steps, grid);
+    }
+}
+
+void solvedown(long long row, long long col, long long curxor, long long steps, vector<vector<long long>> &grid) {
+    curxor ^= grid[row][col];
+    if(row + col == half) {
+        ans += (mp[row][col][curxor^grid[row][col]^k] * steps);
+        return;
+    }
+    if(row>0) {
+        solvedown(row-1, col, curxor, steps, grid);
+    }
+    if(col>0) {
+        solvedown(row, col-1, curxor, steps, grid);
+    }
+}
+
+void solve() {
+    cin>>n>>m>>k;
+
+    vector<vector<long long>> grid(n+1, vector<long long> (m+1, 0));
+    
+    for(long long row=0;row<n;row++) {
+        for(long long col=0;col<m;col++) {
+            cin>>grid[row][col];
+        }
+    }
+
+    half = (n+m-2)/2;
+
+    solveup(0, 0, 0, 1, grid);
+    solvedown(n-1, m-1, 0, 1, grid);
+    cout<<ans<<endl;
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

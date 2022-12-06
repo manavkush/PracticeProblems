@@ -96,7 +96,18 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,m,x,y,d;
+    cin>>n>>m>>x>>y>>d;
 
+    if(((y+d>=m) and (y-d<=1)) || ((x+d>=n) and (x-d<=1))) {
+        cout<<-1<<endl;
+        return;
+    }
+    if( (y-d<=1 and x-d<=1) || (x+d>=n and y+d>=m) ) {
+        cout<<-1<<endl;
+        return;
+    }
+    cout<<n-1+m-1<<endl;
 }
 
 int main(void)

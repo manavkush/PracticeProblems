@@ -96,14 +96,57 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    long long n,m;
+    cin>>n>>m;
+    vector<long long> a;
+    for(int i=0;i<n;i++) {
+        long long x;
+        cin>>x;
+        a.push_back(x);
+    }
+    vector<long long> dp(n, 0);
+    dp[0] = 1ll;
+    for(int i=1;i<n;i++) {
+        if(a[i] == a[i-1]) {
+            dp[i] = dp[i-1]+1;
+        } else {
+            dp[i] = dp[i-1]+1+i;
+        }
+    }
+    long long ans = accumulate(dp.begin(), dp.end(), 0ll);
 
+    for(int i=0;i<m;i++) {
+        // debug(ans);
+        long long idx, x;
+        cin>>idx>>x;
+        idx--;
+        if(a[idx]==x) {
+            cout<<ans<<endl;
+            continue;
+        }
+        
+        if(idx>0) {
+            if(a[idx-1]!=a[idx] and a[idx-1]==x)
+                ans -= (idx)*(n-idx);
+            else if(a[idx-1]==a[idx] and a[idx-1]!=x) 
+                ans += (idx)*(n-idx);
+        }
+        if(idx< n-1 ) {
+            if(a[idx+1]!=x and a[idx+1]==a[idx])
+                ans += (idx+1)*(n-1-idx); 
+            else if(a[idx+1]==x and a[idx]!=a[idx+1])
+                ans -= (idx+1)*(n-1-idx);
+        }
+        a[idx] = x;
+        cout<<ans<<endl;
+    }
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

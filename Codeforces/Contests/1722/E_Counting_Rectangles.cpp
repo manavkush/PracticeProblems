@@ -95,8 +95,20 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+bool static comp(pair<int,int> &a, pair<int,int> &b) {
+    return a.first*a.second < b.first*b.second;
+}
 
+void solve() {
+    int n,q;
+    cin>>n>>q;
+    vector<pair<int,int>> rec(n);
+    for(int i=0;i<n;i++) {
+        int a,b;
+        cin>>a>>b;
+        rec[i] = {a, b};
+    }
+    sort(rec.begin(), rec.end(), comp);
 }
 
 int main(void)

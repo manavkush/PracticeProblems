@@ -95,8 +95,55 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+double util(vector<int> &a, vector<int> &t, double mid) {
+    double ans = INT_MAX;
+    for(int i=0;i<a.size();i++) {
+        ans = min(ans, t[i]+abs(a[i]-mid));
+    }
+    return ans;
+}
 
+void solve() {
+    int n;cin>>n;
+    vector<int> a(n);
+    vector<int> t(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    for(int i=0;i<n;i++) {
+        cin>>t[i];
+    }
+    if(n==1) {
+        cout<<a[0]<<endl;
+        return;
+    }
+    vector<pair<int,int>> vec;
+    for(int i=0;i<n;i++) {
+        pair<int,int> p = {a[i], t[i]};
+        vec.push_back(p);
+    }
+    sort(ALL(vec));
+    double l = vec[0].first;
+    double r = vec[n-1].first;
+    double epsilon = 1e-8;
+    double lim = 1e-6;
+    // debug(l,r,lim);
+    while((r-l) > lim) {
+        double mid = (l+r)/2;
+        double curr = util(a, t, mid);
+        double prev = util(a, t, mid-epsilon);
+        double next = util(a, t, mid+epsilon);
+        // debug(mid, prev, curr, next);
+        if(curr<next and curr<prev) {
+            cout<<curr<<endl;
+            return;
+        } else if(curr<next and curr>prev) {
+            r = mid;
+        } else if(curr>next and curr<prev) {
+            l = mid;
+        }
+    }
+    cout<<(l+r)/2<<endl;
 }
 
 int main(void)

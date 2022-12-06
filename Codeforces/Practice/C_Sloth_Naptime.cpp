@@ -95,15 +95,102 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+vector<vector<int>> adj;
+vector<int> depth;
+vector<vector<int>> ances;
 
+void dfs(int s, int cur_depth, int par) {
+    depth[s] = cur_depth;
+    ances[s][0] = par;
+
+    for(int h=1;h<20;h++) {
+        ances[s][h] = ances[ances[s][h-1]][h-1];
+    }
+    for(auto &x: adj[s]) {
+        if(x!=par) {
+            dfs(x, cur_depth+1, s);
+        }
+    }
 }
+
+int kth_ances(int s, int k) {
+    for(int i=19;i>=0;i--) {
+        if(k>=(1<<i)) {
+            s = ances[s][i];
+            k -= (1<<i);
+        }
+    }
+    return s;
+}
+
+void lca_algo(int a, int b, int c) {
+    int oga, ogb;
+    oga = a, ogb = b;
+
+    if(depth[a]<depth[b]) {
+        swap(a, b);
+    }
+    
+    for(int i=19;i>=0;i--) {
+        if(depth[a] - (1<<i) >= depth[b]) {
+            a = ances[a][i];
+        }
+    }
+    // now "a", "b" are at the same level
+    int lca = b;
+    if(a!=b) {
+        for(int i=19;i>=0;i--) {
+            if(ances[a][i]!=ances[b][i]) {
+                a = ances[a][i];
+                b = ances[b][i];
+            }
+        }
+        lca = ances[a][0];
+    }
+    
+    int dis_a = depth[oga]-depth[lca];
+    int dis_b = depth[ogb]-depth[lca];
+
+    int tot_dis = dis_a + dis_b;
+    if(tot_dis <= c) {
+        cout<<ogb<<endl;
+        return;
+    } else if(c <= dis_a) {
+        cout<<kth_ances(oga, c)<<endl;
+        return;
+    } else {
+        cout<<kth_ances(ogb, dis_b-(c-dis_a))<<endl;
+    }
+}
+
+void solve() {
+    int n, q;
+    cin>>n;
+    adj.resize(n+1);
+    depth.resize(n+1);
+    ances.resize(n+1, vector<int> (20, 0));
+
+    for(int i=0, u, v; i<n-1;i++) {
+        cin>>u>>v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    dfs(1, 0, 0);
+    cin>>q;
+    while(q--) {
+        int a,b,c;
+        cin>>a>>b>>c;
+        lca_algo(a, b, c);
+    }
+}
+    
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

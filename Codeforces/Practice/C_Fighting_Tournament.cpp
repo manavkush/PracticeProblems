@@ -96,7 +96,39 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,q;
+    cin>>n>>q;
+    vector<int> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    vector<int> high(n);
+    high[0] = a[0];
+    for(int i=1;i<n;i++) {
+        high[i] = max(a[i], high[i-1]);
+    }
 
+    for(int i=0;i<q;i++) {
+        int idx,k;
+        cin>>idx>>k;
+        idx--;
+        if(idx>k) {
+            cout<<0<<endl;
+            continue;
+        }
+        auto pos = upper_bound(high.begin(), high.end(), a[idx])-high.begin();
+        int ans = 0;
+        if(idx==0) {
+            ans = max(0, pos-idx);
+        } else {
+            ans = max(0, pos-idx+1);
+        }
+        if(high[n-1]==a[idx]) {
+            ans += n-k;
+        }
+        continue; 
+
+    }
 }
 
 int main(void)

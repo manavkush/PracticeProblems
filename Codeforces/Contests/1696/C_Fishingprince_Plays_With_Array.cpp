@@ -96,6 +96,45 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,m;
+    cin>>n>>m;
+    vi a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    int k;
+    cin>>k;
+    vi b(k);
+    for(int i=0;i<k;i++) {
+        cin>>b[i];
+    }
+    int i=0,j=0;
+    bool flag = 0;
+    while(i<n and j<k) {
+        if(a[i]==b[j]) {
+            i++;
+            j++;
+        } else if(a[i]>b[j]) {
+            if(a[i]%b[j]!=0) {
+                flag = 1;
+                break;
+            } else {
+                int el = a[i]/b[j];
+                int intp = log(el)/log(m);
+                double dblp = log(el)/log(m);
+                if(intp==dblp) {
+                    for(int x=0;x<intp;x++) {
+                        if(j)
+                        j++;
+                    }
+                } else {
+
+                }
+            }
+        } else {
+
+        }
+    }
 
 }
 

@@ -96,7 +96,12 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    for(int i=2;i<=n;i++) {
+        cout<<i<<" ";
+    }
+    cout<<1<<endl;
 }
 
 int main(void)

@@ -95,15 +95,81 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
 
+void update(vector<int> &BIT, int idx, int val) {
+    int n = BIT.size()-1;
+    for(int i=idx;i<=n; i += i&-i ) {
+        BIT[i] += val;
+    }
+}
+
+int find(vector<int> &BIT, int idx) {
+    int ans = 0;
+    for(int i=idx;i>0; i-=i&-i) {
+        ans += BIT[i];
+    }
+    return ans;
+}
+
+int findlow(vector<int> &BIT, int idx) {
+    return find(BIT, idx);
+}
+
+int findhigh(vector<int> &BIT, int idx) {
+    int n = BIT.size()-1;
+    return find(BIT, n)-find(BIT, idx);
+}
+
+
+void solve() {
+    int n;
+    cin>>n;
+    vector<int> a(n);
+    set<int> st;
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+        st.insert(a[i]);
+    }
+    map<int,int> front;
+    int curr = 1;
+    
+    for(auto &x: st) {
+        front[x] = curr;
+        curr++;
+    }
+    // debug(front);
+
+    vector<int> BITback(n+1, 0);
+    vector<int> BITnext(n+1, 0);
+
+    long long result = 0;
+    for(int i=1;i<n;i++) {
+        int compressed = front[a[i]];
+        update(BITnext, compressed, 1);
+    }
+    update(BITback, front[a[0]], 1);
+
+    // debug(BITnext);
+    // debug(BITback);
+
+    for(int i=1;i<n-1;i++) {
+        int compressed = front[a[i]];
+        update(BITnext, compressed, -1);
+        long long find_high = findhigh(BITback, compressed);
+        long long find_low = findlow(BITnext, compressed);
+
+        result += (find_low * find_high);
+        update(BITback, compressed, 1);
+    }
+
+    cout<<result<<endl;
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

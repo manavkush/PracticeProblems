@@ -95,8 +95,49 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
+map<pair<pair<int,int>, int>, int> hs;
+bool dfs(vector<vector<int>> &grid, int r, int c, int sum) {
+    int n = grid.size();
+    int m = grid[0].size();
+    if(r>=n || c>=m) {
+        return false;
+    }
+    if(hs.find({{r,c}, -sum})!=hs.end()) {
+        return true;
+    }
+    if(dfs(grid, r+1, c, sum) || dfs(grid, r, c+1, sum)) {
+        return true;
+    }
+    sum += grid[r][c];
+    hs[{{r,c}, sum}]++;
+    return false;
+}
+// bool dfs2(vector<vector<int>> &grid, int r, int c, int sum) {
+//     if(r<0 || c<0) {
+//         return false;
+//     }
+//     if(hs.find({{r,c}, -sum})!=hs.end()) {
+//         return true;
+//     } else {
+//         sum += grid[r][c];
+//         return (dfs2(grid, r-1, c, sum) || dfs2(grid, r, c-1, sum));
+//     }
+// }
 void solve() {
-
+    int n,m;
+    cin>>n>>m;
+    vector<vector<int>> grid(n, vector<int> (m, 0));
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            cin>>grid[i][j];
+        }
+    }
+    if(dfs(grid, 0, 0, 0) ){
+    // if(dfs2(grid, n-1, m-1, 0)) {
+        cout<<"YES\n";
+    } else {
+        cout<<"NO\n";
+    }
 }
 
 int main(void)

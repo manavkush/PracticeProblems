@@ -96,7 +96,16 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    string str;
+    cin>>str;
+    sort(str.begin(), str.end());
+    if(str=="Timru") {
+        cout<<"YES\n";
+    } else {
+        cout<<"NO\n";
+    }
 }
 
 int main(void)

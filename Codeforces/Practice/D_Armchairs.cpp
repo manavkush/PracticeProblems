@@ -96,14 +96,65 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    vi a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    cout<<"*";
+    stack<int> behind;
+    stack<int> front;
+    long long ans = 0;
+    for(int i=n-1;i>=0;i--) {
+        if(a[i]==0) {
+            behind.push(i);
+        }
+    }
+    for(int i=0;i<n;i++) {
+        // cout<<"*";
 
+        if(!front.empty())
+            debug(front.top());
+        
+        if(!behind.empty())
+            debug(behind.top());
+
+        if(a[i]==1) {
+            if(front.empty()) {
+                ans += behind.top()-i;
+                a[behind.top()] = 2;
+                behind.pop();
+            } else if(behind.empty()) {
+                ans += i-front.top();
+                a[front.top()] = 2;
+                front.pop();
+            } else {
+                if(behind.top()-i <= i-front.top()) {
+                    ans += behind.top()-i;
+                    a[behind.top()] = 2;
+                    behind.pop();
+                } else {
+                    ans += front.top()-i;
+                    a[front.top()] = 2;
+                    front.pop();
+                }
+            }
+        } else if(a[i]==0) {
+            front.push(i);
+            behind.pop();
+        }
+        
+    }
+    cout<<ans<<endl;
+    return;
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

@@ -96,7 +96,29 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    vector<string> words[3];
+    unordered_map<string,int> hash;
+    for(int i=0;i<3;i++) {
+        for(int j=0;j<n;j++) {
+            string word;
+            cin>>word;
+            words[i].push_back(word);
+            hash[word]++;
+        }
+    }
+    for(int i=0;i<3;i++) {
+        int sum = 0;
+        for(int j=0;j<n;j++) {
+            if(hash[words[i][j]] == 1) 
+                sum+=3;
+            else if(hash[words[i][j]]==2)
+                sum++;
+        }
+        cout<<sum<<" ";
+    }
+    cout<<endl;
 }
 
 int main(void)

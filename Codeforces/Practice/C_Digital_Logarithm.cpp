@@ -96,7 +96,71 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    vector<int> a(n), b(n);
+    multiset<int> hash1, hash2;
+    // unordered_map<int,int> hash1, hash2;
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+        hash1.insert(a[i]);
+    }
+    for(int i=0;i<n;i++) {
+        cin>>b[i];
+        auto pos = hash1.find(b[i]);
+        if(pos!=hash1.end()) {
+            hash1.erase(pos);
+        } else {
+            hash2.insert(b[i]);
+        }
+    }
+    // debug(hash1, hash2);
+    vector<int> vec1;
+    vector<int> vec2;
+    int cnt = 0;
+    
+    for(auto &x: hash1) {
+        int logged = x;
+        if(x > 9) {
+            logged = log10(x)+1;
+            cnt ++;
+        }
+        vec1.push_back(logged);
+    }
+    for(auto &x: hash2) {
+        int logged = x;
+        if(x > 9) {
+            logged = log10(x)+1;
+            cnt ++;
+        }
+        vec2.push_back(logged);
+    }
+    // debug(vec1, vec2);
+    hash1.clear();
+    hash2.clear();
+    for(auto &x: vec1) {
+        hash1.insert(x);
+    }
+    for(auto &x: vec2) {
+        auto pos = hash1.find(x);
+        if(pos!=hash1.end()) {
+            hash1.erase(pos);
+        } else {
+            hash2.insert(x);
+        }
+    }
 
+    for(auto &x: hash1) {
+        if(x==1)
+            continue;
+        cnt ++;
+    }
+    for(auto &x: hash2) {
+        if(x==1)
+            continue;
+        cnt++;
+    }
+    cout<<cnt<<endl;
 }
 
 int main(void)

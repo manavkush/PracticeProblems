@@ -96,7 +96,19 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    string s1,s2;
+    cin>>s1>>s2;
+    for(int i=0;i<n;i++) {
+        if(s1[i]==s2[i] || (s1[i]!='R' and s2[i]!='R') ) {
+            continue;
+        } else {
+            cout<<"NO\n";
+            return;
+        }
+    }
+    cout<<"YES\n";
 }
 
 int main(void)

@@ -95,6 +95,51 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
+struct Node {
+    vector<Node*> links;
+    int ax, x;  // stores the bit of ax, x
+    Node() {
+        links.assign(2, nullptr);
+        ax = x = 0;
+    }
+    bool contains(int bit) {
+        return links[bit]!=nullptr;
+    }
+    void put(int ax, int x, int bit, Node* temp) {
+        int linkbit = ((ax^x)>>bit)&1;
+        ax = (ax>>bit)&1;
+        x = (x>>bit)&1;
+        links[linkbit] = temp;
+    }
+    Node* get(int bit) {
+        return links[bit];
+    }
+};
+
+class Trie {
+    Node * root;
+    Trie() {
+        root = new Node();
+    }
+    void insert(int ax, int x) {
+        Node * node = root;
+        for(int i=30;i>=0;i--) {
+            int bit = (val>>i)&1;
+            int xorbit = ((ax^x)>>bit)&1;
+            if(!node->contains(xorbit)) {
+                node->put(ax, x, i, new Node());
+            }
+            node = node->get(xorbit);
+        }
+    }
+    int getMax(int ax, int x, int bit) {
+        Node *node = root;
+        for(int i=30;i>=0;i--) {
+            
+        }
+    }
+};
+
 void solve() {
 
 }

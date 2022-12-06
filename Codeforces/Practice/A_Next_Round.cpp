@@ -96,14 +96,25 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n,k;cin>>n>>k;
+    vi a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    int i = 0;
+    for(;i<n;i++) {
+        if(a[i]<=0 || a[i]<a[k-1]) {
+            break;
+        }
+    }
+    cout<<i<<endl;
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

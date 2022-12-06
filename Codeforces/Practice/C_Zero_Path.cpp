@@ -96,7 +96,40 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n,m;
+    cin>>n>>m;
+    vector<vector<int>> grid(n, vector<int> (m, 0));
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            cin>>grid[i][j];
+        }
+    }
+    if((n+m)%2==0) {
+        cout<<"NO\n";
+        return;
+    }
+    vector<vector<int>> high(n, vector<int> (m, INT_MIN));
+    vector<vector<int>> low(n, vector<int> (m, INT_MAX));
+    high[0][0] = low[0][0] = grid[0][0];
+    
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            if(i>0) {
+                low[i][j] = min(low[i][j], low[i-1][j]+grid[i][j]);
+                high[i][j] = max(high[i][j], high[i-1][j]+grid[i][j]);
+            }
+            if(j>0) {
+                low[i][j] = min(low[i][j], low[i][j-1]+grid[i][j]);
+                high[i][j] = max(high[i][j], high[i][j-1]+grid[i][j]);
+            }
+        }
+    }
+    
+    if(low[n-1][m-1]>0 || high[n-1][m-1]<0) {
+        cout<<"NO\n";
+    } else {
+        cout<<"YES\n";
+    }
 }
 
 int main(void)

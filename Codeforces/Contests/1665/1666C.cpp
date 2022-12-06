@@ -8,19 +8,16 @@ using namespace std;
 #define int long long
 typedef vector<int> vi;
 #define all(x) x.begin(), x.end()
-#define FIO                           \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(NULL);                    \
-    cout.tie(NULL)
-#define tr(it, a) for (auto it = a.begin(); it != a.end(); it++)
+#define FIO     ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define deb(x) cout << #x << "=" << x << endl
 #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
-#define re(i, n) for (int i = 0; i < (n); i++)
+#define re(i,n)        for(int i=0;i<(n);i++)
 #define re1(i, k, n) for (int i = k; k < n ? i <= n : i >= n; k < n ? i += 1 : i -= 1)
-#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FORD(i,a,b)     for(int i=(a);i>=(b);i--)
 typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
@@ -31,12 +28,12 @@ void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char* x) { cerr << '\"' << x << '\"'; }
-void __print(const string& x) { cerr << '\"' << x << '\"'; }
+void __print(const char *x) { cerr << '\"' << x << '\"'; }
+void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
-
+ 
 template <typename T, typename V>
-void __print(const pair<T, V>& x)
+void __print(const pair<T, V> &x)
 {
     cerr << '{';
     __print(x.first);
@@ -45,11 +42,11 @@ void __print(const pair<T, V>& x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T& x)
+void __print(const T &x)
 {
     int f = 0;
     cerr << '{';
-    for (auto& i : x)
+    for (auto &i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -70,53 +67,54 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
-{
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
-    }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    if (a.first != b.first) {
-        return a.first < b.first;
+vector<pair<pii,pii>> segs;
+struct node {
+    int x1,y1,x2,y2;
+};
+void insseg(int x1, int y1, int x2, int y2) {
+    if(x1==x2 and y2==y1) {
+        //same point
+    } else if(x1==x2 || y1==y2) {
+        segs.pb({{x1, y1}, {x2, y2}});
     } else {
-        return a.second < b.second;
+        segs.pb({{x1, y1}, {x1, y2}});
+        segs.pb({{x1, y2}, {x2, y2}});
+    }
+}
+void solve() {
+    vector<int> x(3), y(3);
+    re(i,3) {
+        cin>>x[i]>>y[i];
+    }
+    vector<vi> ways = {{0,1,2}, {0,2,1}, {1, 2, 0}};
+    int low = INT_MAX;
+    vector<node> ans;
+    re(i,3) {
+        // We'll first join ways[i][0], ways[i][1]
+        int x1 = x[ways[i][0]];
+        int x2 = x[ways[i][1]];
+        int x3 = x[ways[i][2]];
+        int y1 = y[ways[i][0]];
+        int y2 = y[ways[i][1]];
+        int y3 = y[ways[i][2]];
+
+        int curr = abs(x1 - x2) + abs(y1 - y2);
+        if(x3>=min(x1,x2) and x3<=min(x1,x2)) {
+            
+        } else if(y3>=min(y1,y2) and y3<=min(y1,y2)) {
+
+        } else {
+
+        }
     }
 }
 int32_t main()
 {
     FIO;
-    int n;
-    cin >> n;
-    vector<pii> vec;
-    re(i, n)
+    int t=1;
+    // cin>>t;
+    while(t--)
     {
-        int a, b;
-        cin >> a >> b;
-        vec.pb({ a, b });
+        solve();    
     }
-    sort(all(vec), comp);
-    vector<pii> dp;
-    debug(vec);
-    dp.push_back({ vec[0].ss, 1 }); // pushing ends
-    for (int i = 1; i < n; i++) {
-        int start = vec[i].ff;
-        int end = vec[i].ss;
-        auto itr = lower_bound(all(dp), mp(start, 0), comp2);
-        int val;
-        if((*itr).first > start) {
-            if(itr == dp.begin()) {
-                val = 1;
-            } else {
-                itr--;
-                val = (*itr).second + 1;
-            }
-        } else {
-            val = (*itr).second + 1;
-        }
-        dp.push_back({ end, val });
-    }
-    debug(dp);
 }

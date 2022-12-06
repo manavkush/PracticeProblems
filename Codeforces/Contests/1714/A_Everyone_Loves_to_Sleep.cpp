@@ -96,6 +96,41 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,h,m;
+    cin>>n>>h>>m;
+    vector<pair<int,int>> vec;
+    for(int i=0;i<n;i++) {
+        int a,b;
+        cin>>a>>b;
+        vec.push_back({a, b});
+    }
+    sort(vec.begin(), vec.end());
+    // auto idx = lower_bound(vec.begin(), vec.end(), {h,m});
+    int idx = 0;
+    for(;idx<n;idx++) {
+        if(vec[idx].first<h)
+            continue;
+        else if(vec[idx].first == h and vec[idx].second<m)
+            continue;
+        else {
+            break;
+        }
+    }
+    if(idx==n) {
+        int mins = 60-m;
+        int hr = 23-h;
+        int l1 = (mins + vec[0].second)%60;
+        int l2 = (vec[0].first + hr + (mins+vec[0].second)/60);
+        cout<<l2<<" "<<l1<<endl;
+    } else {
+        int hr = vec[idx].first-h;
+        int mins = vec[idx].second-m;
+        if(mins<0) {
+            mins = mins+60;
+            hr--;
+        }
+        cout<<hr<<" "<<mins<<endl;
+    }
 
 }
 

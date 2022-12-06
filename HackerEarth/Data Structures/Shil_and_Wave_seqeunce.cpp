@@ -95,15 +95,71 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+const int N = 1e5+5;
+const int mod = 1e9+7;
+vector<int> BIT[3];
+// 3 BITS are needed. 2nd, 3rd store the increasing and decreasing sequences.
+// 1st stores the single elements(which are not sequences)
 
+int query(int bit, int idx) {
+    int sum = 0;
+    for( ; idx>0 ; idx -= idx&-idx) {
+        sum += BIT[bit][idx];
+        sum %= mod;
+    }
+    return sum;
+}
+
+void update(int bit, int idx, int diff) {
+    for( ; idx<N; idx += idx&-idx) {
+        BIT[bit][idx] += diff;
+        BIT[bit][idx] %= mod;
+    }
+}
+
+void init() {
+    for(int i=0;i<3;i++) {
+        BIT[i].assign(N, 0);
+    }
+}
+void solve() {
+    init();
+    int n;
+    cin>>n;
+    vi a(n);
+    long long ans = 0;
+    
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    
+    // BIT[0] -> stores the single series
+    // BIT[1] -> stores the series with last > sec.last
+    // BIT[2] -> stores the series with last < sec.last
+
+    for(int i=0;i<n;i++) {
+        int new_inc = query(0, a[i]-1);
+        int new_dec = (query(0, N-1) - query(0, a[i]) + mod)%mod;
+
+        int curr_dec = (query(1, N-1) - query(1, a[i]) + mod)%mod;
+        int curr_inc = query(2, a[i]-1);
+
+        int incr = (new_inc + curr_inc) % mod;
+        int decr = (new_dec + curr_dec) % mod;
+        // debug(a[i], find1, find0);
+        ans = (ans + (incr + decr)%mod)%mod;
+        update(1, a[i], incr);  // increase the count where last el > sec. last el
+        update(2, a[i], decr);  // increase the count where last el < sec. last el
+        update(0, a[i], 1);     // increase the count of element by 1
+    }
+    cout<<ans<<endl;
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

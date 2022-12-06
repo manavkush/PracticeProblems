@@ -96,7 +96,15 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int x;
+    cin>>x;
+    int a[3];
+    for(int i=0;i<3;i++)
+    cin>>a[i];
+    if(a[x-1]!=0 and a[a[x-1]-1]!=0) {
+        cout<<"YES\n";
+    } else 
+        cout<<"NO\n";
 }
 
 int main(void)

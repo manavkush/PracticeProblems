@@ -95,7 +95,30 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+void solve(int x) {
+    cout<<"Case #"<<x<<": ";
+    string p,q;
+    cin>>p>>q;
+    int i = 0, j = 0;
+    if(p.length() > q.length()) {
+        cout<<"IMPOSSIBLE\n";
+        return;
+    }
+    int cnt = 0;
+    while(i<p.length() and j<q.length()) {
+        if(p[i]==q[j]) {
+            i++;
+            j++;
+        } else {
+            j++;
+            cnt++;
+        }
+    }
+    if(i==p.length()) {
+       cout<<cnt + q.length()-j<<endl;
+    } else {
+        cout<<"IMPOSSIBLE"<<endl;
+    }
 
 }
 
@@ -104,9 +127,8 @@ int main(void)
     FIO;
     int tt = 1;
     cin >> tt;
-    while (tt--)
-    {
-        solve();
+    for(int i=0;i<tt;i++) {
+        solve(i+1);
     }
     return 0;
 }

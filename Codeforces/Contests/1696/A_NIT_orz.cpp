@@ -96,7 +96,15 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n,z;
+    cin>>n>>z;
+    vi a(n);
+    int high = 0;
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+        high = max(high, a[i]|z);
+    }
+    cout<<high<<endl;
 }
 
 int main(void)

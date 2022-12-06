@@ -96,7 +96,42 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    string s;
+    cin>>s;
+    int n = s.length();
+    int first = s[0]-'a';
+    int last = s[n-1]-'a';
+    cout<<abs(first-last)<<" ";
+    
+    vector<pair<int,int>> ans;
+    
+    if(first <= last) {
+        for(int i=0;i<n;i++) {
+            int curr = s[i]-'a';
+            if(curr>=first and curr<=last) {
+                ans.push_back({curr,i});
+            }
+        }
+        sort(ans.begin(), ans.end());
+        cout<<ans.size()<<endl;
+        for(auto &x: ans) {
+            cout<<x.second+1<<" ";
+        }
+    } else {
+        for(int i=0;i<n;i++) {
+            int curr = s[i]-'a';
+            if(curr>=last and curr<=first) {
+                ans.push_back({-curr,i});
+            }
+        }
+        sort(ans.begin(), ans.end());
+        cout<<ans.size()<<endl;
+        for(auto &x: ans) {
+            cout<<(x.second)+1<<" ";
+        }
+    }
+    
+    cout<<endl;
 }
 
 int main(void)

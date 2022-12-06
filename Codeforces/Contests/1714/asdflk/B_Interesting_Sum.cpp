@@ -96,6 +96,32 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    vi a(n);
+    map<int,int> hashbeg;
+    map<int,int, greater<int>> hashend;
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+        hashbeg[a[i]]++;
+        hashend[a[i]]++;
+    }
+    int sum = 0;
+    if(hashend.begin()->second>=2) {
+        sum += 2*hashend.begin()->first;
+    } else {
+        sum += hashend.begin()->first;
+        sum += next(hashend.begin())->first;
+    }
+
+    if(hashbeg.begin()->second>=2) {
+        sum -= 2*hashbeg.begin()->first;
+    } else {
+        sum -= hashbeg.begin()->first;
+        sum -= next(hashbeg.begin())->first;
+    }
+
+    cout<<sum<<endl;
 
 }
 

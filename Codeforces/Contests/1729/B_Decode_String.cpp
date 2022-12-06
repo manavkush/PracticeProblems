@@ -95,15 +95,63 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+unordered_map<int, char> ch;
 
+bool util(string &s, int i, int n, string &ans) {
+    if(i==n) {
+        return true;
+    }
+    // if(i==n-1) {
+    //     if(s[i]=='0')
+    //         return false;
+    //     ans += ch[s[i]-'0'];
+    //     return true;
+    // }
+    if(i<n-2) {
+        if(s[i]=='1' and s[i+2]=='0') {
+            int num = 10*(s[i]-'0') + (s[i+1]-'0');
+            ans += ch[num];
+            if(util(s, i+3, n, ans))
+                return true;
+            ans.pop_back();
+        }
+        if(s[i]=='2' and s[i+1]<='6' and s[i+2]=='0') {
+            int num = 10*(s[i]-'0') + (s[i+1]-'0');
+            ans += ch[num];
+            if(util(s, i+3, n, ans))
+                return true;
+            ans.pop_back();
+        }
+    }
+    if(s[i]=='0') {
+        return false;
+    }
+    ans += ch[s[i]-'0'];
+    if(util(s, i+1, n, ans)) {
+        return true;
+    } 
+    ans.pop_back();
+    return false;
+}
+
+void solve() {
+    int n;cin>>n;
+    string s;
+    cin>>s;
+    string ans;
+    util(s, 0, n, ans);
+    cout<<ans<<endl;
 }
 
 int main(void)
 {    
     FIO;
+    for(int i=0;i<26;i++) {
+        ch[i+1] = 'a'+i;
+    }
     int tt = 1;
     cin >> tt;
+    // debug(ch);
     while (tt--)
     {
         solve();

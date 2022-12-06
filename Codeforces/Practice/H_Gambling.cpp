@@ -96,7 +96,42 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    vector<int> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    map<int,int> hash;
+    set<pair<int,int>, greater<pair<int,int>> > st;
+    int fin_l, fin_r, fin_x, fin_freq = 0;
+    int l=0, x;
+    for(int i=0;i<n;i++) {
+        if(hash.find(a[i])!=hash.end()) {
+            st.erase({hash[a[i]], a[i]});
+        }
+        hash[a[i]]++;
+        st.insert({hash[a[i]], a[i]});
 
+        // negative contribution
+        while(i-l+1 >= 2*(st.begin()->first)) {
+            st.erase({hash[a[l]], a[l]});
+            hash[a[l]]--;
+            if(hash[a[l]]!=0) {
+                st.insert({hash[a[l]], a[l]});
+            } else {
+                hash.erase(a[l]);
+            }
+            l++;
+        }
+        if( 2*(st.begin()->first) - (i-l+1) >  fin_freq) {
+            fin_l = l;
+            fin_r = i;
+            fin_x = a[i];
+            fin_freq = 2*(st.begin()->first) - (i-l+1);
+        }
+    }
+    cout<<fin_x<<" "<<fin_l+1<<" "<<fin_r+1<<endl; 
 }
 
 int main(void)

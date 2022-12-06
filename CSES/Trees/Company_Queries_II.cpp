@@ -95,15 +95,73 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+const int N = 2e5+5;
+vector<vector<int>> adj;
+vector<int> depth(N);
+vector<vector<int>> ancestor(N, vector<int> (20, 0));
 
+void create_table(int src, int prev, int cur_depth) {
+    depth[src] = cur_depth;
+    ancestor[src][0] = prev;
+    for(int i=1;i<20;i++) {
+            ancestor[src][i] = ancestor[ancestor[src][i-1]][i-1];
+    }
+    for(auto &x: adj[src]) {
+        create_table(x, src, cur_depth+1);
+    }
+}
+
+int find_k_ancestor(int src, int k) {
+    int node = src;
+    for(int bit = 20;bit>=0;bit--) {
+        if(k & (1<<bit)) {
+            node = ancestor[node][bit];
+            if(node==0)
+                break;
+        }
+    }
+    return node == 0 ? -1 : node;
+}
+
+int lca(int u, int v) {
+    if(depth[u]>depth[v]) {
+        swap(u,v);
+    }
+    v = find_k_ancestor(v, depth[v]-depth[u]);
+    for(int i=19;i>=0;i--) {
+        if(ancestor[u][i] == ancestor[v][i]) {
+            continue;
+        } else {
+            u = ancestor[u][i];
+            v = ancestor[v][i];
+        }
+    }
+    return (u==v ? u : ancestor[u][0]);
+}
+
+void solve() {
+    int n,q;
+    cin>>n>>q;
+    adj.resize(n+1);
+    for(int i=2;i<=n;i++) {
+        int parent;
+        cin>>parent;
+        adj[parent].push_back(i);
+    }
+    create_table(1, 0, 0);
+    
+    for(int i=0;i<q;i++) {
+        int u,v;
+        cin>>u>>v;
+        cout<<lca(u, v)<<endl;
+    }
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

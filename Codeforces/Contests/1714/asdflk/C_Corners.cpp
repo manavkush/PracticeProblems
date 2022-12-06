@@ -96,7 +96,56 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,m;
+    cin>>n>>m;
+    vector<string> mat;
+    for(int i=0;i<n;i++) {
+        string temp;
+        cin>>temp;
+        mat.push_back(temp);
+    }
+    vector<int> dr = {0, 0, 1, -1, 1, 1, -1, -1};
+    vector<int> dc = {1, -1, 0, 0, 1, -1, 1, -1};
+    int cnt = 0;
+    int connected = 0;
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            if(mat[i][j]=='0') {
+                cnt++;
+            } else {
+                continue;
+            }
+            for(int p = 0; p<8;p++) {
+                int ii = i + dr[p];
+                int jj = j + dc[p];
 
+                if(ii<0 || jj<0 || ii>=n || jj>=m || mat[ii][jj]=='1')
+                    continue;
+
+                connected = 1;
+                break;
+            }
+            
+        }
+    }
+    if(cnt==0) {
+        cout<<n*m-2<<endl;
+        return;
+    }
+    if(cnt==n*m) {
+        cout<<0<<endl;
+        return;
+    }
+    int ans = (n*m -2);
+    if(connected) {
+        ans -= (cnt-2);
+    } else {
+
+        ans -= (cnt-1);
+    }
+    
+    cout<<max(ans, 0)<<endl;
+    
 }
 
 int main(void)

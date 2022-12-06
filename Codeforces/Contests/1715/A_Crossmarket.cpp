@@ -96,7 +96,14 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n,m;
+    cin>>n>>m;
+    if(n==1 && m==1) {
+        cout<<0<<endl;
+        return;
+    }
+    int sum = (n-1)+(m-1)+min(n,m)-1 + 1;
+    cout<<sum<<endl;
 }
 
 int main(void)

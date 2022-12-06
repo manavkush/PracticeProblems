@@ -70,53 +70,70 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
+void solve()
 {
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
+    int n;
+    cin >> n;
+    vi a(n);
+    vi neg(n + 1, 0);
+    vi pos(n + 1, 0);
+    vi zero(n + 1, 0);
+    int prod = 1;
+    int start = 0;
+    int negs = 0;
+    set<pair<int, pii>, greater<pair<int, pii>>> hash;
+    hash.insert({ 0, { 0, -1 } });
+    re(i, n)
+    {
+        cin >> a[i];
     }
-    return a.ff < b.ff;
-}
-bool comp2(pii a, pii b)
-{
-    if (a.first != b.first) {
-        return a.first < b.first;
-    } else {
-        return a.second < b.second;
+    re(i, n)
+    {
+        if(a[i]<0) {
+            negs++;
+        }
+        if(abs(a[i])==2) {
+            prod++;
+        }
+        if (a[i] == 0) {
+            prod = 0;
+            negs = 0;
+            start = i + 1;
+        } else if (negs%2 == 0) {
+            hash.insert({ prod, { start, i } });
+        }
     }
+
+    start = n - 1;
+    prod = 0;
+    negs = 0;
+    for (int i = n - 1; i >= 0; i--) {
+        if(a[i]<0) {
+            negs++;
+        }
+        if(abs(a[i])==2) {
+            prod++;
+        }
+        if (a[i] == 0) {
+            prod = 0;
+            negs = 0;
+            start = i - 1;
+        } else if (negs%2 == 0) {
+            hash.insert({ prod, { i, start } });
+        }
+    }
+
+    auto ans = (*hash.begin());
+    int beg = ans.second.first;
+    int end = n - 1 - ans.second.second;
+    cout << beg << " " << end << endl;
 }
 int32_t main()
 {
     FIO;
-    int n;
-    cin >> n;
-    vector<pii> vec;
-    re(i, n)
-    {
-        int a, b;
-        cin >> a >> b;
-        vec.pb({ a, b });
+    int t = 1;
+    cin >> t;
+    while (t--) {
+        solve();
     }
-    sort(all(vec), comp);
-    vector<pii> dp;
-    debug(vec);
-    dp.push_back({ vec[0].ss, 1 }); // pushing ends
-    for (int i = 1; i < n; i++) {
-        int start = vec[i].ff;
-        int end = vec[i].ss;
-        auto itr = lower_bound(all(dp), mp(start, 0), comp2);
-        int val;
-        if((*itr).first > start) {
-            if(itr == dp.begin()) {
-                val = 1;
-            } else {
-                itr--;
-                val = (*itr).second + 1;
-            }
-        } else {
-            val = (*itr).second + 1;
-        }
-        dp.push_back({ end, val });
-    }
-    debug(dp);
 }

@@ -89,21 +89,56 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /******************* EXPLANATION *************************/
 /*
+    For this problem if we read instructions, it is mentioned that if the
+    same query is asked, then the answer is not calculated again.
+
+    We try to print 25 times, pairs of queries.
+    (i is from [2,26]) 
+        In each query, we ouput {1, i} and {i, 1}   
+        // reverse to force the calculation again 
+
+        If any time -1 comes, then the i-1 is answer
+        Else if {1, i} and {i, 1} give different answer, the 
+        result is sum of both outputs (left from one side + length from other side)
+
+    The probability of getting 2 distances same is (1+1)/4
+    
+    possible answers [{d1,d1}, {d2,d2}, {d1, d2}, {d2, d1}]
+
+    Probability To not get answer is if all queries give same result
+    (1/2)^25 
+
+    Probability to get the answer is 99.999997
     
 */
 /******************* EXPLANATION *************************/
 
-
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    for(int i = 2; i<=26;i++) {
+        long long x,y;
+        cout<<"? "<<1<<" "<<i<<endl;
+        cin>>x;
+        cout<<"? "<<i<<" "<<1<<endl;
+        cin>>y;
 
+        if(x==-1) {
+            cout<<"! "<<i-1<<endl;
+            return;
+        } 
+        if(x!=y) {
+            cout<<"! "<<x+y<<endl;
+            return;
+        }
+    }
+    cout<<"! "<<0<<endl;
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

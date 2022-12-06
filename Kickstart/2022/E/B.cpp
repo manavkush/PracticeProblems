@@ -95,8 +95,35 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+void solve(int tt) {
+    int n;
+    cin>>n;
+    vector<int> a(n);
+    vector<pair<int,int>> vec;
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+        vec.push_back({a[i], i});
+    }
+    sort(vec.begin(), vec.end());
+    cout<<"Case #"<<tt<<": ";
+    for(int i=0;i<n;i++) {
+        int rating = a[i];
+        auto pos = prev(upper_bound(vec.begin(), vec.end(), make_pair(2*rating, INT_MAX)));
 
+        if(pos->second != i) {
+            cout<<pos->first<<" ";
+        } else {
+            if(pos==vec.begin()) {
+                cout<<-1<<" ";
+            } else {
+                pos--;
+                cout<<pos->first<<" ";
+            }
+
+        }
+    }
+    cout<<endl;
+    
 }
 
 int main(void)
@@ -104,9 +131,9 @@ int main(void)
     FIO;
     int tt = 1;
     cin >> tt;
-    while (tt--)
+    for(int i=1;i<=tt;i++)
     {
-        solve();
+        solve(i);
     }
     return 0;
 }

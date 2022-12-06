@@ -96,7 +96,23 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    vector<int> ans;
+    int xorsum = 0;
+    for(int i=0;i<n-3;i++) {
+        ans.push_back(i+1);
+        xorsum ^= i+1;
+    }
+    ans.push_back(1<<29);
+    ans.push_back(1<<30);
+    xorsum^=(1<<29);
+    xorsum^=(1<<30);
+    ans.push_back(xorsum);
+    for(auto &x: ans) {
+        cout<<x<<" ";
+    }
+    cout<<endl;
 }
 
 int main(void)

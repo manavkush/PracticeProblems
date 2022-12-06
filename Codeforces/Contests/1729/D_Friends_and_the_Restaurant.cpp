@@ -96,7 +96,31 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    vector<int> x(n);
+    vector<int> y(n);
+    vector<int> diff;
+    for(int i=0;i<n;i++) {
+        cin>>x[i];
+    }
+    for(int i=0;i<n;i++) {
+        cin>>y[i];
+        diff.push_back(y[i]-x[i]);
+    }
+    sort(ALL(diff));
+    int l = 0, r = n-1;
+    int cnt = 0;
+    while(l<r) {
+        if(diff[l]+diff[r]>=0) {
+            cnt++;
+            l++;
+            r--;
+        } else {
+            l++;
+        }
+    }
+    cout<<cnt<<endl;
 }
 
 int main(void)

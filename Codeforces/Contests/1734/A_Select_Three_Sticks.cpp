@@ -96,6 +96,18 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    vector<int> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    sort(ALL(a));
+    int ans = INT_MAX;
+    for(int i=2;i<n;i++) {
+        ans = min(ans, a[i]-a[i-2]);
+    }
+    cout<<ans<<endl;
 
 }
 

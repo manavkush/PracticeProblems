@@ -95,8 +95,36 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+int n;
+unordered_map<string,int> mp;
+vector<int> reds(105), blues(105);
 
+int util(int redc, int bluec, int idx) {
+    if(idx==n)
+        return min(redc, bluec);
+    
+    string str = to_string(redc) + "#" + to_string(bluec) + "#" + to_string(idx);
+
+    if(mp.find(str)!=mp.end()) {
+        return mp[str];
+    }
+    int take_red = util(redc+reds[idx], bluec, idx+1);
+    int take_blue = util(redc, bluec+blues[idx], idx+1);
+
+    return mp[str] = max(take_red, take_blue);
+}
+
+void solve() {
+    cin>>n;
+
+    for(int i=0;i<n;i++) {
+        cin>>reds[i];
+    }
+    for(int i=0;i<n;i++) {
+        cin>>blues[i];
+    }
+    mp.clear();
+    cout<<util(0, 0, 0)<<endl;
 }
 
 int main(void)

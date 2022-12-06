@@ -96,7 +96,27 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    string s;
+    long long sum = 0;
+    cin>>s;
+    for(int i=0;i<n;i++) {
+        if(s[i]=='1') continue;
 
+        for(int j=i;j<n;j+=(i+1)) {
+            if(s[j]=='0') {
+                sum += i+1;
+                s[j] = '*';
+            } else if(s[j]=='*') {
+                continue;
+            } else {
+                break;
+            }
+        }
+        s[i] = '*';
+    }
+    cout<<sum<<endl; 
 }
 
 int main(void)

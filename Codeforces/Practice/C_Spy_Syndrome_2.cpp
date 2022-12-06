@@ -95,15 +95,56 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+unordered_map<string,string> rev;
+int n,m;
+string str;
+vector<string> ans;
 
+bool util(int pos) {
+    if(pos >= n) {
+        return true;
+    }
+    for(int i=pos;i<(n, pos+1000);i++) {
+        string sub = str.substr(pos, i-pos+1);
+
+        if(rev.find(sub)!=rev.end()) {
+            ans.push_back(sub);
+            if(util(i+1)) {
+                return true;
+            } else {
+                ans.pop_back();
+            }
+        }
+    }
+    return false;
+}
+
+void solve() {
+    cin>>n;
+    cin>>str;
+    cin>>m;
+    string word;
+    
+    for(int i=0;i<m;i++) {
+       cin>>word; 
+       string cpy = word;
+       transform(cpy.begin(), cpy.end(), cpy.begin(), ::tolower);
+       reverse(cpy.begin(), cpy.end());
+       rev[cpy] = word;
+    }
+
+    util(0);
+
+    for(auto &x: ans) {
+        cout<<rev[x]<<" ";
+    }
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

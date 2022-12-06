@@ -95,15 +95,82 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+int n;
+const int N = 1e5+5;
+int BIT[N][26];
 
+void update(int idx, int diff, int ch) {
+    
+    for( ; idx<=n ; idx += (idx&(-idx))) {
+        BIT[idx][ch]+=diff;
+    }
+}
+
+vector<int> query(int idx) {
+    vector<int> res(26, 0);
+
+    for( ; idx>0 ; idx -= (idx&(-idx)) ) {
+        for(int i=0;i<26;i++) {
+            res[i] += BIT[idx][i];
+        }
+    }
+    return res;
+}
+
+void solve() {
+    int q;
+    cin>>n>>q;
+    string str;
+    cin>>str;
+
+    memset(BIT, 0, sizeof(BIT));
+    
+    for(int i=0;i<n;i++) {
+        int ch = str[i]-'a';
+        update(i+1, 1, ch);
+    }
+    
+    while(q--) {
+        int qtype;
+        cin>>qtype;
+        
+        if(qtype==1) {
+            int idx;
+            char ch;
+            cin>>idx>>ch;
+            update(idx, -1, str[idx-1]-'a');
+            str[idx-1] = ch;
+            update(idx, 1, ch-'a');
+        } else {
+            int lidx, ridx;
+            cin>>lidx>>ridx;
+
+            vector<int> qr = query(ridx);
+            vector<int> ql = query(lidx-1);
+            vector<int> res(26);
+            for(int i=0;i<26;i++) {
+                res[i] = qr[i] - ql[i];
+            }
+
+            int cnt = 0;
+            for(auto &x: res) {
+                if(x&1) cnt++;
+            }
+
+            if(cnt>1) {
+                cout<<"no\n";
+            } else {
+                cout<<"yes\n";
+            }
+        }
+    }
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

@@ -96,7 +96,42 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    string s;
+    int n;
+    cin>>n>>s;
+    vector<int> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+        a[i]--;
+    }
+    long long ans = 1;
+    
+    for(int i=0;i<n;i++) {
+        if(s[i]=='*')
+            continue;
+        
+        string tmp;
+        int j = i;
+        do {
+            tmp += s[j];
+            s[j] = '*';
+            j = a[j];
+        } while(i!=j);
 
+        string s2 = tmp;
+        // debug(tmp);
+        long long curr = 0;
+        do {
+            char back = s2.back();
+            s2.pop_back();
+            s2 = (back + s2);
+            curr++;
+            // debug(s2, tmp);
+        }  while(s2!=tmp);
+        ans = (curr * ans) / __gcd(curr, ans);
+        // ans = max(ans, curr);
+    }
+    cout<<ans<<endl;
 }
 
 int main(void)

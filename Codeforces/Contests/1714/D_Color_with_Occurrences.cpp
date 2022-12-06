@@ -95,7 +95,89 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
+
 void solve() {
+    string t;
+    cin>>t;
+    int len = t.length();
+    int n;
+    cin>>n;
+    unordered_map<string,int> hash;
+    vector<string> vec(n);
+    for(int i=0;i<n;i++) {
+        cin>>vec[i];
+        hash[vec[i]] = i;
+    }
+    // debug(hash);
+    vector<pair<int,int>> ans;  
+    // try precomputing maximum length substr starting from ith index
+    vector<pair<int,int>> precomp(len); // till index, string number
+    for(int i=0;i<len;i++) {
+        bool found = 0;
+        for(int j=len-1;j>=i;j--) {
+            string str = t.substr(i, j-i+1);
+            if(hash.find(str)!=hash.end()) {
+                found = 1;
+                precomp[i] = {j, hash[str]};
+                break;
+            }
+        }
+        if(!found) {
+            precomp[i] = {-1, -1};
+        }
+    }
+
+    int i=0;
+    int till = -1;
+    int common = -1;
+    int lowidx = -1;
+    pair<int,int> pr;   // till indx, which string
+    
+    // debug(precomp);
+    for(i=0; i<t.length();i++) {
+        // debug(common, till, precomp[i].first);
+        if(common<= till and precomp[i].first==-1) {
+            cout<<-1<<endl;
+            debug();
+            return;
+        } else if(precomp[i].first==-1) {
+            ans.push_back({pr.second, lowidx});
+            till = common;
+            if(till==len-1) break;
+        } else if(common<=till) {
+            ans.push_back({precomp[i].second, i});
+            till = precomp[i].first;
+            common = till;
+            if(till==len-1) break;
+        } else {
+            if(precomp[i].first > common) {
+                ans.push_back({precomp[i].second, i});
+                till = precomp[i].first;
+                common = till;
+                if(till==len-1) 
+                    break;
+            } else {
+                ans.push_back({pr.second, lowidx});
+                till = common;
+                if(till==len-1) break;
+            }
+        }
+        for(int j=i+1;j<=till;j++) {
+            // debug("* ", precomp[i].first, common);
+            if(precomp[j].first > common) {
+                common = precomp[j].first;
+                pr = precomp[j];
+                lowidx = j;
+            }
+        }
+        i = till;
+    }
+    cout<<ans.size()<<endl;
+    for(auto &x: ans) {
+        cout<<x.first+1<<" "<<x.second+1<<endl;
+    }
+    // debug();
+
 
 }
 

@@ -96,7 +96,40 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    vector<int> a(n), b(n);
+    multiset<int> st;
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    for(int i=0;i<n;i++) {
+        cin>>b[i];
+        st.insert(b[i]);
+    }
+    for(int i=0;i<n;i++) {
+        cout<< *st.lower_bound(a[i]) - a[i]<<" ";
+    }
+    cout<<endl;
+    int l=0, r=1;
+    vector<int> ans(n);
+    while(r<n) {
+        while(r<n and a[r]<=b[r-1])
+            r++;
+        while(l<r) {
+            ans[l] = b[r-1]-a[l];
+            l++;
+        }
+        r++;
+    }
+    while(l<n) {
+        ans[l] = b[r-1]-a[l];
+        l++;
+    }
+    for(auto &x: ans) {
+        cout<<x<<" ";
+    }
+    cout<<endl;
 }
 
 int main(void)

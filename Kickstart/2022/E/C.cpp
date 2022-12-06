@@ -95,8 +95,49 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+void solve(int tt) {
+    cout<<"Case #"<<tt<<": ";
+    int n;
+    cin>>n;
+    string s;
+    cin>>s;
 
+    vector<vector<bool>> dp(n, vector<bool> (n, 0));
+    int len = 1;
+    int first = 0;
+    for(int i=0;i<n;i++) {
+        dp[i][i] = 1;
+    }
+    int ll = 0, sz = 1;
+    for(int i=0;i<n-1;i++) {
+        if(s[i]==s[i+1]) {
+            dp[i][i+1] = 1;
+            first = i;
+            len = 2;
+        }
+    }
+    for(int j=3;j<=n;j++) { //length
+        for(int i=0;i<=n-j;i++) {   // starting index
+            if(s[i]==s[i+j-1] and dp[i+1][i+j-2]) {
+                dp[i][i+j-1] = 1;
+                if(j>sz) {
+                    ll = i;
+                    sz = j;
+                }
+            }
+        }
+    }
+    
+    int i;
+    for(i=n-2;i>=0;i--) {
+        if(dp[0][i] and dp[i+1][n-1]) {
+            break;
+        }
+    }
+    
+    string ans = s.substr(i+1);
+    cout<<ans<<endl;
+    
 }
 
 int main(void)
@@ -104,9 +145,9 @@ int main(void)
     FIO;
     int tt = 1;
     cin >> tt;
-    while (tt--)
+    for(int i=1;i<=tt;i++)
     {
-        solve();
+        solve(i);
     }
     return 0;
 }

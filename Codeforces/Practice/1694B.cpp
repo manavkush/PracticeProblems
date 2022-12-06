@@ -96,7 +96,21 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    string s;
+    cin>>s;
+    bool able = 1;
+    int f = 0;
+    int ans = 0;
+    for(int i=1;i<n;i++) {
+        if(s[i]==s[i-1]) {
+            ans += (2*(i-f)-1);
+            f=i;
+        }
+    }
+    ans += 2*(n-f)-1;
+    cout<< ans<<endl;
 }
 
 int main(void)

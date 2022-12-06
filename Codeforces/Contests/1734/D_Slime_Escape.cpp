@@ -95,8 +95,72 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
+void pyes() {
+    cout<<"YES\n";
+}
+void pno() {
+    cout<<"NO\n";
+}
 void solve() {
+    int n,k;
+    cin>>n>>k;
+    k--;
+    vector<int> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    int i = k-1;
+    int j = k+1;
+    long long sum = a[k];
+    while(true) {
+        // Moving towards left
+        long long templ = sum;
+        int idxl = i;
+        long long maxl = sum;
+        int maxidxl = i;
 
+        while(idxl>=0 and templ+a[idxl] >= 0) {
+            templ += a[idxl--];
+            if(templ > maxl) {
+                maxl = templ;
+                maxidxl = idxl;
+            }
+        }
+        
+        // Moving towards right
+        long long tempr = sum;
+        int idxr = j;
+        long long maxr = sum;
+        int maxidxr = j;
+
+        while(idxr<n and tempr+a[idxr] >= 0) {
+            tempr += a[idxr++];
+            if(tempr > maxr) {
+                maxr = tempr;
+                maxidxr = idxr;
+            }
+        }
+        // Reached the end
+        if(idxr == n || idxl == -1) {
+            pyes();
+            return;
+        }
+        // No profit on either side
+        if(maxidxr==j and maxidxl==i) {
+            pno();
+            return;
+        }
+        // Right has better profit
+        if(maxr > maxl) {
+            j = maxidxr;
+            sum = maxr;
+        } else {
+            // Left better profit
+            i = maxidxl;
+            sum = maxl;
+        }
+    }
+    
 }
 
 int main(void)

@@ -96,6 +96,27 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    vector<int> a(n);
+    int odd_min = INT_MAX, eve_min=INT_MAX;
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+        if(i&1) {
+            odd_min = min(odd_min, a[i]);
+        } else {
+            eve_min = min(eve_min, a[i]);
+        }
+    }
+    if(n&1) {
+        cout<<"Mike\n";
+    } else {
+        if(odd_min>=eve_min) {
+            cout<<"Joe\n";
+        } else {
+            cout<<"Mike\n";
+        }
+    }
 
 }
 

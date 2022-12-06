@@ -96,14 +96,28 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    if(n==1) {
+        cout<<3<<endl;
+        return;
+    }
+    n-=2;
+    int div = n/3;
+    int rem = n%3;
+    if(rem==0) {
+        rem=0;
+    } else {
+        rem+=1;
+    }
+    cout<<5+div*4+rem<<endl;
 }
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();

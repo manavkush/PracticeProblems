@@ -96,6 +96,29 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,l,r;
+    cin>>n>>l>>r;
+    int avlb = r-l+1;
+
+    vector<int> ans;
+    for(int i=1;i<=n;i++) {
+        int rem = l%i;
+        if(rem==0) {
+            ans.push_back(l);
+            continue;
+        }
+        if(l+(i-rem)>r) {
+            cout<<"NO\n";
+            return;
+        } else {
+            ans.push_back(l+(i-rem));
+        }
+    }
+    cout<<"YES\n";
+    for(auto &x: ans) {
+        cout<<x<<" ";
+    }
+    cout<<endl;
 
 }
 

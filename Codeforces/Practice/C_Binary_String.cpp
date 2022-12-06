@@ -95,8 +95,34 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
 
+void solve() {
+    string s;
+    cin>>s;
+    int n = s.length();
+
+    vector<int> pref(n+1);
+    for(int i=0;i<n;i++) {
+        pref[i+1] = pref[i] + (s[i]-'0');
+    }
+    int l = 0, r = 1;
+    int cnt = 0;
+    int ans = pref[n];
+    while(r<=n) {
+        int in_ones = pref[r]-pref[l];
+        int out_ones = pref[n]-in_ones;
+        int in_zeros = (r-l) - in_ones;
+        while(out_ones <= in_zeros and l<r) {
+            ans = min(ans, in_zeros);
+            l++;
+            in_ones = pref[r]-pref[l];
+            out_ones = pref[n]-in_ones;
+            in_zeros = (r-l) - in_ones;
+        }
+        ans = min(ans, out_ones);
+        r++;
+    }
+    cout<< ans <<endl;
 }
 
 int main(void)

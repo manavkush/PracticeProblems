@@ -25,18 +25,22 @@ typedef pair<int, int> pii;
 typedef priority_queue<pii, vector<pii>, greater<pii>> minpq;
 typedef priority_queue<pii> maxpq;
 const int mod = 1000000007;
+inline int add(int a, int b) { return a + b >= mod ? a + b - mod : a + b; }
+inline void inc(int &a, int b) { a = add(a, b); }
+inline int sub(int a, int b) { return a - b < 0 ? a - b + mod : a - b; }
+inline void dec(int &a, int b) { a = sub(a, b); }
 //===================================DEBUG TEMPLATE=================================================
 void __print(int x) { cerr << x; }
 void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(char x) { cerr << '\'' << x << '\''; }
-void __print(const char* x) { cerr << '\"' << x << '\"'; }
-void __print(const string& x) { cerr << '\"' << x << '\"'; }
+void __print(const char *x) { cerr << '\"' << x << '\"'; }
+void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
 
 template <typename T, typename V>
-void __print(const pair<T, V>& x)
+void __print(const pair<T, V> &x)
 {
     cerr << '{';
     __print(x.first);
@@ -45,11 +49,11 @@ void __print(const pair<T, V>& x)
     cerr << '}';
 }
 template <typename T>
-void __print(const T& x)
+void __print(const T &x)
 {
     int f = 0;
     cerr << '{';
-    for (auto& i : x)
+    for (auto &i : x)
         cerr << (f++ ? "," : ""), __print(i);
     cerr << "}";
 }
@@ -70,53 +74,65 @@ void _print(T t, V... v)
 #define debug(x...)
 #endif
 //====================================DEBUG TEMPLATE==============================================
-bool comp(pii& a, pii& b)
+const int N = 2025;
+// int dp[20][20][2];
+map<pair<int,pair<vector<int>, bool>>, int> dp;
+int rec(int dig, int a,  vector<int> &freq, vector<int> &limit, bool tight)
 {
-    if (a.ss != b.ss) {
-        return a.ss < b.ss;
+    if (dig <= 0)
+    {
+        for(int i=0;i<10;i++) {
+            if(freq[i]==limit[i]) {
+                return 0;
+            }
+        }
+        return 1;
     }
-    return a.ff < b.ff;
+    int low = round(pow(10, dig - 1));
+    int up = tight ? (a / low) % 10 : 9;
+    int ans = 0;
+    if(dp.find({dig, {freq, tight}}) != dp.end()) {
+        return dp[{dig, {freq, tight}}];
+    }
+    for (int i = 0; i <= up; i++)
+    {
+        vector<int> temp(10, 0);
+        if((freq == temp) and i==0) {
+            ans += rec(dig - 1, a, freq, limit, (tight && (i == up)));
+        } else {
+            freq[i]++;
+            ans += rec(dig - 1, a, freq, limit, (tight && (i == up)));
+            freq[i]--;
+        }
+    }
+    dp[{dig, {freq, tight}}] = ans;
+    return ans;
 }
-bool comp2(pii a, pii b)
+
+void solve()
 {
-    if (a.first != b.first) {
-        return a.first < b.first;
-    } else {
-        return a.second < b.second;
+    int l, r;
+    cin >> l >> r;
+    vi limit(10);
+    re(i, 10)
+    {
+        cin >> limit[i];
     }
+    int len = floor(log10(r) + 1);
+    vector<int> freq(10, 0);
+    dp.clear();
+    int ans1 = rec(len, r, freq, limit, 1);
+    dp.clear();
+    int ans2 = rec(len, l - 1, freq, limit, 1);
+    cout << ans1-ans2 << endl;
 }
 int32_t main()
 {
     FIO;
-    int n;
-    cin >> n;
-    vector<pii> vec;
-    re(i, n)
+    int t = 1;
+    cin >> t;
+    while (t--)
     {
-        int a, b;
-        cin >> a >> b;
-        vec.pb({ a, b });
+        solve();
     }
-    sort(all(vec), comp);
-    vector<pii> dp;
-    debug(vec);
-    dp.push_back({ vec[0].ss, 1 }); // pushing ends
-    for (int i = 1; i < n; i++) {
-        int start = vec[i].ff;
-        int end = vec[i].ss;
-        auto itr = lower_bound(all(dp), mp(start, 0), comp2);
-        int val;
-        if((*itr).first > start) {
-            if(itr == dp.begin()) {
-                val = 1;
-            } else {
-                itr--;
-                val = (*itr).second + 1;
-            }
-        } else {
-            val = (*itr).second + 1;
-        }
-        dp.push_back({ end, val });
-    }
-    debug(dp);
 }

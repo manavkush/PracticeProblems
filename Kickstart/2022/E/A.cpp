@@ -95,8 +95,12 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
-
+void solve(int tt) {
+    int n;
+    cin>>n;
+    
+    
+    cout<<"Case #"<<tt<<": "<<n/5+1<<endl;
 }
 
 int main(void)
@@ -104,9 +108,9 @@ int main(void)
     FIO;
     int tt = 1;
     cin >> tt;
-    while (tt--)
+    for(int i=1;i<=tt;i++)
     {
-        solve();
+        solve(i);
     }
     return 0;
 }

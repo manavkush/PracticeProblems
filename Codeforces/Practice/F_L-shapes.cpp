@@ -95,8 +95,77 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+vector<int> dr = {-1, 1, 0, 0, 1, -1, -1, 1};
+vector<int> dc = {0, 0, -1, 1, 1, -1, 1, -1};
+int n,m;
 
+int dfs(vector<vector<char>> &grid, int x, int y) {
+    int ans = 0;
+    grid[x][y] = '#';
+    // debug("*");
+    for(int i=0;i<8;i++) {
+        int xx = x + dr[i];
+        int yy = y + dc[i];
+        // debug("*", xx, yy);
+        if(xx<0 || yy<0 || xx>=n || yy>=m)
+            continue;
+        if(grid[xx][yy]=='*') {
+            ans += 1 + dfs(grid, xx, yy);
+        }
+    }
+    // debug("#");
+    return ans;
+}
+
+void solve() {
+    cin>>n>>m;
+    vector<vector<char>> grid(n, vector<char> (m, '.'));
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            cin>>grid[i][j];
+        }
+    }
+    // vector<int> dx = {1, -1, 0, 0};
+    // vector<int> dy = {0, 0, 1, -1};
+    // debug("*");
+    
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            if(grid[i][j]=='*') {
+                vector<pair<int,int>> cnt;
+                for(int idx = 0; idx<4; idx++) {
+                    int x = i+dr[idx];
+                    int y = j+dc[idx];
+                    if(x<0 || y<0 || x>=n || y>=m)
+                        continue;
+                    if(grid[x][y]=='*') {
+                        cnt.push_back({x, y});
+                    }
+                }
+                if((cnt.size()==2) and 
+                 (abs(cnt[0].first - cnt[1].first)==1) and 
+                 (abs(cnt[0].second-cnt[1].second)==1)) {
+                    // debug("*");
+                    if(dfs(grid, i, j)!=2) {
+                        cout<<"NO\n";
+                        // debug("*1");
+                        return;
+                    } else {
+                        // debug("*2");
+                    }
+                }
+            }
+        }
+    }
+    for(int i=0;i<n;i++) {
+        for(int j=0;j<m;j++) {
+            if(grid[i][j]=='*') {
+                cout<<"NO\n";
+                return;
+            }
+        }
+    }
+    cout<<"YES\n";
 }
 
 int main(void)

@@ -95,8 +95,44 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+int cnt = 0;
+long long dfs(vector<vector<int>> &adj, vector<pair<int,int>> &ranges, int node) {
+    if(adj[node].empty()) {
+        cnt++;
+        return ranges[node].second;
+    }
+    long long tot = 0;
+    for(auto &x: adj[node]) {
+        tot += dfs(adj, ranges, x);
+    }
+    if(tot < ranges[node].first) {
+        cnt++;
+        return ranges[node].second;
+    } else if(tot>=ranges[node].second) {
+        return ranges[node].second;
+    } else {
+        return tot;
+    }
+}
 
+void solve() {
+    cnt=0;
+    int n;
+    cin>>n;
+    vector<vector<int>> adj(n+1);
+    for(int i=2;i<=n;i++) {
+        int a;
+        cin>>a;
+        adj[a].push_back(i);
+    }
+    vector<pair<int,int>> ranges(n+1);
+    for(int i=1;i<=n;i++) {
+        int x,y;
+        cin>>x>>y;
+        ranges[i] = {x, y};
+    }
+    dfs(adj, ranges, 1);
+    cout<<cnt<<endl;
 }
 
 int main(void)

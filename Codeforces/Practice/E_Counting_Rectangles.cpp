@@ -96,6 +96,32 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n,q;
+    cin>>n>>q;
+    vector<vector<long long>> grid(1005, vector<long long> (1005, 0));
+
+    for(int i=0;i<n;i++) {
+        int h,w;
+        cin>>h>>w;
+        grid[h][w] += h*w;
+    }
+    for(int i=1;i<=1000;i++) {
+        for(int j=1;j<=1000;j++) {
+            grid[i][j] += grid[i-1][j]+grid[i][j-1]-grid[i-1][j-1];
+        }
+    }
+    // for(int i=0;i<=5;i++) {
+    //     for(int j=0;j<=5;j++) {
+    //         cout<<grid[i][j]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
+    for(int i=0;i<q;i++) {
+        int a,b,c,d;
+        cin>>a>>b>>c>>d;
+        c--, d--;
+        cout<<grid[c][d] - grid[c][b] - grid[a][d] + grid[a][b]<<endl;
+    }
 
 }
 

@@ -95,8 +95,38 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
+bool check(vector<int> &a, int dis, int c) {
+    int cnt = 0;
+    int prev = -1e7;
+    for(int i=0;i<a.size();i++) {
+        if(a[i]-prev>=dis) {
+            cnt++;
+            prev = a[i];
+        }
+    }
+    // debug(cnt, c);
+    return cnt>=c;
+}
 void solve() {
-
+    int n,c;
+    cin>>n>>c;
+    vi a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    sort(ALL(a));
+    int l = 1;
+    int r = 1e9+1;
+    while(l+1<r) {
+        int mid = (r-l)/2 + l;
+        // debug(l,r,mid);
+        if(check(a, mid, c)) {
+            l = mid;
+        } else {
+            r = mid;
+        }
+    }
+    cout<<l<<endl;
 }
 
 int main(void)

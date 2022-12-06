@@ -95,8 +95,31 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
 
+void solve() {
+    // states --> n, q
+    int n,q;
+    cin>>n>>q;
+    vi a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    string ans;
+    int curr = 0;
+    for(int i=n-1;i>=0;i--) {
+        if(a[i]<=curr) {    // Case 1: Tested and Not decreased
+            ans += '1';
+        } else {
+            if(curr<q) {    // Tested and Decreased
+                ans += '1';
+                curr++;
+            } else {        // Not Tested
+                ans += '0';
+            }
+        }
+    }
+    reverse(ans.begin(), ans.end());
+    cout<<ans<<endl;
 }
 
 int main(void)

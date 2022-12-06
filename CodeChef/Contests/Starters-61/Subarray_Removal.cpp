@@ -96,7 +96,26 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    vector<int> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    int cnt1, cnt0;
+    cnt1 = cnt0 = 0;
+    
+    for(int i=0;i<n;i++) {
+        if(a[i]==0) 
+            cnt0++;
+        else cnt1++;
+    }
 
+    if(cnt0>=cnt1) {
+        cout<<cnt1<<endl;
+    } else {
+        cout<<cnt0+((cnt1-cnt0)/3)<<endl;
+    }
 }
 
 int main(void)

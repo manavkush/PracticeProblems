@@ -95,7 +95,41 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
+vector<int> arr;
+bool comp(pair<int,int> &a, pair<int,int> &b) {
+    // if(a.first != b.first)
+    return a.first < b.first;
+}
 void solve() {
+    int n,m;
+    cin>>n>>m;
+    arr.assign(n+1, 0);
+    for(int i=1;i<=n;i++) {
+        cin>>arr[i];
+    }
+    vector<int> hash(n+1, 0);
+    vector<pair<int,int>> vec;  // unhappiness, friends
+    for(int i=0;i<m;i++) {
+        int x,y;
+        cin>>x>>y;
+        hash[x]++;
+        hash[y]++;
+    }
+    if(m%2==0) {
+        cout<<0<<endl;
+        return;
+    }
+    for(int i=1;i<=n;i++) {
+        vec.push_back({arr[i], hash[i]});
+    }
+    sort(vec.begin(), vec.end(), comp);
+    debug(vec);
+    for(int i=0;i<vec.size();i++) {
+        if(vec[i].second&1) {
+            cout<<vec[i].first<<endl;
+            return;
+        }
+    }
 
 }
 

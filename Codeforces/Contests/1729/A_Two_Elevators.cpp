@@ -96,7 +96,18 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int a,b,c;
+    cin>>a>>b>>c;
+    int dis1 = a-1;
+    int dis2 = abs(b-c) + abs(c-1);
+    if(dis1<dis2) {
+        cout<<1<<endl;
+    } else if(dis1>dis2) {
+        cout<<2<<endl;
+    } else {
+        cout<<3<<endl;
+    }
+    // cout<<min(a-1, abs(b-c)+abs(c-1))<<endl;
 }
 
 int main(void)

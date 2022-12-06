@@ -96,6 +96,24 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    int n;
+    cin>>n;
+    vi a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    int cnt = 0;
+    int i=0;
+    for(int j=0;j<n;j++) {
+        int flag = 0;
+        while(j<n and a[j]!=0) {
+            j++;
+            flag = 1;
+        }
+        cnt += flag;
+    }
+    
+    cout<<min(cnt, 2)<<endl;
 
 }
 

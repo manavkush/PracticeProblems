@@ -95,8 +95,35 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
+bool check(int mid, string &s) {
+    // Can you achive 
+}
 void solve() {
+    string s;
+    cin>>s;
+    int n = s.length();
+    int cnt = 0;
+    vector<int> inc(n+1), dec(n+1);
+    for(int i=0;i<n;i++) {
+        inc[i+1] = inc[i] + (s[i]-'0');
+    }
+    for(int i=n-1;i>=0;i--) {
+        dec[i] = dec[i+1] + (s[i]-'0');
+    }
 
+    for(int i=0;i<n;i++) {
+        cnt += ((s[i]-'0')^1);
+    }
+    int l = -1, r = cnt;
+    while(l+1<r) {
+        int mid = (l+r)/2;
+        if(check(mid, s)) {
+            r = mid;
+        } else {
+            l = mid;
+        }
+    }
+    return r;
 }
 
 int main(void)

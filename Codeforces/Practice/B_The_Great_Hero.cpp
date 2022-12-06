@@ -96,6 +96,33 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    long long P,n;
+    long long H;
+    cin>>P>>H>>n;
+    vector<long long> a(n), b(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }   
+    for(int i=0;i<n;i++) {
+        cin>>b[i];
+    }
+    long long health = 0;
+    for(int i=0;i<n;i++) {
+        long long fights = (b[i]+P-1)/P;
+        health += fights*a[i];
+    }
+    H-= health;
+    if(H>0) {
+        cout<<"YES\n";
+        return;
+    } 
+    sort(a.begin(), a.end());
+    auto pos = lower_bound(ALL(a),-(H)+1);
+    if(pos!=a.end()) {
+        cout<<"YES\n";
+    } else {
+        cout<<"NO\n";
+    }
 
 }
 

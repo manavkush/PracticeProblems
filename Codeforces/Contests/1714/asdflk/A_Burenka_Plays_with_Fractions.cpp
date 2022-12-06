@@ -96,7 +96,25 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
+    long long a,b,c,d;
+    cin>>a>>b>>c>>d;
+    long long sum1 = a*d;
+    long long sum2 = b*c;
+    if(sum1==sum2) {
+        cout<<0<<endl;
+        return;
+    } else if(sum1==0 || sum2==0) {
+        cout<<1<<endl;
+        return;
+    }
+    if(sum1>sum2)
+    swap(sum1, sum2);
 
+    if(sum2%sum1==0) {
+        cout<<1<<endl;
+    } else {
+        cout<<2<<endl;
+    }
 }
 
 int main(void)

@@ -95,8 +95,41 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+vector<vector<vector<int>>> adj;
+void dfs(int idx, long long lsum, long long rsum, vector<int> &ans, vector<long long> &bsums) {
+    bsums.push_back(rsum);
+    auto pos = upper_bound(ALL(bsums), lsum)-bsums.begin()-1;
+    ans[idx] = pos;
 
+    for(auto &x: adj[idx]) {
+        int next_node = x[0], left = x[1], right = x[2];
+        
+        if(lsum < rsum)
+            dfs(next_node, lsum+left, rsum+right, ans, bsums);
+        else 
+            dfs(next_node, lsum+left, rsum+right, ans, bsums);
+    }
+    bsums.pop_back();
+}
+
+void solve() {
+    int n;
+    cin>>n;
+    adj.clear();
+    adj.resize(n+1);
+    for(int i=2;i<=n;i++) {
+        int p, x, y;
+        cin>>p>>x>>y;
+        adj[p].push_back({i, x, y});
+    }
+    // debug(adj);
+    vector<int> ans(n+1);
+    vector<long long> bsums;
+    dfs(1, 0, 0, ans, bsums);
+    for(int i = 2;i<=n;i++) {
+        cout<<ans[i]<<" ";
+    }
+    cout<<endl;
 }
 
 int main(void)

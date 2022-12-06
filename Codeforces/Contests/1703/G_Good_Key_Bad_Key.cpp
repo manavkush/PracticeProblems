@@ -95,8 +95,40 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+// long long util(vector<long long> &a, int idx, long long num_bads, int k, vector<vector<long long>> &dp) {
+//     int n = a.size();
+//     if(idx==n)
+//         return 0;
+//     if(dp[idx][num_bads]!=-1)
+//         return dp[idx][num_bads];
+//     long long ans1 = -k + (a[idx]>>num_bads) + util(a, idx+1, num_bads, k, dp);
+//     long long ans2;
+//     if(num_bads>32)
+//     ans2 = (a[idx]>>(num_bads)) + util(a, idx+1, num_bads, k, dp);
+//     else 
+//     ans2 = (a[idx]>>(num_bads+1)) + util(a, idx+1, num_bads+1, k, dp);
 
+//     return dp[idx][num_bads] = max(ans1, ans2);
+// }
+void solve() {
+    int n,k;
+    cin>>n>>k;
+    long long ans = 0;
+    // long long num_bad = 0;
+    vector<long long> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    vector<vector<long long>> dp(n+1, vector<long long> (34, 0));
+    for(int i=n-1;i>=0;i--) {
+        for(int j=32;j>=0;j--) {
+            long long good_ans = -k + (a[i]>>j) + dp[i+1][j];
+            long long bad_ans = (a[i]>>(j+1)) + dp[i+1][j+1];
+            dp[i][j] = max(good_ans, bad_ans);
+        }
+    }
+    ans = dp[0][0];
+    cout<<ans<<endl;
 }
 
 int main(void)

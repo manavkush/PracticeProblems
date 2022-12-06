@@ -96,7 +96,45 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 void solve() {
-
+    int n;
+    cin>>n;
+    string s;
+    cin>>s;
+    int k = 1;
+    int l = 0, r = n-1;
+    long long sum = 0;
+    for(int i=0;i<n;i++) {
+        if(s[i]=='L') {
+            sum += (long long)i;
+        } else {
+            sum += (long long)(n-i-1);
+        }
+    }
+    while(l<=r) {
+        long long log = s[l]=='L' ? l : (n-l-1);
+        long long rog = s[r]=='L' ? r : (n-r-1);
+        long long leftchange = max(l, n-1-l) - log;
+        long long rightchange = max(r, n-1-r) -  rog;
+        
+        if(leftchange==0ll and rightchange==0ll) {
+            l++,r--;
+            continue;
+        } else {
+            k++;
+            if(leftchange>rightchange) {
+                sum += leftchange;
+                l++;
+            } else {
+                sum += rightchange;
+                r--;
+            }
+            cout<<sum<<" ";
+        }
+    }
+    for(;k<=n;k++) {
+        cout<<sum<<" ";
+    }
+    cout<<endl;
 }
 
 int main(void)

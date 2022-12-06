@@ -95,15 +95,106 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-void solve() {
+vector<vector<vector<int>>> adj;
+vector<int> depth;
+vector<vector<int>> ances;
+vector<vector<int>> mins;
 
+void dfs(int s, int cur_depth, int par, int weight) {
+    depth[s] = cur_depth;
+    ances[s][0] = par;
+    mins[s][0] = weight;
+
+    for(int h=1;h<20;h++) {
+        ances[s][h] = ances[ances[s][h-1]][h-1];
+        mins[s][h] = min( mins[s][h-1], mins[ances[s][h-1]][h-1] );
+    }
+    for( auto &vec: adj[s]) {
+        int x = vec[0];
+        int w = vec[1];
+        if(x!=par) {
+            dfs(x, cur_depth+1, s, w);
+        }
+    }
 }
+
+int kth_ances(int s, int k) {
+    for(int i=19;i>=0;i--) {
+        if(k>=(1<<i)) {
+            s = ances[s][i];
+            k -= (1<<i);
+        }
+    }
+    return s;
+}
+
+void lca_algo(int a, int b) {
+    int oga, ogb;
+    oga = a, ogb = b;
+
+    if(depth[a]<depth[b]) {
+        swap(a, b);
+    }
+    
+    a = kth_ances(a, depth[a]-depth[b]);
+    
+    int lca = b;
+    if(a!=b) {
+        for(int i=19;i>=0;i--) {
+            if(ances[a][i]!=ances[b][i]) {
+                a = ances[a][i];
+                b = ances[b][i];
+            }
+        }
+        lca = ances[a][0];
+    }
+    //------------- Found LCA ----------------------
+
+    int ans = INT_MAX;
+    for(int i=19;i>=0;i--) {
+        if(depth[ances[oga][i]]>=depth[lca]) {
+            ans = min(ans, mins[oga][i]);
+            oga = ances[oga][i];
+        }
+        if(depth[ances[ogb][i]]>=depth[lca]) {
+            ans = min(ans, mins[ogb][i]);
+            ogb = ances[ogb][i];
+        }
+    }
+
+    cout<<ans<<endl;
+    
+}
+
+void solve() {
+    int n, m, q;
+    cin>>n>>m;
+    adj.resize(n+1);
+    depth.resize(n+1);
+    ances.resize(n+1, vector<int> (20, 0));
+    mins.resize(n+1, vector<int> (20, INT_MAX));
+
+    for(int i=0, u, v, w; i<m;i++) {
+        cin>>u>>v>>w;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
+    }
+
+    dfs(1, 0, 0, INT_MAX);
+    cin>>q;
+    while(q--) {
+        int a,b;
+        cin>>a>>b;
+        lca_algo(a, b);
+    }
+}
+    
 
 int main(void)
 {    
     FIO;
     int tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while (tt--)
     {
         solve();
