@@ -20,7 +20,7 @@
 # Ignore all local history of files
 **/.history
 **/bin
-
+**/Leetcode/*/info.txt
 # End of https://www.gitignore.io/api/visualstudiocode
 try.cpp
 ans*.txt
