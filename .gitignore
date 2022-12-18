@@ -19,6 +19,7 @@
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 **/.history
+**/bin
 
 # End of https://www.gitignore.io/api/visualstudiocode
 try.cpp
