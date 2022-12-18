@@ -95,52 +95,67 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-vector<vector<int>> adj;
-vector<int> cats;
-int cnt = 0, m, n;
+bool flag = 0;
+vector<vector<int>> adj(26);
+vector<int> st;
+vector<int> vis(26, 0);
 
-void dfs(int src, int par, int cons, int max_cons) {
-    if(cats[src]) {
-        cons++;
-    } else {
-        cons=0;
-    }
-    max_cons = max(max_cons, cons);
-
-    int cnt_child = 0;
-    for(auto &x: adj[src]) {
-        if(x!=par) {
-            cnt_child++;
-            dfs(x, src, cons, max_cons);
+void dfs(vector<vector<int>> &adj, int s) {
+    vis[s] = 2;
+    
+    for(auto &x: adj[s]) {
+        if(vis[x]==2) {
+            flag = 1;
+            return;
+        } else if(vis[x] == 1) {
+            continue;
+        } else {
+            dfs(adj, x);
         }
     }
-    // Leaf node
-    if(cnt_child==0) {
-        if(max_cons<=m) {
-            cnt++;
-        }
-        return;
-    }
+    st.push_back(s);
+    vis[s] = 1;
 }
 
 void solve() {
-    cin>>n>>m;
-    cats.resize(n+1);
-    adj.resize(n+1);
-    for(int i=1;i<=n;i++) {
-        cin>>cats[i];
+    int n;
+    cin>>n;
+    vector<string> vec(n);
+    for(int i=0;i<n;i++) {
+        cin>>vec[i];
+    }
+
+    for(int row=0; row<n-1; row++) {
+        int i;
+        for(i=0; i < min(vec[row].length(), vec[row+1].length());i++) {
+            if(vec[row][i] != vec[row+1][i]) {
+                adj[vec[row][i]-'a'].push_back(vec[row+1][i]-'a');
+                break;
+            }
+        }
+        if(vec[row].length() > vec[row+1].length() and i==vec[row+1].length()) {
+            flag = 1;
+        }
+    }
+
+    // debug(adj);
+
+    for(int i=25;i>=0;i--) {
+        if(vis[i]==0)
+            dfs(adj, i);
+        // debug(i, vis);
+    }
+
+    if(flag) {
+        cout<<"Impossible\n";
+    } else {
+        reverse(st.begin(), st.end());
+        for(auto &x: st) {
+            char c = 'a' + x;
+            cout<<c;
+        }
     }
     
-    for(int i=0;i<n-1;i++) {
-        int u,v;
-        cin>>u>>v;
-
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-
-    dfs(1, 1, 0, 0);
-    cout<<cnt;
 }
 
 int main(void)

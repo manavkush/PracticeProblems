@@ -96,51 +96,49 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 vector<vector<int>> adj;
-vector<int> cats;
-int cnt = 0, m, n;
+vector<pair<int,int>> edges;
+bool flag = 0;
 
-void dfs(int src, int par, int cons, int max_cons) {
-    if(cats[src]) {
-        cons++;
-    } else {
-        cons=0;
-    }
-    max_cons = max(max_cons, cons);
-
-    int cnt_child = 0;
+void dfs(int src, vector<int> &color, int col) {
+    color[src] = col;
     for(auto &x: adj[src]) {
-        if(x!=par) {
-            cnt_child++;
-            dfs(x, src, cons, max_cons);
+        if(color[x]==0) {
+            dfs(x, color, col^3);
+        } else if(color[x]==col) {
+            flag = 1;
+            return;
         }
-    }
-    // Leaf node
-    if(cnt_child==0) {
-        if(max_cons<=m) {
-            cnt++;
-        }
-        return;
     }
 }
 
 void solve() {
+    int n,m;
     cin>>n>>m;
-    cats.resize(n+1);
-    adj.resize(n+1);
-    for(int i=1;i<=n;i++) {
-        cin>>cats[i];
-    }
     
-    for(int i=0;i<n-1;i++) {
-        int u,v;
+    adj.resize(n+1);
+    for(int edge_cnt=0; edge_cnt<m; edge_cnt++) {
+        int u, v;
         cin>>u>>v;
-
         adj[u].push_back(v);
         adj[v].push_back(u);
+        edges.push_back({u,v});
     }
 
-    dfs(1, 1, 0, 0);
-    cout<<cnt;
+    vector<int> color(n+1, 0);
+    dfs(1, color, 1);
+    
+    if(flag) {
+        cout<<"NO\n";
+    } else {
+        cout<<"YES\n";
+        for(auto &x: edges) {
+            if(color[x.first] == 1) {
+                cout<<0;
+            } else {
+                cout<<1;
+            }
+        }
+    }
 }
 
 int main(void)

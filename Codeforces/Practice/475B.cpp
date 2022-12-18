@@ -95,52 +95,28 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-vector<vector<int>> adj;
-vector<int> cats;
-int cnt = 0, m, n;
-
-void dfs(int src, int par, int cons, int max_cons) {
-    if(cats[src]) {
-        cons++;
-    } else {
-        cons=0;
-    }
-    max_cons = max(max_cons, cons);
-
-    int cnt_child = 0;
-    for(auto &x: adj[src]) {
-        if(x!=par) {
-            cnt_child++;
-            dfs(x, src, cons, max_cons);
-        }
-    }
-    // Leaf node
-    if(cnt_child==0) {
-        if(max_cons<=m) {
-            cnt++;
-        }
-        return;
-    }
-}
-
 void solve() {
+    int n,m;
     cin>>n>>m;
-    cats.resize(n+1);
-    adj.resize(n+1);
-    for(int i=1;i<=n;i++) {
-        cin>>cats[i];
-    }
-    
-    for(int i=0;i<n-1;i++) {
-        int u,v;
-        cin>>u>>v;
+    string rows, cols;
+    cin>>rows>>cols;
+    bool flag = 0;
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+    if((rows[0]=='>' and cols[0]=='v') || (rows[0]=='<' and cols[0]=='^')) {
+        flag = 1;
+    } else if((rows[0]=='>' and cols[m-1]=='^') || (rows[0]=='<' and cols[m-1]=='v')) {
+        flag = 1;
+    } else if((rows[n-1]=='>' and cols[0]=='^') || (rows[n-1]=='<' and cols[0]=='v')) {
+        flag = 1;
+    } else if((rows[n-1]=='>' and cols[m-1]=='v') || (rows[n-1]=='<' and cols[m-1]=='^')) {
+        flag = 1;
     }
 
-    dfs(1, 1, 0, 0);
-    cout<<cnt;
+    if(flag) {
+        cout<<"NO\n";
+    } else {
+        cout<<"YES\n";
+    }
 }
 
 int main(void)

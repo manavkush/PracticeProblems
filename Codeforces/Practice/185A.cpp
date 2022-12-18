@@ -95,52 +95,31 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 
 /*********************MAIN PROGRAM*************************/
-vector<vector<int>> adj;
-vector<int> cats;
-int cnt = 0, m, n;
 
-void dfs(int src, int par, int cons, int max_cons) {
-    if(cats[src]) {
-        cons++;
+long long pow2(long long n) {
+    if(n==0ll) {
+        return 1ll;
+    }
+    long long ans = pow2(n/2);
+    if(n&1) {
+        ans = ((ans*ans)%MOD *2ll)%MOD;
     } else {
-        cons=0;
+        ans = ((ans*ans)%MOD);
     }
-    max_cons = max(max_cons, cons);
-
-    int cnt_child = 0;
-    for(auto &x: adj[src]) {
-        if(x!=par) {
-            cnt_child++;
-            dfs(x, src, cons, max_cons);
-        }
-    }
-    // Leaf node
-    if(cnt_child==0) {
-        if(max_cons<=m) {
-            cnt++;
-        }
-        return;
-    }
+    return ans;
 }
 
 void solve() {
-    cin>>n>>m;
-    cats.resize(n+1);
-    adj.resize(n+1);
-    for(int i=1;i<=n;i++) {
-        cin>>cats[i];
+    long long n;
+    cin>>n;
+    if(n==0) {
+        cout<<1<<endl;
+        return;
     }
-    
-    for(int i=0;i<n-1;i++) {
-        int u,v;
-        cin>>u>>v;
+    // debug(pow2(n));
+    long long ans = (pow2(n*2 -1) + pow2(n-1))%MOD;    
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-
-    dfs(1, 1, 0, 0);
-    cout<<cnt;
+    cout<<ans<<endl;
 }
 
 int main(void)

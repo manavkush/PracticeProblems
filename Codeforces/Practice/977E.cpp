@@ -96,50 +96,49 @@ ll pwr(ll a, ll b) {a %= MOD; ll res = 1; while (b > 0) {if (b & 1) res = res * 
 
 /*********************MAIN PROGRAM*************************/
 vector<vector<int>> adj;
-vector<int> cats;
-int cnt = 0, m, n;
+vector<int> degree;
+vector<int> vis;
 
-void dfs(int src, int par, int cons, int max_cons) {
-    if(cats[src]) {
-        cons++;
-    } else {
-        cons=0;
+void dfs(int src, bool &flag) {
+    vis[src] = 1;
+    if(degree[src]!=2) {
+        flag = 1;
     }
-    max_cons = max(max_cons, cons);
 
-    int cnt_child = 0;
     for(auto &x: adj[src]) {
-        if(x!=par) {
-            cnt_child++;
-            dfs(x, src, cons, max_cons);
+        if(!vis[x]) {
+            dfs(x, flag);
         }
-    }
-    // Leaf node
-    if(cnt_child==0) {
-        if(max_cons<=m) {
-            cnt++;
-        }
-        return;
     }
 }
 
 void solve() {
+    int n,m;
     cin>>n>>m;
-    cats.resize(n+1);
     adj.resize(n+1);
-    for(int i=1;i<=n;i++) {
-        cin>>cats[i];
-    }
-    
-    for(int i=0;i<n-1;i++) {
+    degree.resize(n+1);
+    vis.resize(n+1);
+
+    for(int i=0;i<m;i++) {
         int u,v;
         cin>>u>>v;
-
         adj[u].push_back(v);
         adj[v].push_back(u);
+        degree[u]++;
+        degree[v]++;
     }
 
-    dfs(1, 1, 0, 0);
+    int cnt = 0;
+
+    for(int i=1;i<=n;i++) {
+        if(!vis[i]) {
+            bool flag = 0;
+            dfs(i, flag);
+            if(flag==0) {
+                cnt++;
+            }
+        }
+    }
     cout<<cnt;
 }
 

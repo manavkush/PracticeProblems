@@ -1,4 +1,5 @@
 #!/bin/sh
 
-cd 1487
+mkdir -p $1
+cd ./$1
 code .
